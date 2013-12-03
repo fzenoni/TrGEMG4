@@ -48,90 +48,59 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    //to which this SD is attached: the GAS GAP.
 
    //To identify where the step is we use the touchable navigation,
-   //remember we need to use PreStepPoint!
+   //Remember we need to use PreStepPoint!
    G4TouchableHandle touchable = step->GetPreStepPoint()->GetTouchableHandle();
    G4int copyNo = touchable->GetVolume(0)->GetCopyNo();
    G4int layerIndex = copyNo;
+   G4String volName = touchable->GetVolume(0)->GetName();
    //We get now the energy deposited by this step
    G4double edep = step->GetTotalEnergyDeposit() ;
 
-   if(layerIndex == 3) {// we're in drift gap
+   if(volName == "GasGap1") {
+      // we're in drift gap
       driftDep += edep ;
 
       // if any particle makes a 1st step inside Drift Gap
       G4StepPoint* point1 = step->GetPreStepPoint() ;
-      //if(point1->GetStepStatus() == fGeomBoundary) {
+      //if(point1->GetStepStatus() == fGeomBoundary) 
+      // special algorithm for neutron sensitivity
+      charge = step->GetTrack()->GetParticleDefinition()->GetPDGCharge() ;
 
+      if(charge != 0) neutSensitive = true ;
+   }
+
+   if(volName == "GasGap2") {
+      // we're in transfer1 gap
+      transferDep += edep ;
       // special algorithm for neutron sensitivity
       charge = step->GetTrack()->GetParticleDefinition()->GetPDGCharge() ; 
-      if(charge != 0) { 
-	 //if(point1->GetTouchableHandle()->GetVolume()->GetName() == "") {
-	 neutSensitive = true ;
+      if(charge != 0) neutSensitive = true ;
+   }
 
-	 /*
-	 // Values stored for GARFIELD
-	 G4Track* track = step->GetTrack() ;
-	 globalTime = track->GetGlobalTime() ;
-	 pdgCode = track->GetParticleDefinition()->GetPDGEncoding() ;
-	 kineticEnergy = track->GetKineticEnergy() ;
-	 positionX = track->GetPosition().x() ;
-	 positionY = track->GetPosition().y() ;
-	 positionZ = track->GetPosition().z() ;
-	 momentumX = track->GetMomentum().x() ;
-	 momentumY = track->GetMomentum().y() ;
-	 momentumZ = track->GetMomentum().z() ;
-	 momentumDirectionX = track->GetMomentumDirection().x() ; 
-	 momentumDirectionY = track->GetMomentumDirection().y() ; 
-	 momentumDirectionZ = track->GetMomentumDirection().z() ;
-
-	 TrGEMAnalysis::GetInstance()->SaveGarfieldQuantities(
-	 globalTime,
-	 pdgCode,
-	 kineticEnergy,
-	 positionX,
-	 positionY,
-	 positionZ,
-	 momentumX, 
-	 momentumY, 
-	 momentumZ,
-	 momentumDirectionX, 
-	 momentumDirectionY, 
-	 momentumDirectionZ) ;
-	 */ 
-      }
-      }
-
-      if(layerIndex == 7) { // we're in transfer1 gap
-	 transferDep += edep ;
-	 // special algorithm for neutron sensitivity
-	 charge = step->GetTrack()->GetParticleDefinition()->GetPDGCharge() ; 
-	 if(charge != 0) neutSensitive = true ;
-      }
-
-      //This line is used to store in Analysis class the energy deposited in this layer
-      //The Analysis class will summ up this edep to the current event total energy in this layer
-      //Pass the number directly to the Analysis manager. No Hits objects are created in 
-      //this case
-      //Analysis::GetInstance()->AddEDepHad(layerIndex,edep);
+   //This line is used to store in Analysis class the energy deposited in this layer
+   //The Analysis class will sum up this edep to the current event total energy in this layer
+   //Pass the number directly to the Analysis manager. No Hits objects are created in 
+   //this case
+   //Analysis::GetInstance()->AddEDepHad(layerIndex,edep);
 
 
-      //check if edep is from primary or secondary:
-      G4String isPri = step->GetTrack()->GetTrackID() == 1 ? "Yes" : "No";
+   //check if edep is from primary or secondary:
+   G4String isPri = step->GetTrack()->GetTrackID() == 1 ? "Yes" : "No";
 
-      // Tricks to implement hits 
-      hitMap_t::iterator it = hitMap.find(layerIndex) ;
-      GasGapHit* aHit = 0 ;
-      if( it != hitMap.end() ) {
-	 aHit = it->second ;
-      }
-      else {
-	 aHit = new GasGapHit(layerIndex) ;
-	 hitMap.insert( std::make_pair(layerIndex, aHit) ) ;
-	 hitCollection->insert(aHit) ;
-      }
-      aHit->AddEdep(edep) ;
+   // Tricks to implement hits 
+   hitMap_t::iterator it = hitMap.find(layerIndex) ;
+   GasGapHit* aHit = 0 ;
+   if( it != hitMap.end() ) {
+      aHit = it->second ;
+   }
+   else {
+      aHit = new GasGapHit(layerIndex) ;
+      hitMap.insert( std::make_pair(layerIndex, aHit) ) ;
+      hitCollection->insert(aHit) ;
+   }
+   aHit->AddEdep(edep) ;
 
-      return true;
+   return true;
    }
 
    void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
@@ -148,9 +117,9 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
    {
       G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)
-      // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli 77, Sharma)  
-      //G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
-      // These are values previously used. They are quite low!
+      // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli '77, Sharma)  
+      // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
+      // These are values previously used. They represent the minimum ionization potential.
       G4int factor = 5 ;
       if(driftDep > factor*ionizationPotential) {
 	 TrGEMAnalysis::GetInstance()->SetDriftSensitivity(driftDep) ;
