@@ -45,7 +45,7 @@
 /gps/ang/type beam2d
 /gps/ang/sigma_x 2. mrad
 /gps/ang/sigma_y 2. mrad
-/gps/ang/rot1 -1. 0. 0.
+/gps/ang/rot1 -1. 0. 1.
 
 #
 # for drawing the tracks

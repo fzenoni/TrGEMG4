@@ -98,7 +98,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    // Cleanup old geometry
    G4GeometryManager::GetInstance()->OpenGeometry();
 
-   G4GeometryManager::GetInstance()->OpenGeometry();
+   //G4GeometryManager::GetInstance()->OpenGeometry();
    //G4PhysicalVolumeStore::GetInstance()->Clean();
    //G4LogicalVolumeStore::GetInstance()->Clean();
    //G4SolidStore::GetInstance()->Clean();
@@ -137,6 +137,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    G4VisAttributes *gemAttributes = new G4VisAttributes(G4Color::Green()) ;
    gemAttributes->SetForceWireframe(true) ;
 
+   
    G4Trd* cathode = Trapezoid("Cathode", 1.*mm) ;
    G4LogicalVolume* cathodeLog = new G4LogicalVolume(cathode, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "CathodeLog") ;
    cathodeLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
@@ -155,6 +156,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    g10_1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1) ;
    trdLogCollection.push_back(g10_1Log) ;
+   
 
    G4Trd* gasGap1 = Trapezoid("GasGap1", 3.*mm) ;
    G4LogicalVolume* gasGap1Log = new G4LogicalVolume(gasGap1, fGasMat, "gasGap1Log") ; 
@@ -165,6 +167,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    sdman->AddNewDetector(sensitive) ;
    gasGap1Log->SetSensitiveDetector(sensitive) ;
 
+   
    // First GEM Foil - beginning
    G4Trd* copper11 = Trapezoid("Copper11", 5*um) ;
    G4LogicalVolume* copper11Log = new G4LogicalVolume(copper11, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper11Log") ; 
@@ -273,6 +276,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    readoutLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(readout) ;
    trdLogCollection.push_back(readoutLog) ;
+   
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 

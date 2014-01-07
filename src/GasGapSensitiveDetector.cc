@@ -65,7 +65,6 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
       //if(point1->GetStepStatus() == fGeomBoundary) 
       // special algorithm for neutron sensitivity
       charge = step->GetTrack()->GetParticleDefinition()->GetPDGCharge() ;
-
       if(charge != 0) neutSensitive = true ;
    }
 

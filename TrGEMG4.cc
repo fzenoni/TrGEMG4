@@ -7,6 +7,7 @@
 //#include "TROOT.h"
 
 #include "TrGEMDetectorConstruction.hh"
+#include "RPCDetectorConstruction.hh"
 //#include "TrGEMPhysicsList.hh"
 #include "TrGEMPrimaryGeneratorAction.hh"
 #include "TrGEMRunAction.hh"
@@ -31,7 +32,8 @@ int main(int argc, char** argv) {
    G4RunManager* runManager = new G4RunManager ;
 
    // set mandatory initialization classes
-   runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
+   //runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
+   runManager->SetUserInitialization(new RPCDetectorConstruction) ;
    // For EM physics
    //G4VUserPhysicsList* physics = new QGSP_FTFP_BERT();
    //G4VUserPhysicsList* physics = new TrGEMPhysicsList() ;
