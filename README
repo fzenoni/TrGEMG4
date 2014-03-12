@@ -1,0 +1,36 @@
+================================================
+||    T R G E M 4     R E A D M E  v. 0.1.0   ||
+||          - - - - - - - - - - - - -         ||
+||               Florian ZENONI               ||
+================================================
+
+This program is a rather simple Geant4 application that evaluates the sensitivity of a gas detector (Triple GEM or RPC) to an incident beam of photons or neutrons.
+
+ 1- GEOMETRY DEFINITION
+
+  The Geometry is constructed in the TrGEMDetectorConstructiobn class.
+  The setup consists of a sequence of parallelepipeds with a trapezoidal base, oriented along the beam axis.
+  The set of materials was chosen to reproduce as much as possible geometry of Triple GEMs that will be installed in the GE1/1 stations of CMS detector. Another currently available choice for the geometry includes RPC setup, in order to reproduce literature results.
+
+ 2- PHYSICS LIST
+
+  Physics list (PL) must be chosen accordingly to the particle that is chosen for the simulation. It is necessary to include the PL in the TrGEMG4.cc file.
+
+  QGSP_FTFP_BERT is available for photons: it takes care of the electromagnetic physics. 
+
+ 3- PRIMARY GENERATOR
+
+  The primary generator is defined in the TrGEMPrimaryGeneratorAction class. The default kinematics is a 2 GeV photon having its source at z = -5 cm from the center of the World volume, heading perpendicularly to the detector's surface.
+  This default setting can be changed via the Geant4 built-in commands of the G4GeneralParticleSource class.
+
+ 4- DETECTOR RESPONSE
+
+  This program demonstrates the scoring of a simple variable directly in the sensitive detector class. No actual usage of the G4Hit class is implemented.
+
+  It is in the GasGapSensitiveDetector that the sensitivity information is collected. This same information is then saved and stored in a ROOT file thanks to the Analysis function.
+
+  Actually two different definitions of sensitivity are offered:
+    a- If the energy released in the GasGap n.1 is greater than 5 times the effective energy to generate a pair electron-ion in Ar:CO2:CF4 (45:15:40) than driftDep is set to True. If this condition is not met, the same algorithm is applied for GasGap n.2: if the energy is high enough, then transferDep is set as True.
+    b- An event is defined as sensitive if a charged particle appears in GasGap n.1 or n.2. The boolean associated to this definition is called neutSensitive.
+
+  Definition b has proven to be more faithful to experimental cross-sections in the photon case. No such results have been produced so far for the neutrons.
