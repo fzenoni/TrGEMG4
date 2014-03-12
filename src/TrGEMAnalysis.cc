@@ -94,7 +94,10 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    t->Branch("vecProcess","std::vector<std::string>",&pVecProcess);
    t->Branch("vecVolume","std::vector<std::string>",&pVecVolume);
    //t->Branch("vecProcNo",,&pVecVolume) ;
-   g = new TTree("Garfield","Interesting variables for Garfield") ;
+
+   g = new TTree("Signal","Quantities related to secondaries that provide a signal") ;
+   g->Branch("gasGap",&gasGap,"gasGap/I") ;
+   g->Branch("charge",&charge,"charge/I") ;
    g->Branch("globalTime",&globalTime,"globalTime/D") ;
    g->Branch("pdgCode",&pdgCode,"pdgCode/I") ;
    g->Branch("kineticEnergy",&kineticEnergy,"kineticEnergy/D") ;
@@ -107,6 +110,7 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    g->Branch("momentumDirectionX",&momentumDirectionX,"momentumDirectionX/D") ;
    g->Branch("momentumDirectionY",&momentumDirectionY,"momentumDirectionY/D") ;
    g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
+   g->Branch("process",&process) ;
 
 }
 
@@ -260,6 +264,8 @@ void TrGEMAnalysis::SaveStepProcess(G4int procNo, std::string volume) {
 }
 
 void TrGEMAnalysis::SaveGarfieldQuantities(
+      G4int aGasGap,
+      G4int aCharge,
       G4double aGlobalTime,
       G4int aPdgCode,
       G4double aKineticEnergy,
@@ -271,8 +277,11 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
       G4double aMomentumZ,
       G4double aMomentumDirectionX, 
       G4double aMomentumDirectionY, 
-      G4double aMomentumDirectionZ) {
+      G4double aMomentumDirectionZ,
+      std::string aProcess) {
 
+   gasGap = aGasGap ;
+   charge = aCharge ;
    globalTime = aGlobalTime ;
    pdgCode = aPdgCode ;
    kineticEnergy = aKineticEnergy ;
@@ -285,5 +294,6 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
    momentumDirectionX = aMomentumDirectionX ;
    momentumDirectionY = aMomentumDirectionY ;
    momentumDirectionZ = aMomentumDirectionZ ;
+   process = aProcess ;
 
 } 

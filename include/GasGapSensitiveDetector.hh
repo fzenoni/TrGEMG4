@@ -57,6 +57,7 @@ class GasGapSensitiveDetector : public G4VSensitiveDetector
       G4double momentumDirectionX ;
       G4double momentumDirectionY ;
       G4double momentumDirectionZ ;
+      std::string process ;
       G4int    charge ;
       G4bool   neutSensitive ;
 

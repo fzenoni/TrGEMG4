@@ -8,6 +8,7 @@
 
 #include "TrGEMDetectorConstruction.hh"
 #include "RPCDetectorConstruction.hh"
+#include "CfRPCDetectorConstruction.hh"
 #include "UniPVRPCDetectorConstruction.hh"
 //#include "TrGEMPhysicsList.hh"
 #include "TrGEMPrimaryGeneratorAction.hh"
@@ -34,15 +35,17 @@ int main(int argc, char** argv) {
 
    // set mandatory initialization classes
    //runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
-   runManager->SetUserInitialization(new UniPVRPCDetectorConstruction) ;
+   runManager->SetUserInitialization(new CfRPCDetectorConstruction) ;
+   //runManager->SetUserInitialization(new UniPVRPCDetectorConstruction) ;
    // For EM physics
    //G4VUserPhysicsList* physics = new QGSP_FTFP_BERT();
    //G4VUserPhysicsList* physics = new TrGEMPhysicsList() ;
    // For LHC neutron fluxes
    //G4VUserPhysicsList* physics = new QGSP_BERT_HP();
    // Alternate neutrons PL
-   //G4VUserPhysicsList* physics = new FTFP_BERT_HP();
-   G4VUserPhysicsList* physics = new QGSP_BIC_HP();
+   // BUT it looks that this PL is ideal for both photons and neutrons
+   G4VUserPhysicsList* physics = new FTFP_BERT_HP();
+   //G4VUserPhysicsList* physics = new QGSP_BIC_HP();
    runManager->SetUserInitialization(physics) ;
    runManager->SetUserAction(new TrGEMPrimaryGeneratorAction) ;
 

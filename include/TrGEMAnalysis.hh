@@ -37,8 +37,10 @@ class TrGEMAnalysis {
       void SetNeutronSensitivity(G4bool someBool) ;
       void SaveStepProcess(int process, std::string volume) ;
       void SaveGarfieldQuantities(
+	    G4int    aGasGap,
+	    G4int    aCharge,
 	    G4double aGlobalTime,
-	    G4int aPdgCode,
+	    G4int    aPdgCode,
 	    G4double aKineticEnergy,
 	    G4double aPositionX, 
 	    G4double aPositionY, 
@@ -48,7 +50,8 @@ class TrGEMAnalysis {
 	    G4double aMomentumZ,
 	    G4double aMomentumDirectionX, 
 	    G4double aMomentumDirectionY, 
-	    G4double aMomentumDirectionZ) ;
+	    G4double aMomentumDirectionZ,
+	    std::string aProcess) ;
 
 
 
@@ -99,6 +102,8 @@ class TrGEMAnalysis {
 	 G4bool neutronSensitivity ;
 
 	 // GARFIELD quantities
+	 G4int gasGap ;
+	 G4int charge ;
 	 G4double globalTime ;
 	 G4int pdgCode ;
 	 G4double kineticEnergy ;
@@ -111,6 +116,7 @@ class TrGEMAnalysis {
 	 G4double momentumDirectionX ;
 	 G4double momentumDirectionY ;
 	 G4double momentumDirectionZ ;
+	 std::string process ;
 
 	 // ROOT objects
 	 TFile*    m_ROOT_file;
