@@ -251,7 +251,7 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    rpcAttributes->SetForceWireframe(true) ;
 
    //***************************************************
-   //     DUOBLE GAP RPC
+   //     DOUBLE GAP RPC
    //***************************************************
 
    G4Box* FakeBottom = RPCBox("FakeBottom", 0.1*mm) ;
@@ -269,7 +269,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    PEBottomLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(PEBottom) ;
    trdLogCollection.push_back(PEBottomLog) ;
-   PEBottomLog->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* copperBottom = RPCBox("copperBottom", 0.0019*cm) ;
@@ -277,8 +276,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    copperBottomLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(copperBottom) ;
    trdLogCollection.push_back(copperBottomLog) ;
-   copperBottomLog->SetSensitiveDetector(sensitive) ;
-
    //-------------------------------------------------------------------------------------
 
    G4Box* pethylene0 = RPCBox("pethylene0", 0.038*cm) ;
@@ -286,7 +283,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    pethylene0Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene0) ;
    trdLogCollection.push_back(pethylene0Log) ;
-   pethylene0Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite0 = RPCBox("graphite0", 0.002*cm) ;
@@ -294,7 +290,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite0Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite0) ;
    trdLogCollection.push_back(graphite0Log) ;
-   graphite0Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* bakelite0 = RPCBox("bakelite0", 0.2*cm) ;
@@ -302,7 +297,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite0Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite0) ;
    trdLogCollection.push_back(bakelite0Log) ;
-   bakelite0Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* GasGap1 = RPCBox("GasGap1", 0.2*cm) ;
@@ -318,7 +312,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite1Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite1) ;
    trdLogCollection.push_back(bakelite1Log) ;
-   bakelite1Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite1 = RPCBox("graphite1", 0.002*cm) ;
@@ -326,7 +319,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite1Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite1) ;
    trdLogCollection.push_back(graphite1Log) ;
-   graphite1Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* pethylene1 = RPCBox("pethylene1", 0.038*cm) ;
@@ -334,7 +326,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    pethylene1Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene1) ;
    trdLogCollection.push_back(pethylene1Log) ;
-   pethylene1Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* copperStrips = RPCBox("copperStrips", 0.0019*cm) ;
@@ -342,7 +333,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    copperStripsLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(copperStrips) ;
    trdLogCollection.push_back(copperStripsLog) ;
-   copperStripsLog->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* pethylene2 = RPCBox("pethylene2", 0.038*cm) ;
@@ -350,7 +340,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    pethylene2Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene2) ;
    trdLogCollection.push_back(pethylene2Log) ;
-   pethylene2Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite2 = RPCBox("graphite2", 0.002*cm) ;
@@ -358,8 +347,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite2Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite2) ;
    trdLogCollection.push_back(graphite2Log) ;
-   graphite2Log->SetSensitiveDetector(sensitive) ;
-
    //-------------------------------------------------------------------------------------
 
    G4Box* bakelite2 = RPCBox("bakelite2", 0.2*cm) ;
@@ -367,7 +354,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite2Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite2) ;
    trdLogCollection.push_back(bakelite2Log) ;
-   bakelite2Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* GasGap2 = RPCBox("GasGap2", 0.2*cm) ;
@@ -383,7 +369,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite3Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite3) ;
    trdLogCollection.push_back(bakelite3Log) ;
-   bakelite3Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite3 = RPCBox("graphite3", 0.002*cm) ;
@@ -391,8 +376,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite3Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite3) ;
    trdLogCollection.push_back(graphite3Log) ;
-   graphite3Log->SetSensitiveDetector(sensitive) ;
-
    //-------------------------------------------------------------------------------------
 
    G4Box* pethylene3 = RPCBox("pethylene3", 0.038*cm) ;
@@ -400,16 +383,13 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    pethylene3Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene3) ;
    trdLogCollection.push_back(pethylene3Log) ;
-   pethylene3Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
-
 
    G4Box* copperTop = RPCBox("copperTop", 0.0019*cm) ;
    G4LogicalVolume* copperTopLog = new G4LogicalVolume(copperTop, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copperTopLog") ;
    copperTopLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(copperTop) ;
    trdLogCollection.push_back(copperTopLog) ;
-   copperTopLog->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
 
    G4Box* PETop = RPCBox("PETop", 0.025*cm) ;
@@ -417,7 +397,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    PETopLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(PETop) ;
    trdLogCollection.push_back(PETopLog) ;
-   PETopLog->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
    G4Box* FakeTop = RPCBox("FakeTop", 0.1*mm) ;
    G4LogicalVolume* FakeTopLog = new G4LogicalVolume(FakeTop, fAirMat, "FakeTopLog") ;
@@ -425,7 +404,6 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    trdCollection.push_back(FakeTop) ;
    trdLogCollection.push_back(FakeTopLog) ;
    FakeTopLog->SetSensitiveDetector(sensitive) ;
-
 
 
    //***************************************************

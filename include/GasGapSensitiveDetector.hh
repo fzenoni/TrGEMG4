@@ -44,20 +44,6 @@ class GasGapSensitiveDetector : public G4VSensitiveDetector
    private:
       G4double driftDep ;
       G4double transferDep ;
-      // GARFIELD quantities
-      G4double globalTime ;
-      G4int    pdgCode ;
-      G4double kineticEnergy ;
-      G4double positionX ;
-      G4double positionY ;
-      G4double positionZ ;
-      G4double momentumX ;
-      G4double momentumY ;
-      G4double momentumZ ;
-      G4double momentumDirectionX ;
-      G4double momentumDirectionY ;
-      G4double momentumDirectionZ ;
-      std::string process ;
       G4int    charge ;
       G4bool   neutSensitive ;
 

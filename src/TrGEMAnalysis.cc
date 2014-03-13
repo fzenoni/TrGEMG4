@@ -2,6 +2,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Event.hh"
+#include "G4Step.hh"
 #include "G4Run.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -129,7 +130,6 @@ void TrGEMAnalysis::EndOfEvent(const G4Event* /*anEvent*/)
    //ntuple->Fill(double(n_gapGamma[0]),double(n_gapElectron[0]),double(n_gapPositron[0])) ;
 
    t->Fill() ;
-   g->Fill() ;
 
 }
 
@@ -170,6 +170,14 @@ void TrGEMAnalysis::EndOfRun(const G4Run* aRun)
    delete m_ROOT_file;
 
 }
+
+
+void TrGEMAnalysis::EndOfStep(const G4Step* aStep) {
+
+   g->Fill() ;
+
+} 
+
 
 void TrGEMAnalysis::AddSecondary(const G4ParticleDefinition* part)
 {

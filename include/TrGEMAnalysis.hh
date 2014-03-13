@@ -6,6 +6,7 @@
 
 class G4Run;
 class G4Event;
+class G4Step;
 class G4ParticleDefinition;
 class TFile;
 class TH1D;
@@ -24,6 +25,7 @@ class TrGEMAnalysis {
       void EndOfEvent(const G4Event* anEvent);
       void PrepareNewRun(const G4Run* aRun);
       void EndOfRun(const G4Run* aRun);
+      void EndOfStep(const G4Step* aStep);
       void AddSecondary(const G4ParticleDefinition* part);
       void AddGapSecondary(const G4ParticleDefinition* part, G4int gapNum);
       void AddEDep(G4double edep, G4double z);
