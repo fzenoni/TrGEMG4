@@ -5,6 +5,7 @@
 #include <vector>
 
 class G4Run;
+class G4Track;
 class G4Event;
 class G4Step;
 class G4ParticleDefinition;
@@ -25,7 +26,7 @@ class TrGEMAnalysis {
       void EndOfEvent(const G4Event* anEvent);
       void PrepareNewRun(const G4Run* aRun);
       void EndOfRun(const G4Run* aRun);
-      void EndOfStep(const G4Step* aStep);
+      void EndOfStack(const G4Track* aTrack);
       void AddSecondary(const G4ParticleDefinition* part);
       void AddGapSecondary(const G4ParticleDefinition* part, G4int gapNum);
       void AddEDep(G4double edep, G4double z);
@@ -47,9 +48,6 @@ class TrGEMAnalysis {
 	    G4double aPositionX, 
 	    G4double aPositionY, 
 	    G4double aPositionZ,
-	    G4double aMomentumX, 
-	    G4double aMomentumY, 
-	    G4double aMomentumZ,
 	    G4double aMomentumDirectionX, 
 	    G4double aMomentumDirectionY, 
 	    G4double aMomentumDirectionZ,
@@ -112,9 +110,6 @@ class TrGEMAnalysis {
 	 G4double positionX ;
 	 G4double positionY ;
 	 G4double positionZ ;
-	 G4double momentumX ;
-	 G4double momentumY ;
-	 G4double momentumZ ;
 	 G4double momentumDirectionX ;
 	 G4double momentumDirectionY ;
 	 G4double momentumDirectionZ ;

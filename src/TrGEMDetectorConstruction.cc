@@ -75,13 +75,13 @@ void TrGEMDetectorConstruction::DefineMaterials() {
    CF4->AddElement(elF, 4) ; 
 
    // Ar:CO2 (70:30) @ STP conditions
-   G4double mixtureDensity = (Argon->GetDensity() * 70/100.0 + CarbonDioxide->GetDensity() * 30/100.0) ;
+   G4double mixtureDensity = (Argon->GetDensity() * 70./100.0 + CarbonDioxide->GetDensity() * 30./100.0) ;
    G4Material *ArCO2 = new G4Material("Ar/CO2",mixtureDensity,2) ;
    ArCO2->AddMaterial(Argon, 0.7) ;
    ArCO2->AddMaterial(CarbonDioxide, 0.3) ;
 
    // Ar:CO2:CF4 (45:15:40) @ STP conditions
-   mixtureDensity = (Argon->GetDensity() * 45/100.0 + CarbonDioxide->GetDensity() * 15/100.0 + CF4->GetDensity() * 40/100.0) ;
+   mixtureDensity = (Argon->GetDensity() * 45./100.0 + CarbonDioxide->GetDensity() * 15./100.0 + CF4->GetDensity() * 40./100.0) ;
    G4Material *ArCO2CF4 = new G4Material("Ar/CO2/CF4",mixtureDensity,3) ;
    ArCO2CF4->AddMaterial(Argon, 0.45) ;
    ArCO2CF4->AddMaterial(CarbonDioxide,0.15) ;
@@ -137,7 +137,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    G4VisAttributes *gemAttributes = new G4VisAttributes(G4Color::Green()) ;
    gemAttributes->SetForceWireframe(true) ;
 
-   
+    
    G4Trd* cathode = Trapezoid("Cathode", 1.*mm) ;
    G4LogicalVolume* cathodeLog = new G4LogicalVolume(cathode, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "CathodeLog") ;
    cathodeLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
@@ -156,7 +156,6 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    g10_1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1) ;
    trdLogCollection.push_back(g10_1Log) ;
-   
 
    G4Trd* gasGap1 = Trapezoid("GasGap1", 3.*mm) ;
    G4LogicalVolume* gasGap1Log = new G4LogicalVolume(gasGap1, fGasMat, "gasGap1Log") ; 
@@ -187,6 +186,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(copper12) ;
    trdLogCollection.push_back(copper12Log) ;
    // First GEM Foil - end
+   
 
    G4Trd* gasGap2 = Trapezoid("GasGap2", 1.*mm) ;
    G4LogicalVolume* gasGap2Log = new G4LogicalVolume(gasGap2, fGasMat, "gasGap2Log") ;
@@ -276,7 +276,6 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    readoutLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(readout) ;
    trdLogCollection.push_back(readoutLog) ;
-   
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 

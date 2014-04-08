@@ -116,11 +116,12 @@ void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
    //G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)
-   G4double ionizationPotential = 0.97*14*eV+0.03*10.6*eV ; // RPC GAS 
+   G4double ionizationPotential = 0.7*26*eV + 0.3*33*eV ; // Ar:CO2 (70:30)
+   //G4double ionizationPotential = 0.97*14*eV+0.03*10.6*eV ; // RPC GAS 
    // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli '77, Sharma)  
    // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
    // These are values previously used. They represent the minimum ionization potential.
-   G4int factor = 5 ;
+   G4int factor = 0 ;
    if(driftDep > factor*ionizationPotential) {
       TrGEMAnalysis::GetInstance()->SetDriftSensitivity(driftDep) ;
       //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 

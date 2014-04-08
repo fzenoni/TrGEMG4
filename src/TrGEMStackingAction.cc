@@ -3,6 +3,7 @@
 
 #include "G4ClassificationOfNewTrack.hh"
 #include "G4Track.hh"
+#include "G4VProcess.hh"
 
 TrGEMStackingAction::TrGEMStackingAction()
 {}
@@ -15,6 +16,51 @@ G4ClassificationOfNewTrack TrGEMStackingAction::ClassifyNewTrack( const G4Track 
    // always "urgent" in current applications
    G4ClassificationOfNewTrack result( fUrgent );
 
+   // Saving here the "Garfield" variables
+   charge = aTrack->GetParticleDefinition()->GetPDGCharge() ;
+   globalTime = aTrack->GetGlobalTime() ;
+   pdgCode = aTrack->GetParticleDefinition()->GetPDGEncoding() ;
+   kineticEnergy = aTrack->GetVertexKineticEnergy() ;
+   positionX = aTrack->GetVertexPosition().x() ;
+   positionY = aTrack->GetVertexPosition().y() ;
+   positionZ = aTrack->GetVertexPosition().z() ;
+   //G4cout << positionZ << G4endl ;
+   momentumDirectionX = aTrack->GetVertexMomentumDirection().x() ; 
+   momentumDirectionY = aTrack->GetVertexMomentumDirection().y() ; 
+   momentumDirectionZ = aTrack->GetVertexMomentumDirection().z() ;
+   //const G4VProcess* proc = point2->GetProcessDefinedStep();
+   //const G4String procname = proc->GetProcessName();
+   //process = procname ;
+   if(aTrack->GetCreatorProcess() != NULL) {
+      const G4VProcess* proc = aTrack->GetCreatorProcess() ;
+      const G4String procname = proc->GetProcessName() ;
+      //G4cout << procname << G4endl;
+      process = procname ;
+   }
+   //else G4cout << "No process?" << G4endl ;
+   //if(process != "Transportation" && process != "eIoni" && process != "hIoni" && process != "ionIoni") G4cout << process << G4endl ;
+   //if(volName == "WorldSpace") G4cout << process << G4endl ;
+
+   /*
+   TrGEMAnalysis::GetInstance()->SaveGarfieldQuantities(
+	 1,
+	 charge,
+	 globalTime,
+	 pdgCode,
+	 kineticEnergy,
+	 positionX,
+	 positionY,
+	 positionZ,
+	 momentumDirectionX, 
+	 momentumDirectionY, 
+	 momentumDirectionZ,
+	 process) ;
+   */
+   // Let's save the "Garfield" variables
+   // Commented hoping the simulation will be faster
+   //TrGEMAnalysis::GetInstance()->EndOfStack(aTrack) ;
+
+
    if ( aTrack->GetParentID() > 0 ) // This is a secondary
    {
       TrGEMAnalysis::GetInstance()->AddSecondary(aTrack->GetDefinition());
@@ -23,6 +69,7 @@ G4ClassificationOfNewTrack TrGEMStackingAction::ClassifyNewTrack( const G4Track 
       //for(G4int i = 0; i < 4; i++) {
       //if(orTouch == GasGaps[i]) // This is a secondary born in GasGap #i 
       //TrGEMAnalysis::GetInstance()->AddGapSecondary(aTrack->GetDefinition(), i);
+      //
    }
    else // This is primary
    {
@@ -32,5 +79,5 @@ G4ClassificationOfNewTrack TrGEMStackingAction::ClassifyNewTrack( const G4Track 
 
    return result;
 
-}
+   }
 

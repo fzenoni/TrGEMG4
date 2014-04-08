@@ -16,7 +16,7 @@
 #include "TrGEMEventAction.hh"
 #include "TrGEMSteppingAction.hh"
 #include "TrGEMStackingAction.hh"
-//#include "TrGEMTrackingAction.hh"
+#include "TrGEMTrackingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -34,8 +34,8 @@ int main(int argc, char** argv) {
    G4RunManager* runManager = new G4RunManager ;
 
    // set mandatory initialization classes
-   //runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
-   runManager->SetUserInitialization(new CfRPCDetectorConstruction) ;
+   runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
+   //runManager->SetUserInitialization(new CfRPCDetectorConstruction) ;
    //runManager->SetUserInitialization(new UniPVRPCDetectorConstruction) ;
    // For EM physics
    //G4VUserPhysicsList* physics = new QGSP_FTFP_BERT();
@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
    // User Action classes
    runManager->SetUserAction(new TrGEMRunAction) ;
    runManager->SetUserAction(new TrGEMEventAction) ;
-   //runManager->SetUserAction(new TrGEMTrackingAction) ;
+   runManager->SetUserAction(new TrGEMTrackingAction) ;
    runManager->SetUserAction(new TrGEMStackingAction) ;
    runManager->SetUserAction(new TrGEMSteppingAction) ;
 

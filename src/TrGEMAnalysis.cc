@@ -105,9 +105,6 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    g->Branch("positionX",&positionX,"positionX/D") ;
    g->Branch("positionY",&positionY,"positionY/D") ;
    g->Branch("positionZ",&positionZ,"positionZ/D") ;
-   g->Branch("momentumX",&momentumX,"momentumX/D") ;
-   g->Branch("momentumY",&momentumY,"momentumY/D") ;
-   g->Branch("momentumZ",&momentumZ,"momentumZ/D") ;
    g->Branch("momentumDirectionX",&momentumDirectionX,"momentumDirectionX/D") ;
    g->Branch("momentumDirectionY",&momentumDirectionY,"momentumDirectionY/D") ;
    g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
@@ -172,7 +169,7 @@ void TrGEMAnalysis::EndOfRun(const G4Run* aRun)
 }
 
 
-void TrGEMAnalysis::EndOfStep(const G4Step* aStep) {
+void TrGEMAnalysis::EndOfStack(const G4Track* aTrack) {
 
    g->Fill() ;
 
@@ -280,9 +277,6 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
       G4double aPositionX, 
       G4double aPositionY, 
       G4double aPositionZ,
-      G4double aMomentumX, 
-      G4double aMomentumY, 
-      G4double aMomentumZ,
       G4double aMomentumDirectionX, 
       G4double aMomentumDirectionY, 
       G4double aMomentumDirectionZ,
@@ -296,9 +290,6 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
    positionX = aPositionX ;
    positionY = aPositionY ;
    positionZ = aPositionZ ;
-   momentumX = aMomentumX ;
-   momentumY = aMomentumY ;
-   momentumZ = aMomentumZ ;
    momentumDirectionX = aMomentumDirectionX ;
    momentumDirectionY = aMomentumDirectionY ;
    momentumDirectionZ = aMomentumDirectionZ ;

@@ -29,8 +29,8 @@ TrGEMDetectorConstruction::TrGEMDetectorConstruction() :
    tripleGemHeight    = 990.0*mm ;
 
    // Squared shape dimensions
-   tripleGemPx = 10.*mm ;
-   tripleGemPy = 10.*mm ;
+   tripleGemPx = 100.*mm ;
+   tripleGemPy = 100.*mm ;
 
    G4double cut = 10*um ;
    fGasDetectorCuts = new G4ProductionCuts() ;
@@ -95,7 +95,8 @@ void TrGEMDetectorConstruction::DefineMaterials() {
    ArCO2CF4->AddMaterial(CF4,0.40) ;
 
    // Choice of the gas
-   fGasMat = ArCO2CF4 ;
+   //fGasMat = ArCO2CF4 ;
+   fGasMat = ArCO2 ;
 
 }
 
@@ -105,7 +106,6 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    // Cleanup old geometry
    G4GeometryManager::GetInstance()->OpenGeometry();
 
-   G4GeometryManager::GetInstance()->OpenGeometry();
    //G4PhysicalVolumeStore::GetInstance()->Clean();
    //G4LogicalVolumeStore::GetInstance()->Clean();
    //G4SolidStore::GetInstance()->Clean();
@@ -116,9 +116,9 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    // SD Manager 
    G4SDManager* sdman = G4SDManager::GetSDMpointer() ;
 
-   G4double worldSizeX = /*tripleGemPx*1.5*/ 10*cm;
-   G4double worldSizeY = /*tripleGemPy*1.5*/ 10*cm;
-   G4double worldSizeZ = 10*cm;
+   G4double worldSizeX = /*tripleGemPx*1.5*/ 100*cm;
+   G4double worldSizeY = /*tripleGemPy*1.5*/ 100*cm;
+   G4double worldSizeZ = 100*cm;
 
    // World definition and placement
    G4Box* worldBox = new G4Box("WorldBox", worldSizeX, worldSizeY, worldSizeZ) ;
@@ -146,14 +146,16 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    G4VisAttributes *gemAttributes = new G4VisAttributes(G4Color::Green()) ;
    gemAttributes->SetForceWireframe(true) ;
 
+   /*
    G4Box* cathode = GemBox("Cathode", 3.*mm) ;
    G4LogicalVolume* cathodeLog = new G4LogicalVolume(cathode, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "CathodeLog") ;
    cathodeLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(cathode) ;
    trdLogCollection.push_back(cathodeLog) ;
+   */
 
    // Drift cathode foil
-   G4Box* kapton0 = GemBox("kapton0", 250.*um) ;
+   G4Box* kapton0 = GemBox("kapton0", 200.*um) ;
    G4LogicalVolume* kapton0Log = new G4LogicalVolume(kapton0, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton0Log") ;
    kapton0Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(kapton0) ;
@@ -175,11 +177,11 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    gasGap1Log->SetSensitiveDetector(sensitive) ;
 
    // First GEM Foil - beginning
-   /*G4Box* copper11 = GemBox("Copper11", 5*um) ;
-     G4LogicalVolume* copper11Log = new G4LogicalVolume(copper11, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper11Log") ; 
-     copper11Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-     trdCollection.push_back(copper11) ;
-     trdLogCollection.push_back(copper11Log) ;*/
+   G4Box* copper11 = GemBox("Copper11", 5*um) ;
+   G4LogicalVolume* copper11Log = new G4LogicalVolume(copper11, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper11Log") ; 
+   copper11Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper11) ;
+   trdLogCollection.push_back(copper11Log) ;
 
    G4Box* kapton1 = GemBox("Kapton1", 50.*um) ;
    G4LogicalVolume* kapton1Log = new G4LogicalVolume(kapton1, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton1Log") ;
@@ -187,25 +189,25 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(kapton1) ;
    trdLogCollection.push_back(kapton1Log) ;
 
-   /*G4Box* copper12 = GemBox("Copper12",5.*um) ;
-     G4LogicalVolume* copper12Log = new G4LogicalVolume(copper12, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper12Log") ;
-     copper12Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-     trdCollection.push_back(copper12) ;
-     trdLogCollection.push_back(copper12Log) ;*/
+   G4Box* copper12 = GemBox("Copper12",5.*um) ;
+   G4LogicalVolume* copper12Log = new G4LogicalVolume(copper12, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper12Log") ;
+   copper12Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper12) ;
+   trdLogCollection.push_back(copper12Log) ;
    // First GEM Foil - end
 
-   G4Box* gasGap2 = GemBox("GasGap2", 1.*mm) ;
+   G4Box* gasGap2 = GemBox("GasGap2", 2.*mm) ;
    G4LogicalVolume* gasGap2Log = new G4LogicalVolume(gasGap2, fGasMat, "gasGap2Log") ;
    gasGap2Log->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
    trdCollection.push_back(gasGap2) ;
    trdLogCollection.push_back(gasGap2Log) ;
    gasGap2Log->SetSensitiveDetector(sensitive) ;
 
-   /*G4Box* copper21 = GemBox("Copper21", 5.*um) ;
-     G4LogicalVolume* copper21Log = new G4LogicalVolume(copper21, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper21Log") ;
-     copper21Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-     trdCollection.push_back(copper21) ;
-     trdLogCollection.push_back(copper21Log) ;*/
+   G4Box* copper21 = GemBox("Copper21", 5.*um) ;
+   G4LogicalVolume* copper21Log = new G4LogicalVolume(copper21, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper21Log") ;
+   copper21Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper21) ;
+   trdLogCollection.push_back(copper21Log) ;
 
    G4Box* kapton2 = GemBox("Kapton2", 50.*um) ;
    G4LogicalVolume* kapton2Log = new G4LogicalVolume(kapton2, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton2Log") ;
@@ -213,11 +215,11 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(kapton2) ;
    trdLogCollection.push_back(kapton2Log) ;
 
-   /*G4Box* copper22 = GemBox("Copper22", 5.*um) ;
-     G4LogicalVolume* copper22Log = new G4LogicalVolume(copper22, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper22Log") ;
-     copper22Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-     trdCollection.push_back(copper22) ;
-     trdLogCollection.push_back(copper22Log) ;*/
+   G4Box* copper22 = GemBox("Copper22", 5.*um) ;
+   G4LogicalVolume* copper22Log = new G4LogicalVolume(copper22, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper22Log") ;
+   copper22Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper22) ;
+   trdLogCollection.push_back(copper22Log) ;
 
    G4Box* gasGap3 = GemBox("GasGap3", 2.*mm) ;
    G4LogicalVolume* gasGap3Log = new G4LogicalVolume(gasGap3, fGasMat, "GasGap3Log") ;
@@ -225,11 +227,11 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(gasGap3) ;
    trdLogCollection.push_back(gasGap3Log) ;
 
-   /*G4Box* copper31 = GemBox("Copper31", 5.*um) ;
-     G4LogicalVolume* copper31Log = new G4LogicalVolume(copper31, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper31Log") ;
-     copper31Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-     trdCollection.push_back(copper31) ;
-     trdLogCollection.push_back(copper31Log) ;*/
+   G4Box* copper31 = GemBox("Copper31", 5.*um) ;
+   G4LogicalVolume* copper31Log = new G4LogicalVolume(copper31, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper31Log") ;
+   copper31Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper31) ;
+   trdLogCollection.push_back(copper31Log) ;
 
    G4Box* kapton3 = GemBox("Kapton3", 50.*um) ;
    G4LogicalVolume* kapton3Log = new G4LogicalVolume(kapton3, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton3Log") ;
@@ -237,13 +239,13 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(kapton3) ;
    trdLogCollection.push_back(kapton3Log) ;
 
-   /*G4Box* copper32 = GemBox("Copper32", 5.*um) ;
-     G4LogicalVolume* copper32Log = new G4LogicalVolume(copper32, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper32Log") ;
-     copper32Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-     trdCollection.push_back(copper32) ;
-     trdLogCollection.push_back(copper32Log) ;*/
+   G4Box* copper32 = GemBox("Copper32", 5.*um) ;
+   G4LogicalVolume* copper32Log = new G4LogicalVolume(copper32, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper32Log") ;
+   copper32Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper32) ;
+   trdLogCollection.push_back(copper32Log) ;
 
-   G4Box* gasGap4 = GemBox("GasGap4", 1.*mm) ;
+   G4Box* gasGap4 = GemBox("GasGap4", 2.*mm) ;
    G4LogicalVolume* gasGap4Log = new G4LogicalVolume(gasGap4, fGasMat, "gasGap4Log") ;
    gasGap4Log->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
    trdCollection.push_back(gasGap4) ;
@@ -256,19 +258,27 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(g10_2) ;
    trdLogCollection.push_back(g10_2Log) ;
 
+   G4Box* kapton4 = GemBox("kapton4", 200.*um) ;
+   G4LogicalVolume* kapton4Log = new G4LogicalVolume(kapton4, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton4Log") ;
+   kapton4Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(kapton4) ;
+   trdLogCollection.push_back(kapton4Log) ;
+
+   /*
    // BOX cover (1 mm) + GEM cover (1 mm)
    G4Box* readout = GemBox("Readout", 2.*mm) ;
    G4LogicalVolume* readoutLog = new G4LogicalVolume(readout, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "readoutLog") ;
    readoutLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(readout) ;
    trdLogCollection.push_back(readoutLog) ;
+   */
 
-
-   G4double holePitch = 140.*um ;
-   G4double spacingX = holePitch ;
-   G4double spacingY = holePitch*sqrt(3.)/2 ;
-   G4int NbOfHolesX = floor((tripleGemPx - 2.*80.E-3)/spacingX) ; // Dynamic computation of nb of holes 
-   G4int NbOfHolesY = floor((tripleGemPy - 2.*80.E-3)/spacingY) ; // Dynamic computation of nb of holes
+   /*
+      G4double holePitch = 140.*um ;
+      G4double spacingX = holePitch ;
+      G4double spacingY = holePitch*sqrt(3.)/2 ;
+      G4int NbOfHolesX = floor((tripleGemPx - 2.*80.E-3)/spacingX) ; // Dynamic computation of nb of holes 
+      G4int NbOfHolesY = floor((tripleGemPy - 2.*80.E-3)/spacingY) ; // Dynamic computation of nb of holes
    //G4cout << tripleGemPx << " " << holePitch << " " << NbOfHolesY << G4endl ;
    G4double rmax = sqrt((35*35.+35*25.+25*25.)/3)*um; // for a volume equivalent to the true gem hole's one
    G4Tubs* hole = new G4Tubs("Hole", 0, rmax, 50.*um/2, 0.*deg, 360.*deg) ;
@@ -278,18 +288,19 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    G4double startY = -(tripleGemPy/2/um - 80)*um ;
    //G4cout << startX << " " << startY << G4endl ; 
    for(G4int i = 0; i < NbOfHolesY ; i++) {
-      G4double positionY = startY + i*spacingY ;
-      G4double xShift = 0. ;
-      if(i%2 != 0) xShift = holePitch/2 ;
-      for(G4int j = 0; j < NbOfHolesX ; j++) {
-	 G4double positionX = startX + xShift + j*spacingX ;
-	 G4ThreeVector position(positionX,positionY,0) ;
-	 holeCopyNo++ ;
-	 new G4PVPlacement(0,position,holeLog,"holePlacement1", kapton1Log, false, holeCopyNo);
-	 new G4PVPlacement(0,position,holeLog,"holePlacement2", kapton2Log, false, 1E6+holeCopyNo);
-	 new G4PVPlacement(0,position,holeLog,"holePlacement3", kapton3Log, false, 2E6+holeCopyNo);
-      }
+   G4double positionY = startY + i*spacingY ;
+   G4double xShift = 0. ;
+   if(i%2 != 0) xShift = holePitch/2 ;
+   for(G4int j = 0; j < NbOfHolesX ; j++) {
+   G4double positionX = startX + xShift + j*spacingX ;
+   G4ThreeVector position(positionX,positionY,0) ;
+   holeCopyNo++ ;
+   new G4PVPlacement(0,position,holeLog,"holePlacement1", kapton1Log, false, holeCopyNo);
+   new G4PVPlacement(0,position,holeLog,"holePlacement2", kapton2Log, false, 1E6+holeCopyNo);
+   new G4PVPlacement(0,position,holeLog,"holePlacement3", kapton3Log, false, 2E6+holeCopyNo);
    }
+   }
+   */
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 
