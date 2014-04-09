@@ -16,19 +16,6 @@ class TrGEMStackingAction : public G4UserStackingAction {
 
       virtual G4ClassificationOfNewTrack ClassifyNewTrack( const G4Track* aTrack );
 
-   private:
-      G4int charge ;
-      G4double globalTime ;
-      G4int    pdgCode ;
-      G4double kineticEnergy ;
-      G4double positionX ;
-      G4double positionY ;
-      G4double positionZ ;
-      G4double momentumDirectionX ;
-      G4double momentumDirectionY ;
-      G4double momentumDirectionZ ;
-      std::string process ;
-      
 };
 
 #endif

@@ -97,10 +97,11 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    //t->Branch("vecProcNo",,&pVecVolume) ;
 
    g = new TTree("Signal","Quantities related to secondaries that provide a signal") ;
-   g->Branch("gasGap",&gasGap,"gasGap/I") ;
+   g->Branch("eventID",&eventID,"eventID/I") ;
    g->Branch("charge",&charge,"charge/I") ;
    g->Branch("globalTime",&globalTime,"globalTime/D") ;
    g->Branch("pdgCode",&pdgCode,"pdgCode/I") ;
+   g->Branch("particle",&particle) ;
    g->Branch("kineticEnergy",&kineticEnergy,"kineticEnergy/D") ;
    g->Branch("positionX",&positionX,"positionX/D") ;
    g->Branch("positionY",&positionY,"positionY/D") ;
@@ -109,6 +110,7 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    g->Branch("momentumDirectionY",&momentumDirectionY,"momentumDirectionY/D") ;
    g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
    g->Branch("process",&process) ;
+   g->Branch("volume",&volume) ;
 
 }
 
@@ -169,7 +171,7 @@ void TrGEMAnalysis::EndOfRun(const G4Run* aRun)
 }
 
 
-void TrGEMAnalysis::EndOfStack(const G4Track* aTrack) {
+void TrGEMAnalysis::EndOfTrack(const G4Track* aTrack) {
 
    g->Fill() ;
 
@@ -268,11 +270,12 @@ void TrGEMAnalysis::SaveStepProcess(G4int procNo, std::string volume) {
 
 }
 
-void TrGEMAnalysis::SaveGarfieldQuantities(
-      G4int aGasGap,
+void TrGEMAnalysis::SaveProcessQuantities(
+      G4int anEventID,
       G4int aCharge,
       G4double aGlobalTime,
       G4int aPdgCode,
+      std::string aParticle,
       G4double aKineticEnergy,
       G4double aPositionX, 
       G4double aPositionY, 
@@ -280,12 +283,14 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
       G4double aMomentumDirectionX, 
       G4double aMomentumDirectionY, 
       G4double aMomentumDirectionZ,
-      std::string aProcess) {
+      std::string aProcess,
+      std::string aVolume) {
 
-   gasGap = aGasGap ;
+   eventID = anEventID ;
    charge = aCharge ;
    globalTime = aGlobalTime ;
    pdgCode = aPdgCode ;
+   particle = aParticle ;
    kineticEnergy = aKineticEnergy ;
    positionX = aPositionX ;
    positionY = aPositionY ;
@@ -294,5 +299,6 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
    momentumDirectionY = aMomentumDirectionY ;
    momentumDirectionZ = aMomentumDirectionZ ;
    process = aProcess ;
+   volume = aVolume ;
 
 } 

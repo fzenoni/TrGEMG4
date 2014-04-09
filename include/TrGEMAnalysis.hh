@@ -26,7 +26,7 @@ class TrGEMAnalysis {
       void EndOfEvent(const G4Event* anEvent);
       void PrepareNewRun(const G4Run* aRun);
       void EndOfRun(const G4Run* aRun);
-      void EndOfStack(const G4Track* aTrack);
+      void EndOfTrack(const G4Track* aTrack);
       void AddSecondary(const G4ParticleDefinition* part);
       void AddGapSecondary(const G4ParticleDefinition* part, G4int gapNum);
       void AddEDep(G4double edep, G4double z);
@@ -39,11 +39,12 @@ class TrGEMAnalysis {
       void SetTransferSensitivity(G4double someTransferEdep) ;
       void SetNeutronSensitivity(G4bool someBool) ;
       void SaveStepProcess(int process, std::string volume) ;
-      void SaveGarfieldQuantities(
-	    G4int    aGasGap,
+      void SaveProcessQuantities(
+	    G4int    anEventID,
 	    G4int    aCharge,
 	    G4double aGlobalTime,
 	    G4int    aPdgCode,
+	    std::string aParticle,
 	    G4double aKineticEnergy,
 	    G4double aPositionX, 
 	    G4double aPositionY, 
@@ -51,9 +52,8 @@ class TrGEMAnalysis {
 	    G4double aMomentumDirectionX, 
 	    G4double aMomentumDirectionY, 
 	    G4double aMomentumDirectionZ,
-	    std::string aProcess) ;
-
-
+	    std::string aProcess,
+	    std::string aVolume) ;
 
    private:
 
@@ -101,11 +101,12 @@ class TrGEMAnalysis {
 	 G4int vecProcNo ;
 	 G4bool neutronSensitivity ;
 
-	 // GARFIELD quantities
-	 G4int gasGap ;
+	 // PROCESS quantities
+	 G4int eventID ;
 	 G4int charge ;
 	 G4double globalTime ;
 	 G4int pdgCode ;
+	 std::string particle ;
 	 G4double kineticEnergy ;
 	 G4double positionX ;
 	 G4double positionY ;
@@ -114,6 +115,7 @@ class TrGEMAnalysis {
 	 G4double momentumDirectionY ;
 	 G4double momentumDirectionZ ;
 	 std::string process ;
+	 std::string volume ;
 
 	 // ROOT objects
 	 TFile*    m_ROOT_file;
