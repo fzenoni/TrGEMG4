@@ -34,7 +34,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 find_package(ROOT QUIET)
 add_definitions(-DG4ANALYSIS_USE_ROOT)
 if(NOT ROOT_FOUND)
-   message(STATUS "G4 Examples: ROOT package not found. --> 3GEM-G4 example disabled")  
+   message(STATUS "ROOT package not found. --> TrGEMG4 disabled")  
   return()
 endif()
 

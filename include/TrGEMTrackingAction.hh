@@ -18,6 +18,8 @@ class TrGEMTrackingAction : public G4UserTrackingAction {
 
    private:
       G4int eventID ;
+      G4int parentID ;
+      G4int trackID ;
       G4int charge ;
       G4double globalTime ;
       G4int    pdgCode ;

@@ -98,6 +98,8 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
 
    g = new TTree("Signal","Quantities related to secondaries that provide a signal") ;
    g->Branch("eventID",&eventID,"eventID/I") ;
+   g->Branch("parentID",&parentID,"parentID/I") ;
+   g->Branch("trackID",&eventID,"trackID/I") ;
    g->Branch("charge",&charge,"charge/I") ;
    g->Branch("globalTime",&globalTime,"globalTime/D") ;
    g->Branch("pdgCode",&pdgCode,"pdgCode/I") ;
@@ -272,6 +274,8 @@ void TrGEMAnalysis::SaveStepProcess(G4int procNo, std::string volume) {
 
 void TrGEMAnalysis::SaveProcessQuantities(
       G4int anEventID,
+      G4int aParentID,
+      G4int aTrackID,
       G4int aCharge,
       G4double aGlobalTime,
       G4int aPdgCode,
@@ -288,6 +292,8 @@ void TrGEMAnalysis::SaveProcessQuantities(
 
    eventID = anEventID ;
    charge = aCharge ;
+   parentID = aParentID ;
+   trackID = aTrackID ;
    globalTime = aGlobalTime ;
    pdgCode = aPdgCode ;
    particle = aParticle ;

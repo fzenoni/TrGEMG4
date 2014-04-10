@@ -3,6 +3,8 @@
 #include "CfRPCDetectorConstruction.hh"
 #include "GasGapSensitiveDetector.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4NistManager.hh"
 #include "G4SDManager.hh"
 #include "G4Element.hh"

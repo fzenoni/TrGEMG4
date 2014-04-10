@@ -1,7 +1,8 @@
 #include "TrGEMPrimaryGeneratorAction.hh"
 
 #include "G4GeneralParticleSource.hh"
-
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
       const G4String& particleName,

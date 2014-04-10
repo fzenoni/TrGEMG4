@@ -41,6 +41,8 @@ class TrGEMAnalysis {
       void SaveStepProcess(int process, std::string volume) ;
       void SaveProcessQuantities(
 	    G4int    anEventID,
+	    G4int    aParentID,
+	    G4int    aTrackID,
 	    G4int    aCharge,
 	    G4double aGlobalTime,
 	    G4int    aPdgCode,
@@ -103,6 +105,8 @@ class TrGEMAnalysis {
 
 	 // PROCESS quantities
 	 G4int eventID ;
+	 G4int parentID ;
+	 G4int trackID ;
 	 G4int charge ;
 	 G4double globalTime ;
 	 G4int pdgCode ;
