@@ -10,8 +10,8 @@
 #/vis/scene/add/hits
 #/vis/scene/add/trajectories
 
-/gps/particle gamma 
-/gps/energy 0.029 MeV
+/gps/particle e+ 
+/gps/energy 0.15 MeV
 
 #/gps/pos/type Beam
 #/gps/position 0. 0. 3. cm
@@ -21,13 +21,23 @@
 #/gps/ang/type beam2d
 #/gps/ang/sigma_x 0. mrad
 #/gps/ang/sigma_y 0. mrad
-#/gps/ang/rot1 -1. 0. 1.
+#/gps/ang/rot1 -1. 0. 0.
 
 /gps/pos/type Surface
 /gps/pos/shape Sphere
 /gps/pos/centre 0. 0. 0. cm
 /gps/pos/radius 1 m
 /gps/ang/type focused
+
+# G. Croci's setup
+# geom. efficiency = 6.02%
+#/gps/ang/type iso
+#/gps/position 0. 0. -23 cm
+#/gps/ang/mintheta -45 deg
+#/gps/ang/mintheta 45 deg
+#/gps/ang/minphi -45 deg
+#/gps/ang/maxphi 45 deg
+#/gps/ang/rot1 0. 0. -1.
 
 /run/verbose 0
 /event/verbose 0
@@ -36,4 +46,5 @@
 /run/setCutForAGivenParticle gamma 1 um
 /run/setCutForAGivenParticle e- 1 nm
 /run/setCutForAGivenParticle e+ 1 um
-/run/beamOn 1000000
+/run/setCutForAGivenParticle proton 0.0 mm
+/run/beamOn 1000

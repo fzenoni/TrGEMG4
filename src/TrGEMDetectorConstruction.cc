@@ -279,6 +279,15 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(readout) ;
    trdLogCollection.push_back(readoutLog) ;
 
+   // GEB board (1.16 mm)
+   G4Trd* geb = Trapezoid("GEB", 1.16*mm) ;
+   G4LogicalVolume* gebLog = new G4LogicalVolume(readout, fG10Mat, "gebLog") ;
+   gebLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   trdCollection.push_back(geb) ;
+   trdLogCollection.push_back(gebLog) ;
+
+
+
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 
    return worldPhys ;
