@@ -113,6 +113,7 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
    g->Branch("process",&process) ;
    g->Branch("volume",&volume) ;
+   g->Branch("chargedSensitivity",&chargedSensitivity, "chargedSensitivity/O") ;
 
 }
 
@@ -288,7 +289,8 @@ void TrGEMAnalysis::SaveProcessQuantities(
       G4double aMomentumDirectionY, 
       G4double aMomentumDirectionZ,
       std::string aProcess,
-      std::string aVolume) {
+      std::string aVolume,
+      G4bool aChargedSensitivity) {
 
    eventID = anEventID ;
    charge = aCharge ;
@@ -306,5 +308,6 @@ void TrGEMAnalysis::SaveProcessQuantities(
    momentumDirectionZ = aMomentumDirectionZ ;
    process = aProcess ;
    volume = aVolume ;
+   chargedSensitivity = neutronSensitivity ;
 
 } 

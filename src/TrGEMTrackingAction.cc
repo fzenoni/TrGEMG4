@@ -19,6 +19,7 @@ TrGEMTrackingAction::TrGEMTrackingAction() :
    momentumDirectionX(0.),
    momentumDirectionY(0.),
    momentumDirectionZ(0.),
+   process(""),
    volume("")
 {;}
 
@@ -86,7 +87,8 @@ void TrGEMTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 	 momentumDirectionY, 
 	 momentumDirectionZ,
 	 process,
-	 volume) ;
+	 volume,
+	 false) ;
 
    
    TrGEMAnalysis::GetInstance()->EndOfTrack(aTrack) ;

@@ -55,7 +55,8 @@ class TrGEMAnalysis {
 	    G4double aMomentumDirectionY, 
 	    G4double aMomentumDirectionZ,
 	    std::string aProcess,
-	    std::string aVolume) ;
+	    std::string aVolume,
+	    G4bool aChargedSensitivity) ;
 
    private:
 
@@ -120,6 +121,7 @@ class TrGEMAnalysis {
 	 G4double momentumDirectionZ ;
 	 std::string process ;
 	 std::string volume ;
+	 G4bool chargedSensitivity ;
 
 	 // ROOT objects
 	 TFile*    m_ROOT_file;
