@@ -8,6 +8,8 @@
 #include "G4GeneralParticleSource.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "TH1F.h"
+#include "TF1.h"
 
 
 class TrGEMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
@@ -26,9 +28,18 @@ class TrGEMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
    private :
       // data members
+
+      G4GeneralParticleSource *gps = new G4GeneralParticleSource() ;
       G4ParticleGun* fParticleGun; // pointer to a G4 service class
       G4GeneralParticleSource *gun ;
+      TF1* fit_cosx ;
+      TF1* fit_cosy ;
+      G4double prob_neg_y ;
+      G4double prob_neg_z ;
 
+      //TH1F* dummy_x ;
+      //TH1F* dummy_y ;
+      //TH1F* dummy_z ;
 };
 
 #endif
