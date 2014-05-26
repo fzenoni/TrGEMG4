@@ -147,6 +147,13 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdCollection.push_back(readoutB) ;
    trdLogCollection.push_back(readoutBLog) ;
 
+   // GEB board (1.16 mm)
+   G4Trd* gebB = Trapezoid("GEBB", 1.16*mm) ;
+   G4LogicalVolume* gebBLog = new G4LogicalVolume(gebB, fG10Mat, "gebBLog") ;
+   gebLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   trdCollection.push_back(gebB) ;
+   trdLogCollection.push_back(gebBLog) ;
+
    // Spacer (air/void)
    G4Trd* spacerB = Trapezoid("spacerB", 1.8*mm) ;
    G4LogicalVolume* spacerBLog = new G4LogicalVolume(spacerB, fEmptyMat, "spacerBLog") ;
@@ -154,13 +161,13 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdCollection.push_back(spacerB) ;
    trdLogCollection.push_back(spacerBLog) ;
 
-   G4Trd* kapton4B = Trapezoid("kapton4B", 200.*um) ;
-   G4LogicalVolume* kapton4BLog = new G4LogicalVolume(kapton4B, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton4BLog") ;
-   kapton4BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(kapton4B) ;
-   trdLogCollection.push_back(kapton4BLog) ;
-  
    // Readout Board
+   G4Trd* copper5B = Trapezoid("Copper5B", 5.*um) ;
+   G4LogicalVolume* copper5BLog = new G4LogicalVolume(copper5B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper5BLog") ;
+   copper5BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper5B) ;
+   trdLogCollection.push_back(copper5BLog) ;   
+
    G4Trd* g10_2B = Trapezoid("g10_2B", 3.*mm) ;
    G4LogicalVolume* g10_2BLog = new G4LogicalVolume(g10_2B, fG10Mat, "g10_2BLog") ; // was G4_BAKELITE
    g10_2BLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
@@ -253,46 +260,44 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdCollection.push_back(gasGap1B) ;
    trdLogCollection.push_back(gasGap1BLog) ;
 
+   G4Trd* copper02B = Trapezoid("Copper02B",5.*um) ;
+   G4LogicalVolume* copper02BLog = new G4LogicalVolume(copper02B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper02BLog") ;
+   copper02BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper02B) ;
+   trdLogCollection.push_back(copper02BLog) ;
+
    G4Trd* g10_1B = Trapezoid("g10_1B", 3.*mm) ;
    G4LogicalVolume* g10_1BLog = new G4LogicalVolume(g10_1B, fG10Mat, "G10_1BLog") ;
    g10_1BLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1B) ;
    trdLogCollection.push_back(g10_1LogB) ;
 
-   // Drift cathode foil
-   G4Trd* kapton0B = Trapezoid("kapton0B", 200.*um) ;
-   G4LogicalVolume* kapton0BLog = new G4LogicalVolume(kapton0B, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton0BLog") ;
-   kapton0BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(kapton0B) ;
-   trdLogCollection.push_back(kapton0BLog) ;
-
-   G4Trd* cathodeB = Trapezoid("CathodeB", 1.*mm) ;
-   G4LogicalVolume* cathodeBLog = new G4LogicalVolume(cathodeB, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "CathodeBLog") ;
-   cathodeBLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
-   trdCollection.push_back(cathodeB) ;
-   trdLogCollection.push_back(cathodeBLog) ;
+   G4Trd* copper01B = Trapezoid("Copper01B",5.*um) ;
+   G4LogicalVolume* copper01BLog = new G4LogicalVolume(copper01B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper01BLog") ;
+   copper01BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper01B) ;
+   trdLogCollection.push_back(copper01BLog) ;
 
    // END OF FIRST CHAMBER
    // BEGINNING OF SECOND CHAMBER
 
-   G4Trd* cathodeA = Trapezoid("CathodeA", 1.*mm) ;
-   G4LogicalVolume* cathodeALog = new G4LogicalVolume(cathodeA, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "CathodeALog") ;
-   cathodeALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
-   trdCollection.push_back(cathodeA) ;
-   trdLogCollection.push_back(cathodeALog) ;
-
-   // Drift cathode foil
-   G4Trd* kapton0A = Trapezoid("kapton0A", 200.*um) ;
-   G4LogicalVolume* kapton0ALog = new G4LogicalVolume(kapton0A, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton0ALog") ;
-   kapton0ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(kapton0A) ;
-   trdLogCollection.push_back(kapton0ALog) ;
+   G4Trd* copper01A = Trapezoid("Copper01A", 5*um) ;
+   G4LogicalVolume* copper01ALog = new G4LogicalVolume(copper01A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper01ALog") ; 
+   copper01ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper01A) ;
+   trdLogCollection.push_back(copper01ALog) ;
 
    G4Trd* g10_1A = Trapezoid("g10_1A", 3.*mm) ;
    G4LogicalVolume* g10_1ALog = new G4LogicalVolume(g10_1A, fG10Mat, "G10_1ALog") ;
    g10_1ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1A) ;
    trdLogCollection.push_back(g10_1LogA) ;
+
+   G4Trd* copper01B = Trapezoid("Copper01B", 5*um) ;
+   G4LogicalVolume* copper01BLog = new G4LogicalVolume(copper01B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper01BLog") ; 
+   copper01BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper01B) ;
+   trdLogCollection.push_back(copper01BLog) ;
 
    G4Trd* gasGap1A = Trapezoid("GasGap1A", 3.*mm) ;
    G4LogicalVolume* gasGap1ALog = new G4LogicalVolume(gasGap1A, fGasMat, "gasGap1ALog") ; 
@@ -392,11 +397,11 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdCollection.push_back(g10_2A) ;
    trdLogCollection.push_back(g10_2ALog) ;
 
-   G4Trd* kapton4A = Trapezoid("kapton4A", 200.*um) ;
-   G4LogicalVolume* kapton4ALog = new G4LogicalVolume(kapton4A, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton4ALog") ;
-   kapton4ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(kapton4A) ;
-   trdLogCollection.push_back(kapton4ALog) ;
+   G4Trd* copper5A = Trapezoid("Copper5A", 5.*um) ;
+   G4LogicalVolume* copper5ALog = new G4LogicalVolume(copper5A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper5ALog") ;
+   copper5ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper5A) ;
+   trdLogCollection.push_back(copper5ALog) ;
 
    // Spacer (air/void)
    G4Trd* spacerA = Trapezoid("spacerA", 1.8*mm) ;
@@ -404,6 +409,13 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    spacerALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(spacerA) ;
    trdLogCollection.push_back(spacerALog) ;
+
+   // GEB board (1.16 mm)
+   G4Trd* gebA = Trapezoid("GEBA", 1.16*mm) ;
+   G4LogicalVolume* gebALog = new G4LogicalVolume(gebA, fG10Mat, "gebALog") ;
+   gebALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   trdCollection.push_back(gebA) ;
+   trdLogCollection.push_back(gebALog) ;
 
    // GEM cover (1 mm)
    G4Trd* readoutA = Trapezoid("ReadoutA", 1.*mm) ;

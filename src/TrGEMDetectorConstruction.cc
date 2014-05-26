@@ -167,7 +167,6 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
    sdman->AddNewDetector(sensitive) ;
    gasGap1Log->SetSensitiveDetector(sensitive) ;
-
    
    // First GEM Foil - beginning
    G4Trd* copper11 = Trapezoid("Copper11", 5*um) ;
@@ -259,6 +258,12 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdCollection.push_back(g10_2) ;
    trdLogCollection.push_back(g10_2Log) ;
 
+   G4Trd* copper5 = Trapezoid("Copper5", 5.*um) ;
+   G4LogicalVolume* copper5Log = new G4LogicalVolume(copper5, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper5Log") ;
+   copper5Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper5) ;
+   trdLogCollection.push_back(copper5Log) ;
+
    // Spacer (air/void)
    G4Trd* spacer = Trapezoid("spacer", 1.8*mm) ;
    G4LogicalVolume* spacerLog = new G4LogicalVolume(spacer, fEmptyMat, "spacerLog") ;
@@ -268,7 +273,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    
    // GEB board (1.16 mm)
    G4Trd* geb = Trapezoid("GEB", 1.16*mm) ;
-   G4LogicalVolume* gebLog = new G4LogicalVolume(readout, fG10Mat, "gebLog") ;
+   G4LogicalVolume* gebLog = new G4LogicalVolume(geb, fG10Mat, "gebLog") ;
    gebLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(geb) ;
    trdLogCollection.push_back(gebLog) ;
