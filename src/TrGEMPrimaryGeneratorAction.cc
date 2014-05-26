@@ -79,7 +79,7 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
    G4double cosz(0.) ;
    double z_source(0) ;
-   if(gRandom->Uniform() > prob_neg_z) {
+   if(gRandom->Uniform() < prob_neg_z) {
       cosz = sqrt(1-cosx*cosx-cosy*cosy) ;
       z_source = 1.9*cm ;
    }
