@@ -88,6 +88,7 @@ void TrGEMTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 	 momentumDirectionZ,
 	 process,
 	 volume,
+	 false,
 	 false) ;
 
    

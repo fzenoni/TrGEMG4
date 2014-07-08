@@ -36,16 +36,16 @@
 #/gps/pos/radius 1 m
 #/gps/ang/type focused
 
-/gps/pos/type Beam
+#/gps/pos/type Beam
 #/gps/position 0. 0. 2.743 cm
-/gps/position 0. 0. -1 cm
-/gps/pos/sigma_x 1. mm
-/gps/pos/sigma_y 1. mm
+#/gps/position 0. 0. -1 cm
+#/gps/pos/sigma_x 1. mm
+#/gps/pos/sigma_y 1. mm
 
-/gps/ang/type beam2d
-/gps/ang/sigma_x 2. mrad
-/gps/ang/sigma_y 2. mrad
-/gps/ang/rot1 -1. 0. 1.
+#/gps/ang/type beam2d
+#/gps/ang/sigma_x 2. mrad
+#/gps/ang/sigma_y 2. mrad
+#/gps/ang/rot1 -1. 0. 1.
 
 #
 # for drawing the tracks

@@ -66,7 +66,8 @@ void TrGEMDetectorConstruction::DefineMaterials() {
    G4Material* Argon = manager->FindOrBuildMaterial("G4_Ar");
    G4Material* CarbonDioxide = manager->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
    G4Material* empty = manager->FindOrBuildMaterial("G4_Galactic");
-   fEmptyMat = empty ;
+   G4Material* air = manager->FindOrBuildMaterial("G4_AIR");
+   fEmptyMat = air ;
 
    // CF4 must be defined by hand
    G4int numel(0) ;
@@ -139,151 +140,158 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    G4VisAttributes *gemAttributes = new G4VisAttributes(G4Color::Green()) ;
    gemAttributes->SetForceWireframe(true) ;
 
-    
+   
+   // GEM cover (1 mm)
+   G4Trd* cover1A = Trapezoid("Cover1A", 1.*mm) ;
+   G4LogicalVolume* cover1ALog = new G4LogicalVolume(cover1A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "Cover1ALog") ;
+   cover1ALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
+   trdCollection.push_back(cover1A) ;
+   trdLogCollection.push_back(cover1ALog) ;
+ 
    // Drift cathode foil
-   G4Trd* copper01 = Trapezoid("Copper01", 5*um) ;
-   G4LogicalVolume* copper01Log = new G4LogicalVolume(copper01, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper01Log") ; 
-   copper01Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper01) ;
-   trdLogCollection.push_back(copper01Log) ;
+   G4Trd* copper01A = Trapezoid("Copper01A", 5*um) ;
+   G4LogicalVolume* copper01ALog = new G4LogicalVolume(copper01A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper01ALog") ; 
+   copper01ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper01A) ;
+   trdLogCollection.push_back(copper01ALog) ;
 
-   G4Trd* g10_1 = Trapezoid("g10_1", 3.*mm) ;
-   G4LogicalVolume* g10_1Log = new G4LogicalVolume(g10_1, fG10Mat, "G10_1Log") ;
-   g10_1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(g10_1) ;
-   trdLogCollection.push_back(g10_1Log) ;
+   G4Trd* g10_1A = Trapezoid("g10_1A", 3.*mm) ;
+   G4LogicalVolume* g10_1ALog = new G4LogicalVolume(g10_1A, fG10Mat, "G10_1ALog") ;
+   g10_1ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   trdCollection.push_back(g10_1A) ;
+   trdLogCollection.push_back(g10_1ALog) ;
 
-   G4Trd* copper02 = Trapezoid("Copper02", 5*um) ;
-   G4LogicalVolume* copper02Log = new G4LogicalVolume(copper02, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper02Log") ; 
-   copper02Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper02) ;
-   trdLogCollection.push_back(copper02Log) ;
+   G4Trd* copper02A = Trapezoid("Copper02A", 5*um) ;
+   G4LogicalVolume* copper02ALog = new G4LogicalVolume(copper02A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper02ALog") ; 
+   copper02ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper02A) ;
+   trdLogCollection.push_back(copper02ALog) ;
 
-   G4Trd* gasGap1 = Trapezoid("GasGap1", 3.*mm) ;
-   G4LogicalVolume* gasGap1Log = new G4LogicalVolume(gasGap1, fGasMat, "gasGap1Log") ; 
-   gasGap1Log->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
-   trdCollection.push_back(gasGap1) ;
-   trdLogCollection.push_back(gasGap1Log) ;
+   G4Trd* gasGap1A = Trapezoid("GasGap1A", 3.*mm) ;
+   G4LogicalVolume* gasGap1ALog = new G4LogicalVolume(gasGap1A, fGasMat, "gasGap1ALog") ; 
+   gasGap1ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
+   trdCollection.push_back(gasGap1A) ;
+   trdLogCollection.push_back(gasGap1ALog) ;
    GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
    sdman->AddNewDetector(sensitive) ;
-   gasGap1Log->SetSensitiveDetector(sensitive) ;
+   gasGap1ALog->SetSensitiveDetector(sensitive) ;
    
    // First GEM Foil - beginning
-   G4Trd* copper11 = Trapezoid("Copper11", 5*um) ;
-   G4LogicalVolume* copper11Log = new G4LogicalVolume(copper11, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper11Log") ; 
-   copper11Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper11) ;
-   trdLogCollection.push_back(copper11Log) ;
+   G4Trd* copper11A = Trapezoid("Copper11A", 5*um) ;
+   G4LogicalVolume* copper11ALog = new G4LogicalVolume(copper11A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper11ALog") ; 
+   copper11ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper11A) ;
+   trdLogCollection.push_back(copper11ALog) ;
 
-   G4Trd* kapton1 = Trapezoid("Kapton1", 50.*um) ;
-   G4LogicalVolume* kapton1Log = new G4LogicalVolume(kapton1, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton1Log") ;
-   kapton1Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(kapton1) ;
-   trdLogCollection.push_back(kapton1Log) ;
+   G4Trd* kapton1A = Trapezoid("Kapton1A", 50.*um) ;
+   G4LogicalVolume* kapton1ALog = new G4LogicalVolume(kapton1A, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton1ALog") ;
+   kapton1ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(kapton1A) ;
+   trdLogCollection.push_back(kapton1ALog) ;
 
-   G4Trd* copper12 = Trapezoid("Copper12",5.*um) ;
-   G4LogicalVolume* copper12Log = new G4LogicalVolume(copper12, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper12Log") ;
-   copper12Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper12) ;
-   trdLogCollection.push_back(copper12Log) ;
+   G4Trd* copper12A = Trapezoid("Copper12A",5.*um) ;
+   G4LogicalVolume* copper12ALog = new G4LogicalVolume(copper12A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper12ALog") ;
+   copper12ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper12A) ;
+   trdLogCollection.push_back(copper12ALog) ;
    // First GEM Foil - end
    
 
-   G4Trd* gasGap2 = Trapezoid("GasGap2", 1.*mm) ;
-   G4LogicalVolume* gasGap2Log = new G4LogicalVolume(gasGap2, fGasMat, "gasGap2Log") ;
-   gasGap2Log->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
-   trdCollection.push_back(gasGap2) ;
-   trdLogCollection.push_back(gasGap2Log) ;
-   gasGap2Log->SetSensitiveDetector(sensitive) ;
+   G4Trd* gasGap2A = Trapezoid("GasGap2A", 1.*mm) ;
+   G4LogicalVolume* gasGap2ALog = new G4LogicalVolume(gasGap2A, fGasMat, "gasGap2ALog") ;
+   gasGap2ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
+   trdCollection.push_back(gasGap2A) ;
+   trdLogCollection.push_back(gasGap2ALog) ;
+   gasGap2ALog->SetSensitiveDetector(sensitive) ;
 
-   G4Trd* copper21 = Trapezoid("Copper21", 5.*um) ;
-   G4LogicalVolume* copper21Log = new G4LogicalVolume(copper21, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper21Log") ;
-   copper21Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper21) ;
-   trdLogCollection.push_back(copper21Log) ;
+   G4Trd* copper21A = Trapezoid("Copper21A", 5.*um) ;
+   G4LogicalVolume* copper21ALog = new G4LogicalVolume(copper21A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper21ALog") ;
+   copper21ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper21A) ;
+   trdLogCollection.push_back(copper21ALog) ;
 
-   G4Trd* kapton2 = Trapezoid("Kapton2", 50.*um) ;
-   G4LogicalVolume* kapton2Log = new G4LogicalVolume(kapton2, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton2Log") ;
-   kapton2Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(kapton2) ;
-   trdLogCollection.push_back(kapton2Log) ;
+   G4Trd* kapton2A = Trapezoid("Kapton2A", 50.*um) ;
+   G4LogicalVolume* kapton2ALog = new G4LogicalVolume(kapton2A, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton2ALog") ;
+   kapton2ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(kapton2A) ;
+   trdLogCollection.push_back(kapton2ALog) ;
 
-   G4Trd* copper22 = Trapezoid("Copper22", 5.*um) ;
-   G4LogicalVolume* copper22Log = new G4LogicalVolume(copper22, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper22Log") ;
-   copper22Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper22) ;
-   trdLogCollection.push_back(copper22Log) ;
+   G4Trd* copper22A = Trapezoid("Copper22A", 5.*um) ;
+   G4LogicalVolume* copper22ALog = new G4LogicalVolume(copper22A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper22ALog") ;
+   copper22ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper22A) ;
+   trdLogCollection.push_back(copper22ALog) ;
 
-   G4Trd* gasGap3 = Trapezoid("GasGap3", 2.*mm) ;
-   G4LogicalVolume* gasGap3Log = new G4LogicalVolume(gasGap3, fGasMat, "GasGap3Log") ;
-   gasGap3Log->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
-   trdCollection.push_back(gasGap3) ;
-   trdLogCollection.push_back(gasGap3Log) ;
+   G4Trd* gasGap3A = Trapezoid("GasGap3A", 2.*mm) ;
+   G4LogicalVolume* gasGap3ALog = new G4LogicalVolume(gasGap3A, fGasMat, "GasGap3ALog") ;
+   gasGap3ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
+   trdCollection.push_back(gasGap3A) ;
+   trdLogCollection.push_back(gasGap3ALog) ;
 
-   G4Trd* copper31 = Trapezoid("Copper31", 5.*um) ;
-   G4LogicalVolume* copper31Log = new G4LogicalVolume(copper31, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper31Log") ;
-   copper31Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper31) ;
-   trdLogCollection.push_back(copper31Log) ;
+   G4Trd* copper31A = Trapezoid("Copper31A", 5.*um) ;
+   G4LogicalVolume* copper31ALog = new G4LogicalVolume(copper31A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper31ALog") ;
+   copper31ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper31A) ;
+   trdLogCollection.push_back(copper31ALog) ;
 
-   G4Trd* kapton3 = Trapezoid("Kapton3", 50.*um) ;
-   G4LogicalVolume* kapton3Log = new G4LogicalVolume(kapton3, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton3Log") ;
-   kapton3Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(kapton3) ;
-   trdLogCollection.push_back(kapton3Log) ;
+   G4Trd* kapton3A = Trapezoid("Kapton3A", 50.*um) ;
+   G4LogicalVolume* kapton3ALog = new G4LogicalVolume(kapton3A, G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON"), "kapton3ALog") ;
+   kapton3ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(kapton3A) ;
+   trdLogCollection.push_back(kapton3ALog) ;
 
-   G4Trd* copper32 = Trapezoid("Copper32", 5.*um) ;
-   G4LogicalVolume* copper32Log = new G4LogicalVolume(copper32, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper32Log") ;
-   copper32Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper32) ;
-   trdLogCollection.push_back(copper32Log) ;
+   G4Trd* copper32A = Trapezoid("Copper32A", 5.*um) ;
+   G4LogicalVolume* copper32ALog = new G4LogicalVolume(copper32A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper32ALog") ;
+   copper32ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper32A) ;
+   trdLogCollection.push_back(copper32ALog) ;
 
-   G4Trd* gasGap4 = Trapezoid("GasGap4", 1.*mm) ;
-   G4LogicalVolume* gasGap4Log = new G4LogicalVolume(gasGap4, fGasMat, "gasGap4Log") ;
-   gasGap4Log->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
-   trdCollection.push_back(gasGap4) ;
-   trdLogCollection.push_back(gasGap4Log) ;
+   G4Trd* gasGap4A = Trapezoid("GasGap4A", 1.*mm) ;
+   G4LogicalVolume* gasGap4ALog = new G4LogicalVolume(gasGap4A, fGasMat, "gasGap4ALog") ;
+   gasGap4ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
+   trdCollection.push_back(gasGap4A) ;
+   trdLogCollection.push_back(gasGap4ALog) ;
 
    // Readout strips
-   G4Trd* copper4 = Trapezoid("Copper4", 5.*um) ;
-   G4LogicalVolume* copper4Log = new G4LogicalVolume(copper4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper4Log") ;
-   copper4Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper4) ;
-   trdLogCollection.push_back(copper4Log) ;
+   G4Trd* copper4A = Trapezoid("Copper4A", 5.*um) ;
+   G4LogicalVolume* copper4ALog = new G4LogicalVolume(copper4A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper4ALog") ;
+   copper4ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper4A) ;
+   trdLogCollection.push_back(copper4ALog) ;
 
    // Readout Board
-   G4Trd* g10_2 = Trapezoid("g10_2", 3.*mm) ;
-   G4LogicalVolume* g10_2Log = new G4LogicalVolume(g10_2, fG10Mat, "g10_2Log") ; // was G4_BAKELITE
-   g10_2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(g10_2) ;
-   trdLogCollection.push_back(g10_2Log) ;
+   G4Trd* g10_2A = Trapezoid("g10_2A", 3.*mm) ;
+   G4LogicalVolume* g10_2ALog = new G4LogicalVolume(g10_2A, fG10Mat, "g10_2ALog") ;
+   g10_2ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   trdCollection.push_back(g10_2A) ;
+   trdLogCollection.push_back(g10_2ALog) ;
 
-   G4Trd* copper5 = Trapezoid("Copper5", 5.*um) ;
-   G4LogicalVolume* copper5Log = new G4LogicalVolume(copper5, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper5Log") ;
-   copper5Log->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(copper5) ;
-   trdLogCollection.push_back(copper5Log) ;
+   G4Trd* copper5A = Trapezoid("Copper5A", 5.*um) ;
+   G4LogicalVolume* copper5ALog = new G4LogicalVolume(copper5A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper5ALog") ;
+   copper5ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(copper5A) ;
+   trdLogCollection.push_back(copper5ALog) ;
 
    // Spacer (air/void)
-   G4Trd* spacer = Trapezoid("spacer", 1.8*mm) ;
-   G4LogicalVolume* spacerLog = new G4LogicalVolume(spacer, fEmptyMat, "spacerLog") ;
-   spacerLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
-   trdCollection.push_back(spacer) ;
-   trdLogCollection.push_back(spacerLog) ;
+   G4Trd* spacerA = Trapezoid("spacerA", 1.8*mm) ;
+   G4LogicalVolume* spacerALog = new G4LogicalVolume(spacerA, fEmptyMat, "spacerALog") ;
+   spacerALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
+   trdCollection.push_back(spacerA) ;
+   trdLogCollection.push_back(spacerALog) ;
    
    // GEB board (1.16 mm)
-   G4Trd* geb = Trapezoid("GEB", 1.16*mm) ;
-   G4LogicalVolume* gebLog = new G4LogicalVolume(geb, fG10Mat, "gebLog") ;
-   gebLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(geb) ;
-   trdLogCollection.push_back(gebLog) ;
+   G4Trd* gebA = Trapezoid("GEBA", 1.16*mm) ;
+   G4LogicalVolume* gebALog = new G4LogicalVolume(gebA, fG10Mat, "gebALog") ;
+   gebALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   trdCollection.push_back(gebA) ;
+   trdLogCollection.push_back(gebALog) ;
 
    // GEM cover (1 mm)
-   G4Trd* readout = Trapezoid("Readout", 1.*mm) ;
-   G4LogicalVolume* readoutLog = new G4LogicalVolume(readout, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "readoutLog") ;
-   readoutLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
-   trdCollection.push_back(readout) ;
-   trdLogCollection.push_back(readoutLog) ;
+   G4Trd* cover2A = Trapezoid("Cover2A", 1.*mm) ;
+   G4LogicalVolume* cover2ALog = new G4LogicalVolume(cover2A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "cover2ALog") ;
+   cover2ALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
+   trdCollection.push_back(cover2A) ;
+   trdLogCollection.push_back(cover2ALog) ;
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 

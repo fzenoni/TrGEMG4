@@ -42,10 +42,13 @@ class GasGapSensitiveDetector : public G4VSensitiveDetector
       //@}
 
    private:
-      G4double driftDep ;
-      G4double transferDep ;
+      G4double driftDepA ;
+      G4double driftDepB ;
+      G4double transferDepA ;
+      G4double transferDepB ;
       G4int    charge ;
-      G4bool   neutSensitive ;
+      G4bool   neutSensitiveA ;
+      G4bool   neutSensitiveB ;
 
       typedef std::map<G4int,GasGapHit*> hitMap_t; //< Helper mapping layer number with hit
       hitMap_t hitMap;

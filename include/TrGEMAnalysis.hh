@@ -35,9 +35,12 @@ class TrGEMAnalysis {
       void SetBeam(const G4ParticleDefinition* part, G4double energy);
       //void CreateBranch(G4String name, G4int evtNo, G4String type) ;
       void AddParticlesPerEvent(G4int PDGCode) ;
-      void SetDriftSensitivity(G4double someDriftEdep) ;
-      void SetTransferSensitivity(G4double someTransferEdep) ;
-      void SetNeutronSensitivity(G4bool someBool) ;
+      void SetDriftSensitivityA(G4double someDriftEdep) ;
+      void SetDriftSensitivityB(G4double someDriftEdep) ;
+      void SetTransferSensitivityA(G4double someTransferEdep) ;
+      void SetTransferSensitivityB(G4double someTransferEdep) ;
+      void SetNeutronSensitivityA(G4bool someBool) ;
+      void SetNeutronSensitivityB(G4bool someBool) ;
       void SaveStepProcess(int process, std::string volume) ;
       void SaveProcessQuantities(
 	    G4int    anEventID,
@@ -56,7 +59,8 @@ class TrGEMAnalysis {
 	    G4double aMomentumDirectionZ,
 	    std::string aProcess,
 	    std::string aVolume,
-	    G4bool aChargedSensitivity) ;
+	    G4bool aChargedSensitivityA,
+	    G4bool aChargedSensitivityB) ;
 
    private:
 
@@ -93,16 +97,21 @@ class TrGEMAnalysis {
 	 G4int posxevt ;
 	 G4int gammaxevt ;
 	 G4int secoxevt ;
-	 G4bool driftSensitivity ;
-	 G4bool transferSensitivity ;
-	 G4double driftEdep ;
-	 G4double transferEdep ;
+	 G4bool driftSensitivityA ;
+	 G4bool transferSensitivityA ;
+	 G4double driftEdepA ;
+	 G4double transferEdepA ;
+	 G4bool driftSensitivityB ;
+	 G4bool transferSensitivityB ;
+	 G4double driftEdepB ;
+	 G4double transferEdepB ;
 	 std::vector<std::string> vecProcess ;
 	 std::vector<std::string>* pVecProcess ;
 	 std::vector<std::string> vecVolume ;
 	 std::vector<std::string>* pVecVolume ;
 	 G4int vecProcNo ;
-	 G4bool neutronSensitivity ;
+	 G4bool neutronSensitivityA ;
+	 G4bool neutronSensitivityB ;
 
 	 // PROCESS quantities
 	 G4int eventID ;
@@ -121,7 +130,8 @@ class TrGEMAnalysis {
 	 G4double momentumDirectionZ ;
 	 std::string process ;
 	 std::string volume ;
-	 G4bool chargedSensitivity ;
+	 G4bool chargedSensitivityA ;
+	 G4bool chargedSensitivityB ;
 
 	 // ROOT objects
 	 TFile*    m_ROOT_file;

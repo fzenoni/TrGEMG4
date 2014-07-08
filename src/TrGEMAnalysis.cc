@@ -44,10 +44,14 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
    gammaxevt = 0 ;
    secoxevt = 0 ;
 
-   driftSensitivity = false ;
-   transferSensitivity = false ;
-   driftEdep = 0. ;
-   transferEdep = 0. ;
+   driftSensitivityA = false ;
+   driftSensitivityB = false ;
+   transferSensitivityA = false ;
+   transferSensitivityB = false ;
+   driftEdepA = 0. ;
+   driftEdepB = 0. ;
+   transferEdepA = 0. ;
+   transferEdepB = 0. ;
 }
 
 void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
@@ -87,11 +91,16 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    t->Branch("posxevt",&posxevt,"posxevt/I") ;
    t->Branch("gammaxevt",&gammaxevt,"gammaxevt/I") ;
    t->Branch("secoxevt",&secoxevt,"secoxevt/I") ;
-   t->Branch("driftSensitivity",&driftSensitivity,"driftSensitivity/O") ;
-   t->Branch("transferSensitivity",&transferSensitivity,"transferSensitivity/O") ;
-   t->Branch("driftEdep",&driftEdep,"driftEdep/D") ;
-   t->Branch("transferEdep",&transferEdep, "transferEdep/D") ;
-   t->Branch("neutronSensitivity",&neutronSensitivity, "neutronSensitivity/O") ;
+   t->Branch("driftSensitivityA",&driftSensitivityA,"driftSensitivityA/O") ;
+   t->Branch("driftSensitivityB",&driftSensitivityB,"driftSensitivityB/O") ;
+   t->Branch("transferSensitivityA",&transferSensitivityA,"transferSensitivityA/O") ;
+   t->Branch("transferSensitivityB",&transferSensitivityB,"transferSensitivityB/O") ;
+   t->Branch("driftEdepA",&driftEdepA,"driftEdepA/D") ;
+   t->Branch("driftEdepB",&driftEdepB,"driftEdepB/D") ;
+   t->Branch("transferEdepA",&transferEdepA, "transferEdepA/D") ;
+   t->Branch("transferEdepB",&transferEdepB, "transferEdepB/D") ;
+   t->Branch("neutronSensitivityA",&neutronSensitivityA, "neutronSensitivityA/O") ;
+   t->Branch("neutronSensitivityB",&neutronSensitivityB, "neutronSensitivityB/O") ;
    t->Branch("vecProcess","std::vector<std::string>",&pVecProcess);
    t->Branch("vecVolume","std::vector<std::string>",&pVecVolume);
    //t->Branch("vecProcNo",,&pVecVolume) ;
@@ -113,7 +122,8 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
    g->Branch("process",&process) ;
    g->Branch("volume",&volume) ;
-   g->Branch("chargedSensitivity",&chargedSensitivity, "chargedSensitivity/O") ;
+   g->Branch("chargedSensitivityA",&chargedSensitivityA, "chargedSensitivityA/O") ;
+   g->Branch("chargedSensitivityB",&chargedSensitivityB, "chargedSensitivityB/O") ;
 
 }
 
@@ -229,26 +239,45 @@ void TrGEMAnalysis::AddParticlesPerEvent(G4int PDGCode) {
    else G4cout << "You must implement a new variable" << G4endl ; 
 }
 
-void TrGEMAnalysis::SetDriftSensitivity(G4double someDriftEdep) {
+void TrGEMAnalysis::SetDriftSensitivityA(G4double someDriftEdep) {
 
-   driftSensitivity = true ;
-   driftEdep = someDriftEdep ;
-
-}
-
-void TrGEMAnalysis::SetTransferSensitivity(G4double someTransferEdep) {
-
-   transferSensitivity = true ;
-   transferEdep = someTransferEdep ;
+   driftSensitivityA = true ;
+   driftEdepA = someDriftEdep ;
 
 }
 
-void TrGEMAnalysis::SetNeutronSensitivity(G4bool someBool) {
+void TrGEMAnalysis::SetTransferSensitivityA(G4double someTransferEdep) {
 
-   neutronSensitivity = someBool ;
+   transferSensitivityA = true ;
+   transferEdepA = someTransferEdep ;
 
 }
 
+void TrGEMAnalysis::SetDriftSensitivityB(G4double someDriftEdep) {
+
+   driftSensitivityB = true ;
+   driftEdepB = someDriftEdep ;
+
+}
+
+void TrGEMAnalysis::SetTransferSensitivityB(G4double someTransferEdep) {
+
+   transferSensitivityB = true ;
+   transferEdepB = someTransferEdep ;
+
+}
+
+void TrGEMAnalysis::SetNeutronSensitivityA(G4bool someBool) {
+
+   neutronSensitivityA = someBool ;
+
+}
+
+void TrGEMAnalysis::SetNeutronSensitivityB(G4bool someBool) {
+
+   neutronSensitivityB = someBool ;
+
+}
 
 void TrGEMAnalysis::SaveStepProcess(G4int procNo, std::string volume) {
 
@@ -290,7 +319,8 @@ void TrGEMAnalysis::SaveProcessQuantities(
       G4double aMomentumDirectionZ,
       std::string aProcess,
       std::string aVolume,
-      G4bool aChargedSensitivity) {
+      G4bool aChargedSensitivityA,
+      G4bool aChargedSensitivityB) {
 
    eventID = anEventID ;
    charge = aCharge ;
@@ -308,6 +338,7 @@ void TrGEMAnalysis::SaveProcessQuantities(
    momentumDirectionZ = aMomentumDirectionZ ;
    process = aProcess ;
    volume = aVolume ;
-   chargedSensitivity = neutronSensitivity ;
+   chargedSensitivityA = neutronSensitivityA ;
+   chargedSensitivityB = neutronSensitivityB ;
 
 } 

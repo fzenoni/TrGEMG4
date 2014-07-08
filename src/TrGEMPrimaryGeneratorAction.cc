@@ -40,16 +40,16 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TFile* angularFile = new TFile("/Users/fzenoni/TrGEMG4/angular.root") ;
 
-   TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_n") ;
+   TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_ph") ;
    h_cosx->Fit("pol4") ;
    fit_cosx = h_cosx->GetFunction("pol4") ;
 
-   TH1F* h_cosy = (TH1F*)angularFile->Get("cosy_n") ;
+   TH1F* h_cosy = (TH1F*)angularFile->Get("cosy_ph") ;
    prob_neg_y = h_cosy->Integral(1,h_cosy->GetNbinsX()/2)/h_cosy->Integral() ;
    h_cosy->Fit("pol4") ;
    fit_cosy = h_cosy->GetFunction("pol4") ;
 
-   TH1F* h_cosz = (TH1F*)angularFile->Get("cosz_n") ;
+   TH1F* h_cosz = (TH1F*)angularFile->Get("cosz_ph") ;
    prob_neg_z = h_cosz->Integral(1,h_cosz->GetNbinsX()/2)/h_cosz->Integral() ;
    // no fit needed for z
    //
@@ -81,7 +81,7 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
    double z_source(0) ;
    if(gRandom->Uniform() < prob_neg_z) {
       cosz = sqrt(1-cosx*cosx-cosy*cosy) ;
-      z_source = 1.9*cm ;
+      z_source = 4.1*cm ; // good for superchamber
    }
    else {
       cosz = -sqrt(1-cosx*cosx-cosy*cosy) ;

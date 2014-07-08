@@ -16,10 +16,13 @@
 
    GasGapSensitiveDetector::GasGapSensitiveDetector(G4String SDname)
 : G4VSensitiveDetector(SDname),
-   driftDep(0.),
-   transferDep(0.),
+   driftDepA(0.),
+   driftDepB(0.),
+   transferDepA(0.),
+   transferDepB(0.),
    charge(0),
-   neutSensitive(false)
+   neutSensitiveA(false),
+   neutSensitiveB(false)
 
 {
    G4cout << "*************************************" << G4endl ;
@@ -28,7 +31,7 @@
 
    // Declaration of the hit collection name
    G4String myCollectionName = "GasGapHitCollection" ;
-   collectionName.insert( myCollectionName) ;
+   collectionName.insert(myCollectionName) ;
 
 }
 
@@ -59,23 +62,37 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
 
    // Senstivity algorithms
    if(track->GetGlobalTime() < timeWindow) {
-      if(volName == "GasGap1") {
+     if(volName == "GasGap1A") {
 	 // we're in drift gap
-	 driftDep += edep ;
+	 if(edep != 0) driftDepA += edep ;
 
 	 // special algorithm for neutron sensitivity
-	 if(charge != 0) 
-	    neutSensitive = true ;
+	 if(charge != 0) neutSensitiveA = true ;
       }
 
-      if(volName == "GasGap2") {
+      if(volName == "GasGap2A") {
 	 // we're in transfer1 gap
-	 transferDep += edep ;
+	 if(edep != 0) transferDepA += edep ;
 
 	 // special algorithm for neutron sensitivity
-	 if(charge != 0) 
-	    neutSensitive = true ;
+	 if(charge != 0) neutSensitiveA = true ;
       }
+      
+      if(volName == "GasGap1B") {
+	 // we're in drift gap
+	 if(edep != 0) driftDepB += edep ;
+
+	 // special algorithm for neutron sensitivity
+	 if(charge != 0) neutSensitiveB = true ;
+      }
+
+      if(volName == "GasGap2B") {
+	 // we're in transfer1 gap
+	 if(edep != 0) transferDepB += edep ;
+
+	 // special algorithm for neutron sensitivity
+	 if(charge != 0) neutSensitiveB = true ;
+      } 
    }
 
    //This line is used to store in Analysis class the energy deposited in this layer
@@ -124,23 +141,37 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
    // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
    // These are values previously used. They represent the minimum ionization potential.
    G4int factor = 0 ;
-   if(driftDep > factor*ionizationPotential) {
-      TrGEMAnalysis::GetInstance()->SetDriftSensitivity(driftDep) ;
+   if(driftDepA > factor*ionizationPotential) {
+      TrGEMAnalysis::GetInstance()->SetDriftSensitivityA(driftDepA) ;
       //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 
    }
-   else if(transferDep > factor*ionizationPotential) { 
-      TrGEMAnalysis::GetInstance()->SetTransferSensitivity(transferDep) ;
+   else if(transferDepA > factor*ionizationPotential) { 
+      TrGEMAnalysis::GetInstance()->SetTransferSensitivityA(transferDepA) ;
       //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDep,"Energy") << ")" << G4endl ;
    }
 
-   driftDep = 0. ;
-   transferDep = 0. ;
+   if(driftDepB > factor*ionizationPotential) {
+      TrGEMAnalysis::GetInstance()->SetDriftSensitivityB(driftDepB) ;
+      //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 
+   }
+   else if(transferDepB > factor*ionizationPotential) { 
+      TrGEMAnalysis::GetInstance()->SetTransferSensitivityB(transferDepB) ;
+      //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDep,"Energy") << ")" << G4endl ;
+   }
+
+   driftDepA = 0. ;
+   transferDepA = 0. ;
+   driftDepB = 0. ;
+   transferDepB = 0. ;
 
    //hitCollection->PrintAllHits() ;
 
-   TrGEMAnalysis::GetInstance()->SetNeutronSensitivity(neutSensitive) ;
+   TrGEMAnalysis::GetInstance()->SetNeutronSensitivityA(neutSensitiveA) ;
+   TrGEMAnalysis::GetInstance()->SetNeutronSensitivityB(neutSensitiveB) ;
+   
    // resetting neutron sensitivity
-   neutSensitive = false ;
+   neutSensitiveA = false ;
+   neutSensitiveB = false ;
 
 }
 
