@@ -34,6 +34,7 @@ class TrGEMSuperChamberDetectorConstruction_BIS : public G4VUserDetectorConstruc
       void PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume *pMotherLogical) ; 
 
    private :
+      G4Material*        fFR4Mat;
       G4Material*        fG10Mat;
       G4Material*        fGasMat;
       G4Material*        fEmptyMat;

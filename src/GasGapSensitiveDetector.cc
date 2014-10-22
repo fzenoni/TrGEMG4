@@ -54,6 +54,8 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    G4String volName = touchable->GetVolume(0)->GetName();
    //We get now the energy deposited by this step
    G4double edep = step->GetTotalEnergyDeposit() ;
+   G4double nonionedep = step->GetNonIonizingEnergyDeposit() ;
+   edep -= nonionedep ;
 
    // G4double timeWindow = 1.E8*ns ;
    // the following number is smaller than any other

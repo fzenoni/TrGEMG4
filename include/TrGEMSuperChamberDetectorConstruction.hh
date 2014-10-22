@@ -36,6 +36,7 @@ class TrGEMSuperChamberDetectorConstruction : public G4VUserDetectorConstruction
 
    private :
       G4Material*        fG10Mat;
+      G4Material*        fFR4Mat;
       G4Material*        fGasMat;
       G4Material*        fEmptyMat;
       G4ProductionCuts*  fGasDetectorCuts;
@@ -49,4 +50,3 @@ class TrGEMSuperChamberDetectorConstruction : public G4VUserDetectorConstruction
 };
 
 #endif
-

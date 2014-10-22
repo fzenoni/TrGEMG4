@@ -36,9 +36,9 @@ int main(int argc, char** argv) {
    G4RunManager* runManager = new G4RunManager ;
 
    // set mandatory initialization classes
-   runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
+   //runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
    //runManager->SetUserInitialization(new TrGEMSuperChamberDetectorConstruction_BIS) ;
-   //runManager->SetUserInitialization(new TrGEMSuperChamberDetectorConstruction) ;
+   runManager->SetUserInitialization(new TrGEMSuperChamberDetectorConstruction) ;
    //runManager->SetUserInitialization(new CfRPCDetectorConstruction) ;
    //runManager->SetUserInitialization(new UniPVRPCDetectorConstruction) ;
    // For EM physics
