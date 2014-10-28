@@ -163,7 +163,8 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    gasAttributes->SetForceWireframe(true) ;
    G4VisAttributes *gemAttributes = new G4VisAttributes(G4Color::Green()) ;
    gemAttributes->SetForceWireframe(true) ;
-
+   G4VisAttributes *vfatAttributes = new G4VisAttributes(G4Color::Yellow()) ;
+   vfatAttributes->SetForceWireframe(true) ;
 
    // Beginning of geometry definition
    GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
@@ -258,7 +259,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(copper5BLog) ;   
 
    G4Trd* g10_2B = Trapezoid("g10_2B", 3.*mm) ;
-   G4LogicalVolume* g10_2BLog = new G4LogicalVolume(g10_2B, fG10Mat, "g10_2BLog") ; 
+   G4LogicalVolume* g10_2BLog = new G4LogicalVolume(g10_2B, fFR4Mat, "g10_2BLog") ; 
    g10_2BLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_2B) ;
    trdLogCollection.push_back(g10_2BLog) ;
@@ -359,7 +360,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(copper02BLog) ;
 
    G4Trd* g10_1B = Trapezoid("g10_1B", 3.*mm) ;
-   G4LogicalVolume* g10_1BLog = new G4LogicalVolume(g10_1B, fG10Mat, "G10_1BLog") ;
+   G4LogicalVolume* g10_1BLog = new G4LogicalVolume(g10_1B, fFR4Mat, "G10_1BLog") ;
    g10_1BLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1B) ;
    trdLogCollection.push_back(g10_1BLog) ;
@@ -387,7 +388,13 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    cover2ALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(cover2A) ;
    trdLogCollection.push_back(cover2ALog) ;
-   
+  
+   // VFAT2
+   G4Box* vfatA = new G4Box("vfatA", 43.*mm, 54.*mm, 1.*mm) ;
+   G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "vfatALog") ;
+   vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
+
+
    // GEB board A composition
    // Copper plane 1
    G4Trd* gebA_copper1 = Trapezoid("gebA_copper1", 35*um) ;
@@ -471,7 +478,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
 
    // Readout Board
    G4Trd* g10_2A = Trapezoid("g10_2A", 3.*mm) ;
-   G4LogicalVolume* g10_2ALog = new G4LogicalVolume(g10_2A, fG10Mat, "g10_2ALog") ; // was G4_BAKELITE
+   G4LogicalVolume* g10_2ALog = new G4LogicalVolume(g10_2A, fFR4Mat, "g10_2ALog") ; // was G4_BAKELITE
    g10_2ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_2A) ;
    trdLogCollection.push_back(g10_2ALog) ;
@@ -572,7 +579,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(copper02ALog) ;
 
    G4Trd* g10_1A = Trapezoid("g10_1A", 3.*mm) ;
-   G4LogicalVolume* g10_1ALog = new G4LogicalVolume(g10_1A, fG10Mat, "G10_1ALog") ;
+   G4LogicalVolume* g10_1ALog = new G4LogicalVolume(g10_1A, fFR4Mat, "G10_1ALog") ;
    g10_1ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1A) ;
    trdLogCollection.push_back(g10_1ALog) ;

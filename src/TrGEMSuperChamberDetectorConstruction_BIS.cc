@@ -172,7 +172,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(copper01ALog) ;
 
    G4Trd* g10_1A = Trapezoid("g10_1A", 3.*mm) ;
-   G4LogicalVolume* g10_1ALog = new G4LogicalVolume(g10_1A, fG10Mat, "G10_1ALog") ;
+   G4LogicalVolume* g10_1ALog = new G4LogicalVolume(g10_1A, fFR4Mat, "G10_1ALog") ;
    g10_1ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1A) ;
    trdLogCollection.push_back(g10_1ALog) ;
@@ -276,7 +276,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
 
    // Readout Board
    G4Trd* g10_2A = Trapezoid("g10_2A", 3.*mm) ;
-   G4LogicalVolume* g10_2ALog = new G4LogicalVolume(g10_2A, fG10Mat, "g10_2ALog") ; // was G4_BAKELITE
+   G4LogicalVolume* g10_2ALog = new G4LogicalVolume(g10_2A, fFR4Mat, "g10_2ALog") ; // was G4_BAKELITE
    g10_2ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_2A) ;
    trdLogCollection.push_back(g10_2ALog) ;
@@ -386,7 +386,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(copper01BLog) ;
 
    G4Trd* g10_1B = Trapezoid("g10_1B", 3.*mm) ;
-   G4LogicalVolume* g10_1BLog = new G4LogicalVolume(g10_1B, fG10Mat, "G10_1BLog") ;
+   G4LogicalVolume* g10_1BLog = new G4LogicalVolume(g10_1B, fFR4Mat, "G10_1BLog") ;
    g10_1BLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1B) ;
    trdLogCollection.push_back(g10_1BLog) ;
@@ -486,7 +486,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(copper4BLog) ;
 
    G4Trd* g10_2B = Trapezoid("g10_2B", 3.*mm) ;
-   G4LogicalVolume* g10_2BLog = new G4LogicalVolume(g10_2B, fG10Mat, "g10_2BLog") ; // was G4_BAKELITE
+   G4LogicalVolume* g10_2BLog = new G4LogicalVolume(g10_2B, fFR4Mat, "g10_2BLog") ; // was G4_BAKELITE
    g10_2BLog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_2B) ;
    trdLogCollection.push_back(g10_2BLog) ;

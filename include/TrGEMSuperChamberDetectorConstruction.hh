@@ -19,6 +19,7 @@ class G4PhysicalVolume ;
 #include "G4ProductionCuts.hh"
 #include "G4Region.hh"
 #include "G4Trd.hh"
+#include "G4CSGSolid.hh"
 
 
 class TrGEMSuperChamberDetectorConstruction : public G4VUserDetectorConstruction
