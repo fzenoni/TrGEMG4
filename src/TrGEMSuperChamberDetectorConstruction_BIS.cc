@@ -23,9 +23,9 @@ TrGEMSuperChamberDetectorConstruction_BIS::TrGEMSuperChamberDetectorConstruction
    tripleGemThinBase(0), tripleGemLargeBase(0), tripleGemHeight(0)
 {
 
-   tripleGemThinBase  = 220.0*mm ;
-   tripleGemLargeBase = 445.0*mm ;
-   tripleGemHeight    = 990.0*mm ;
+   tripleGemThinBase  = 279.*mm ; //220.0*mm ;
+   tripleGemLargeBase = 510.*mm ; //445.0*mm ;
+   tripleGemHeight    = 1283.*mm ; //990.0*mm ;
 
    G4double cut = 1*mm ;
    fGasDetectorCuts = new G4ProductionCuts() ;
@@ -162,6 +162,9 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    gasAttributes->SetForceWireframe(true) ;
    G4VisAttributes *gemAttributes = new G4VisAttributes(G4Color::Green()) ;
    gemAttributes->SetForceWireframe(true) ;
+   G4VisAttributes *vfatAttributes = new G4VisAttributes(G4Color::Yellow()) ;
+   vfatAttributes->SetForceWireframe(true) ;
+
 
    // Beginning of geometry definition
 
@@ -362,6 +365,13 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdCollection.push_back(gebA_copper1) ;
    trdLogCollection.push_back(gebA_copper1Log) ;
 
+   // VFAT2
+   G4Trd* vfatA = Trapezoid("vfatA", 1.6*mm) ;
+   G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, fEmptyMat, "vfatALog") ;
+   vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
+   trdCollection.push_back(vfatA) ;
+   trdLogCollection.push_back(vfatALog) ;
+
    // GEM cover (1 mm)
    G4Trd* cover2A = Trapezoid("Cover2A", 1.*mm) ;
    G4LogicalVolume* cover2ALog = new G4LogicalVolume(cover2A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "cover2ALog") ;
@@ -416,7 +426,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    kapton1BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(kapton1B) ;
    trdLogCollection.push_back(kapton1BLog) ;
-   
+
    G4Trd* copper12B = Trapezoid("Copper12B",5.*um) ;
    G4LogicalVolume* copper12BLog = new G4LogicalVolume(copper12B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper12BLog") ;
    copper12BLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
@@ -504,7 +514,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    spacerBLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(spacerB) ;
    trdLogCollection.push_back(spacerBLog) ;
-   
+
    // GEB board B composition
    // Copper plane 4
    G4Trd* gebB_copper4 = Trapezoid("gebB_copper4", 35*um) ;
@@ -573,6 +583,13 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdCollection.push_back(gebB_copper1) ;
    trdLogCollection.push_back(gebB_copper1Log) ;
 
+   // VFAT2
+   G4Trd* vfatB = Trapezoid ("vfatB", 1.6*mm) ;
+   G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
+   vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
+   trdCollection.push_back(vfatB) ;
+   trdLogCollection.push_back(vfatBLog) ;
+
    // GEM cover (1 mm)
    G4Trd* cover1B = Trapezoid("Cover1B", 1.*mm) ;
    G4LogicalVolume* cover1BLog = new G4LogicalVolume(cover1B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "cover1BLog") ;
@@ -597,20 +614,68 @@ G4Trd* TrGEMSuperChamberDetectorConstruction_BIS::Trapezoid(G4String name, G4dou
 
 void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
 
-   G4double XTranslation = 0 ;
+   G4double XTranslation = 0. ;
+   G4String coordX ;
+   G4String coordY ;
+   std::vector<G4double> x ;
+   std::vector<G4double> y ;
+   std::ifstream coordFile ("/Users/fzenoni/TrGEMG4/vfatCoord.txt", std::ios::in) ;
+   if(coordFile) {
+      while(!coordFile.eof()) {
+	 coordFile >> coordX ; 
+	 coordFile >> coordY ;
+	 if(coordX == "" || coordY == "") continue ;
+	 x.push_back(std::stod(coordX)) ; 
+	 y.push_back(std::stod(coordY)) ; 
+      }
+      coordFile.close() ;
+   }
 
    for(size_t i=0 ; i<trdCollection.size() ; i++) {
       // i counts as the copyNo
+      G4String layerName = trdCollection.at(i)->GetName() ;
       XTranslation += trdCollection.at(i)->GetXHalfLength1() ;
       G4ThreeVector position = tlate + G4ThreeVector(XTranslation,0,0).transform(G4RotationMatrix(*pRot).inverse()) ;
-      G4cout << "Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " << G4BestUnit(XTranslation,"Length") << G4endl ;
+      G4cout << "Volume (" << i << ") " << layerName << " the position is " << G4BestUnit(XTranslation,"Length") << G4endl ;
+      if(layerName == "vfatA" || layerName == "vfatB") {
+	 // here lies the positionning of every single vfat2 module
+	 double vfatX = 46*mm ;
+	 double vfatY = 43*mm ;
+	 double vfatThick = 1.*mm ;
+	 double copperThick = 17.5*um ;
+	 double insulatorThick = 310*um ;
+	 G4Box* vfatModule = new G4Box("vfatModule", vfatThick/2., vfatX/2., vfatY/2.) ; // G4Box wants half sizes
+	 G4LogicalVolume* vfatModuleLog = new G4LogicalVolume(vfatModule, fEmptyMat, "vfatModuleLog") ;
+	 for(G4int k = 0; k < 24; k++) {
+	    new G4PVPlacement(0, G4ThreeVector(0., y[k], -x[k]+tripleGemHeight/2.), vfatModuleLog, layerName, trdLogCollection.at(i), false, i) ;
+	    // vfat content
+	    G4int copyNo = 0. ;
+	    G4Box* Cu = new G4Box("Cu", copperThick/2., vfatX/2., vfatY/2.) ;
+	    G4LogicalVolume* CuLog = new G4LogicalVolume(Cu, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "CuLog") ;
+	    G4Box* insulator = new G4Box("insulator", insulatorThick/2., vfatX/2., vfatY/2.) ;
+	    G4LogicalVolume* insulatorLog = new G4LogicalVolume(insulator, fFR4Mat, "insulatorLog") ;
+	    new G4PVPlacement(0, G4ThreeVector(vfatThick/2.-copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	    new G4PVPlacement(0, G4ThreeVector(vfatThick/2.-copperThick-insulatorThick/2., 0., 0.), insulatorLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	    new G4PVPlacement(0, G4ThreeVector(insulatorThick/2.+copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	    new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), insulatorLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	    new G4PVPlacement(0, G4ThreeVector(-insulatorThick/2.-copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	    new G4PVPlacement(0, G4ThreeVector(-vfatThick/2.+copperThick+insulatorThick/2., 0., 0.), insulatorLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	    new G4PVPlacement(0, G4ThreeVector(-vfatThick/2.+copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	 }
+	 // And now for the optohybrid
+	 G4Box* optoHybrid = new G4Box("optoHybrid", 1.6*mm/2., 220.13/2*mm, 140.60/2.*mm) ;
+	 G4LogicalVolume* optoHybridLog = new G4LogicalVolume(optoHybrid, fFR4Mat, "optoHybridLog") ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0.005, -80.39+tripleGemHeight/2.), optoHybridLog, layerName, trdLogCollection.at(i), false, i) ;
+      }
+
       new G4PVPlacement(pRot,
 	    position,
 	    trdLogCollection.at(i),
-	    trdCollection.at(i)->GetName(),
+	    layerName,
 	    pMotherLogical,
 	    false,
 	    i) ;
+
       XTranslation += trdCollection.at(i)->GetXHalfLength1() ;
    }
 }
