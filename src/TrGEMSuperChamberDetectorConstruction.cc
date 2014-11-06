@@ -684,7 +684,6 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
       */
 
       if(layerName == "coolCuA" || layerName == "coolCuB") {
-	 G4cout << "God only knows how much I am sick of this junk" << G4endl ;
          G4double coolThick = 1.*mm ;
 	 G4double coolWidth = 188.*mm ;
 	 G4double coolShortHeight = 51.*mm ;
