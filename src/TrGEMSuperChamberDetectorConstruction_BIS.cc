@@ -371,6 +371,19 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatA) ;
    trdLogCollection.push_back(vfatALog) ;
+   
+   // Cooling copper
+   G4Trd* coolCuA = Trapezoid("coolCuA", 1.*mm) ;
+   G4LogicalVolume* coolCuALog = new G4LogicalVolume(coolCuA, fEmptyMat, "coolCuALog") ;
+   coolCuALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
+   trdCollection.push_back(coolCuA) ;
+   trdLogCollection.push_back(coolCuALog) ;
+
+   // Cooling pipe
+   G4Trd* coolPipeA = Trapezoid("coolPipeA", 8.*mm) ;
+   G4LogicalVolume* coolPipeALog = new G4LogicalVolume(coolPipeA, fEmptyMat, "coolPipeA") ;
+   trdCollection.push_back(coolPipeA) ;
+   trdLogCollection.push_back(coolPipeALog) ;
 
    // GEM cover (1 mm)
    G4Trd* cover2A = Trapezoid("Cover2A", 1.*mm) ;
@@ -589,6 +602,19 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatB) ;
    trdLogCollection.push_back(vfatBLog) ;
+   
+   // Cooling copper
+   G4Trd* coolCuB = Trapezoid("coolCuB", 1.*mm) ;
+   G4LogicalVolume* coolCuBLog = new G4LogicalVolume(coolCuB, fEmptyMat, "coolCuBLog") ;
+   coolCuBLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
+   trdCollection.push_back(coolCuB) ;
+   trdLogCollection.push_back(coolCuBLog) ;
+
+   // Cooling pipe
+   G4Trd* coolPipeB = Trapezoid("coolPipeB", 8.*mm) ;
+   G4LogicalVolume* coolPipeBLog = new G4LogicalVolume(coolPipeB, fEmptyMat, "coolPipeB") ;
+   trdCollection.push_back(coolPipeB) ;
+   trdLogCollection.push_back(coolPipeBLog) ;
 
    // GEM cover (1 mm)
    G4Trd* cover1B = Trapezoid("Cover1B", 1.*mm) ;
@@ -637,6 +663,29 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
       XTranslation += trdCollection.at(i)->GetXHalfLength1() ;
       G4ThreeVector position = tlate + G4ThreeVector(XTranslation,0,0).transform(G4RotationMatrix(*pRot).inverse()) ;
       G4cout << "Volume (" << i << ") " << layerName << " the position is " << G4BestUnit(XTranslation,"Length") << G4endl ;
+
+      if(layerName == "coolCuA" || layerName == "coolCuB") {
+	 G4cout << "God only knows how much I am sick of this junk" << G4endl ;
+         G4double coolThick = 1.*mm ;
+	 G4double coolWidth = 188.*mm ;
+	 G4double coolShortHeight = 51.*mm ;
+	 G4double coolLongHeight = 150.*mm ;
+	 // big cooler
+	 G4Box* coolBig = new G4Box("coolBig", coolThick/2., coolWidth/2., coolLongHeight/2.) ; 
+	 G4LogicalVolume* coolBigLog = new G4LogicalVolume(coolBig, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "coolBigLog") ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + coolShortHeight + coolLongHeight/2.), coolBigLog, layerName, trdLogCollection.at(i), false, i) ;
+	 // small coolers
+	 G4Box* coolSmall = new G4Box("coolSmall", coolThick/2., coolWidth/2., coolShortHeight/2.) ; 
+	 G4LogicalVolume* coolSmallLog = new G4LogicalVolume(coolSmall, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "coolSmallLog") ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (5./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (8./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (11./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (14./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (17./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (20./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (23./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
+      }
+
       if(layerName == "vfatA" || layerName == "vfatB") {
 	 // here lies the positionning of every single vfat2 module
 	 double vfatX = 46*mm ;
