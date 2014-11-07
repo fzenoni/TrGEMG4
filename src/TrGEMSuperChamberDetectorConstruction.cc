@@ -672,16 +672,16 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
       G4ThreeVector position = tlate + G4ThreeVector(XTranslation,0,0).transform(G4RotationMatrix(*pRot).inverse()) ;
       G4cout << "Volume (" << i << ") " << layerName << " the position is " << G4BestUnit(XTranslation,"Length") << G4endl ;
 
-      /*
+      
       if(layerName == "coolPipeA" || layerName == "coolPipeB") {
 	 G4double inRadius = 6.*mm ;
 	 G4double outRadius = 8.*mm ;
-	 G4Torus* bendPipe = new G4Torus("bendPipe", inRadius, outRadius, 75.*mm, -90*degree, 90*degree) ; 
+	 G4Torus* bendPipe = new G4Torus("bendPipe", inRadius, outRadius, 75.*mm, 0.*degree, 180.*degree) ; 
 	 G4LogicalVolume* bendPipeLog = new G4LogicalVolume(bendPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe"), "bendPipeLog") ; 
 	 new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), bendPipeLog, layerName, trdLogCollection.at(i), false, i) ;
 
       }
-      */
+      
 
       if(layerName == "coolCuA" || layerName == "coolCuB") {
          G4double coolThick = 1.*mm ;
