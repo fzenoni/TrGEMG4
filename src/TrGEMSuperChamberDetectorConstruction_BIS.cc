@@ -8,6 +8,8 @@
 #include "G4Element.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
+#include "G4Torus.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryManager.hh"
@@ -290,12 +292,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdCollection.push_back(copper5A) ;
    trdLogCollection.push_back(copper5ALog) ;
 
+   /*
    // Spacer (air/void)
    G4Trd* spacerA = Trapezoid("spacerA", 1.*mm) ;
    G4LogicalVolume* spacerALog = new G4LogicalVolume(spacerA, fEmptyMat, "spacerALog") ;
    spacerALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(spacerA) ;
    trdLogCollection.push_back(spacerALog) ;
+   */
 
    // GEB board A composition
    // Copper plane 4
@@ -371,7 +375,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatA) ;
    trdLogCollection.push_back(vfatALog) ;
-   
+
    // Cooling copper
    G4Trd* coolCuA = Trapezoid("coolCuA", 1.*mm) ;
    G4LogicalVolume* coolCuALog = new G4LogicalVolume(coolCuA, fEmptyMat, "coolCuALog") ;
@@ -380,7 +384,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(coolCuALog) ;
 
    // Cooling pipe
-   G4Trd* coolPipeA = Trapezoid("coolPipeA", 8.*mm) ;
+   G4Trd* coolPipeA = Trapezoid("coolPipeA", 16.*mm) ;
    G4LogicalVolume* coolPipeALog = new G4LogicalVolume(coolPipeA, fEmptyMat, "coolPipeA") ;
    trdCollection.push_back(coolPipeA) ;
    trdLogCollection.push_back(coolPipeALog) ;
@@ -521,12 +525,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdCollection.push_back(copper5B) ;
    trdLogCollection.push_back(copper5BLog) ;   
 
+   /*
    // Spacer (air/void)
    G4Trd* spacerB = Trapezoid("spacerB", 1.*mm) ;
    G4LogicalVolume* spacerBLog = new G4LogicalVolume(spacerB, fEmptyMat, "spacerBLog") ;
    spacerBLog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(spacerB) ;
    trdLogCollection.push_back(spacerBLog) ;
+   */
 
    // GEB board B composition
    // Copper plane 4
@@ -602,7 +608,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatB) ;
    trdLogCollection.push_back(vfatBLog) ;
-   
+
    // Cooling copper
    G4Trd* coolCuB = Trapezoid("coolCuB", 1.*mm) ;
    G4LogicalVolume* coolCuBLog = new G4LogicalVolume(coolCuB, fEmptyMat, "coolCuBLog") ;
@@ -611,7 +617,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(coolCuBLog) ;
 
    // Cooling pipe
-   G4Trd* coolPipeB = Trapezoid("coolPipeB", 8.*mm) ;
+   G4Trd* coolPipeB = Trapezoid("coolPipeB", 16.*mm) ;
    G4LogicalVolume* coolPipeBLog = new G4LogicalVolume(coolPipeB, fEmptyMat, "coolPipeB") ;
    trdCollection.push_back(coolPipeB) ;
    trdLogCollection.push_back(coolPipeBLog) ;
@@ -657,6 +663,17 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
       coordFile.close() ;
    }
 
+   // Rotation Matrix for pipes
+   G4RotationMatrix* rotationPlacement1 = new G4RotationMatrix() ;
+   rotationPlacement1->rotateY(M_PI / 2.0) ;
+   rotationPlacement1->rotateX(0.) ;
+   rotationPlacement1->rotateZ(-M_PI / 2.0) ;
+   
+   G4RotationMatrix* rotationPlacement2 = new G4RotationMatrix() ;
+   rotationPlacement2->rotateY(0.) ;
+   rotationPlacement2->rotateX(M_PI ) ;
+   rotationPlacement2->rotateZ(0.) ;
+
    for(size_t i=0 ; i<trdCollection.size() ; i++) {
       // i counts as the copyNo
       G4String layerName = trdCollection.at(i)->GetName() ;
@@ -664,8 +681,30 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
       G4ThreeVector position = tlate + G4ThreeVector(XTranslation,0,0).transform(G4RotationMatrix(*pRot).inverse()) ;
       G4cout << "Volume (" << i << ") " << layerName << " the position is " << G4BestUnit(XTranslation,"Length") << G4endl ;
 
+      if(layerName == "coolPipeA" || layerName == "coolPipeB") {
+	 G4double inRadius = 6.*mm ;
+	 G4double outRadius = 8.*mm ;
+	 G4double shift = 120.*mm ;
+	 G4double pipeLength = 0.565*m ;
+	 G4double aperture = 100.*mm ;
+	 G4Torus* bendPipe = new G4Torus("bendPipe", inRadius, outRadius, aperture, 0.*degree, 180.*degree) ; 
+	 G4Torus* bendWater = new G4Torus("bendPipe", 0., inRadius, aperture, 0.*degree, 180.*degree) ; 
+	 G4LogicalVolume* bendPipeLog = new G4LogicalVolume(bendPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "bendPipeLog") ; 
+	 G4LogicalVolume* bendWaterLog = new G4LogicalVolume(bendWater, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "bendWaterLog") ; 
+	 G4Tubs* straightPipe = new G4Tubs("straightPipe", inRadius, outRadius, pipeLength, 0., 2*M_PI) ;
+	 G4Tubs* straightWater = new G4Tubs("straightWater", 0., inRadius, pipeLength, 0., 2*M_PI) ;
+	 G4LogicalVolume* straightPipeLog = new G4LogicalVolume(straightPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "straightPipeLog") ;
+	 G4LogicalVolume* straightWaterLog = new G4LogicalVolume(straightWater, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "straightWaterLog") ;
+	 new G4PVPlacement(rotationPlacement1, G4ThreeVector(0.,0.,-tripleGemHeight/2.+shift), bendPipeLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement1, G4ThreeVector(0.,0.,-tripleGemHeight/2.+shift), bendWaterLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,aperture,-tripleGemHeight/2.+shift+pipeLength), straightPipeLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,aperture,-tripleGemHeight/2.+shift+pipeLength), straightWaterLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,-aperture,-tripleGemHeight/2.+shift+pipeLength), straightPipeLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,-aperture,-tripleGemHeight/2.+shift+pipeLength), straightWaterLog, layerName, trdLogCollection.at(i), false, i) ;
+      }
+
       if(layerName == "coolCuA" || layerName == "coolCuB") {
-         G4double coolThick = 1.*mm ;
+	 G4double coolThick = 1.*mm ;
 	 G4double coolWidth = 188.*mm ;
 	 G4double coolShortHeight = 51.*mm ;
 	 G4double coolLongHeight = 150.*mm ;

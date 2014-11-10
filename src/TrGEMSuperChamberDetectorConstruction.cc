@@ -9,6 +9,7 @@
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Torus.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryManager.hh"
@@ -178,9 +179,9 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    cover1BLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(cover1B) ;
    trdLogCollection.push_back(cover1BLog) ;
-   
+
    // Cooling pipe
-   G4Trd* coolPipeB = Trapezoid("coolPipeB", 8.*mm) ;
+   G4Trd* coolPipeB = Trapezoid("coolPipeB", 16.*mm) ;
    G4LogicalVolume* coolPipeBLog = new G4LogicalVolume(coolPipeB, fEmptyMat, "coolPipeB") ;
    trdCollection.push_back(coolPipeB) ;
    trdLogCollection.push_back(coolPipeBLog) ;
@@ -275,7 +276,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdCollection.push_back(spacerB) ;
    trdLogCollection.push_back(spacerBLog) ;
    */
-   
+
    // Readout Board
    G4Trd* copper5B = Trapezoid("Copper5B", 35.*um/*5.*um*/) ;
    G4LogicalVolume* copper5BLog = new G4LogicalVolume(copper5B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper5BLog") ;
@@ -413,9 +414,9 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    cover2ALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(cover2A) ;
    trdLogCollection.push_back(cover2ALog) ;
-   
+
    // Cooling pipe
-   G4Trd* coolPipeA = Trapezoid("coolPipeA", 8.*mm) ;
+   G4Trd* coolPipeA = Trapezoid("coolPipeA", 16.*mm) ;
    G4LogicalVolume* coolPipeALog = new G4LogicalVolume(coolPipeA, fEmptyMat, "coolPipeA") ;
    trdCollection.push_back(coolPipeA) ;
    trdLogCollection.push_back(coolPipeALog) ;
@@ -664,6 +665,17 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
       }
       coordFile.close() ;
    }
+   
+   // Rotation Matrix for pipes
+   G4RotationMatrix* rotationPlacement1 = new G4RotationMatrix() ;
+   rotationPlacement1->rotateY(M_PI / 2.0) ;
+   rotationPlacement1->rotateX(0.) ;
+   rotationPlacement1->rotateZ(-M_PI / 2.0) ;
+   
+   G4RotationMatrix* rotationPlacement2 = new G4RotationMatrix() ;
+   rotationPlacement2->rotateY(0.) ;
+   rotationPlacement2->rotateX(M_PI ) ;
+   rotationPlacement2->rotateZ(0.) ;
 
    for(size_t i=0 ; i<trdCollection.size() ; i++) {
       // i counts as the copyNo
@@ -672,19 +684,30 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
       G4ThreeVector position = tlate + G4ThreeVector(XTranslation,0,0).transform(G4RotationMatrix(*pRot).inverse()) ;
       G4cout << "Volume (" << i << ") " << layerName << " the position is " << G4BestUnit(XTranslation,"Length") << G4endl ;
 
-      
       if(layerName == "coolPipeA" || layerName == "coolPipeB") {
 	 G4double inRadius = 6.*mm ;
 	 G4double outRadius = 8.*mm ;
-	 G4Torus* bendPipe = new G4Torus("bendPipe", inRadius, outRadius, 75.*mm, 0.*degree, 180.*degree) ; 
-	 G4LogicalVolume* bendPipeLog = new G4LogicalVolume(bendPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe"), "bendPipeLog") ; 
-	 new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), bendPipeLog, layerName, trdLogCollection.at(i), false, i) ;
-
+	 G4double shift = 120.*mm ;
+	 G4double pipeLength = 0.565*m ;
+	 G4double aperture = 100.*mm ;
+	 G4Torus* bendPipe = new G4Torus("bendPipe", inRadius, outRadius, aperture, 0.*degree, 180.*degree) ; 
+	 G4Torus* bendWater = new G4Torus("bendPipe", 0., inRadius, aperture, 0.*degree, 180.*degree) ; 
+	 G4LogicalVolume* bendPipeLog = new G4LogicalVolume(bendPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "bendPipeLog") ; 
+	 G4LogicalVolume* bendWaterLog = new G4LogicalVolume(bendWater, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "bendWaterLog") ; 
+	 G4Tubs* straightPipe = new G4Tubs("straightPipe", inRadius, outRadius, pipeLength, 0., 2*M_PI) ;
+	 G4Tubs* straightWater = new G4Tubs("straightWater", 0., inRadius, pipeLength, 0., 2*M_PI) ;
+	 G4LogicalVolume* straightPipeLog = new G4LogicalVolume(straightPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "straightPipeLog") ;
+	 G4LogicalVolume* straightWaterLog = new G4LogicalVolume(straightWater, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "straightWaterLog") ;
+	 new G4PVPlacement(rotationPlacement1, G4ThreeVector(0.,0.,-tripleGemHeight/2.+shift), bendPipeLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement1, G4ThreeVector(0.,0.,-tripleGemHeight/2.+shift), bendWaterLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,aperture,-tripleGemHeight/2.+shift+pipeLength), straightPipeLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,aperture,-tripleGemHeight/2.+shift+pipeLength), straightWaterLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,-aperture,-tripleGemHeight/2.+shift+pipeLength), straightPipeLog, layerName, trdLogCollection.at(i), false, i) ;
+	 new G4PVPlacement(rotationPlacement2, G4ThreeVector(0.,-aperture,-tripleGemHeight/2.+shift+pipeLength), straightWaterLog, layerName, trdLogCollection.at(i), false, i) ;
       }
-      
 
       if(layerName == "coolCuA" || layerName == "coolCuB") {
-         G4double coolThick = 1.*mm ;
+	 G4double coolThick = 1.*mm ;
 	 G4double coolWidth = 188.*mm ;
 	 G4double coolShortHeight = 51.*mm ;
 	 G4double coolLongHeight = 150.*mm ;
@@ -703,7 +726,7 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
 	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (20./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
 	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (23./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
       }
-      
+
       if(layerName == "vfatA" || layerName == "vfatB") {
 	 // here lies the positionning of every single vfat2 module
 	 G4double vfatX = 46*mm ;
