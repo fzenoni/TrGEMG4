@@ -160,13 +160,13 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    cathodeAttributes->SetForceWireframe(true) ;
    G4VisAttributes *g10Attributes = new G4VisAttributes(G4Color::White()) ;
    g10Attributes->SetForceWireframe(true) ;
-   G4VisAttributes *gasAttributes = new G4VisAttributes(G4Color::Red()) ;
+   G4VisAttributes *gasAttributes = new G4VisAttributes(G4Color::Cyan()) ;
    gasAttributes->SetForceWireframe(true) ;
    G4VisAttributes *gemAttributes = new G4VisAttributes(G4Color::Green()) ;
    gemAttributes->SetForceWireframe(true) ;
    G4VisAttributes *vfatAttributes = new G4VisAttributes(G4Color::Yellow()) ;
    vfatAttributes->SetForceWireframe(true) ;
-
+   
 
    // Beginning of geometry definition
 
@@ -645,7 +645,12 @@ G4Trd* TrGEMSuperChamberDetectorConstruction_BIS::Trapezoid(G4String name, G4dou
 }
 
 void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
-
+   
+   G4VisAttributes *coolingAttributes = new G4VisAttributes(G4Color::Blue()) ;
+   coolingAttributes->SetForceWireframe(true) ;
+   G4VisAttributes *copperAttributes = new G4VisAttributes(G4Color(1.0, 0.65, 0.)) ;
+   copperAttributes->SetForceWireframe(true) ;
+   
    G4double XTranslation = 0. ;
    G4String coordX ;
    G4String coordY ;
@@ -690,10 +695,12 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
 	 G4Torus* bendPipe = new G4Torus("bendPipe", inRadius, outRadius, aperture, 0.*degree, 180.*degree) ; 
 	 G4Torus* bendWater = new G4Torus("bendPipe", 0., inRadius, aperture, 0.*degree, 180.*degree) ; 
 	 G4LogicalVolume* bendPipeLog = new G4LogicalVolume(bendPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "bendPipeLog") ; 
+         bendPipeLog->SetVisAttributes(new G4VisAttributes(*coolingAttributes)) ;
 	 G4LogicalVolume* bendWaterLog = new G4LogicalVolume(bendWater, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "bendWaterLog") ; 
 	 G4Tubs* straightPipe = new G4Tubs("straightPipe", inRadius, outRadius, pipeLength, 0., 2*M_PI) ;
 	 G4Tubs* straightWater = new G4Tubs("straightWater", 0., inRadius, pipeLength, 0., 2*M_PI) ;
 	 G4LogicalVolume* straightPipeLog = new G4LogicalVolume(straightPipe, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "straightPipeLog") ;
+         straightPipeLog->SetVisAttributes(new G4VisAttributes(*coolingAttributes)) ;
 	 G4LogicalVolume* straightWaterLog = new G4LogicalVolume(straightWater, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "straightWaterLog") ;
 	 new G4PVPlacement(rotationPlacement1, G4ThreeVector(0.,0.,-tripleGemHeight/2.+shift), bendPipeLog, layerName, trdLogCollection.at(i), false, i) ;
 	 new G4PVPlacement(rotationPlacement1, G4ThreeVector(0.,0.,-tripleGemHeight/2.+shift), bendWaterLog, layerName, trdLogCollection.at(i), false, i) ;
@@ -711,10 +718,12 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
 	 // big cooler
 	 G4Box* coolBig = new G4Box("coolBig", coolThick/2., coolWidth/2., coolLongHeight/2.) ; 
 	 G4LogicalVolume* coolBigLog = new G4LogicalVolume(coolBig, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "coolBigLog") ;
+         coolBigLog->SetVisAttributes(new G4VisAttributes(*copperAttributes)) ;
 	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + coolShortHeight + coolLongHeight/2.), coolBigLog, layerName, trdLogCollection.at(i), false, i) ;
 	 // small coolers
 	 G4Box* coolSmall = new G4Box("coolSmall", coolThick/2., coolWidth/2., coolShortHeight/2.) ; 
 	 G4LogicalVolume* coolSmallLog = new G4LogicalVolume(coolSmall, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "coolSmallLog") ;
+         coolSmallLog->SetVisAttributes(new G4VisAttributes(*copperAttributes)) ;
 	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (5./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
 	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (8./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
 	 new G4PVPlacement(0, G4ThreeVector(0., 0., -tripleGemHeight/2. + (11./1.5)*coolShortHeight + coolLongHeight), coolSmallLog, layerName, trdLogCollection.at(i), false, i) ;
