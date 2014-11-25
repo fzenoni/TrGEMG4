@@ -174,6 +174,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    // Beginning of geometry definition
    GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
 
+
+   // Fake B
+   G4Trd* fakeB = Trapezoid("fakeB", 1.*nm) ;
+   G4LogicalVolume* fakeBLog = new G4LogicalVolume(fakeB, fEmptyMat, "fakeB") ;
+   trdCollection.push_back(fakeB) ;
+   trdLogCollection.push_back(fakeBLog) ;
+   fakeBLog->SetSensitiveDetector(sensitive) ;
+
    // GEM cover (1 mm)
    G4Trd* cover1B = Trapezoid("Cover1B", 1.*mm) ;
    G4LogicalVolume* cover1BLog = new G4LogicalVolume(cover1B, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "cover1BLog") ;
@@ -631,6 +639,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    copper01ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(copper01A) ;
    trdLogCollection.push_back(copper01ALog) ;
+   
+   // Fake A
+   G4Trd* fakeA = Trapezoid("fakeA", 1.*nm) ;
+   G4LogicalVolume* fakeALog = new G4LogicalVolume(fakeA, fEmptyMat, "fakeA") ;
+   trdCollection.push_back(fakeA) ;
+   trdLogCollection.push_back(fakeALog) ;
+   fakeALog->SetSensitiveDetector(sensitive) ;
+
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 
