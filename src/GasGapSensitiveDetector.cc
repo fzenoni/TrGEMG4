@@ -22,7 +22,8 @@
    transferDepB(0.),
    charge(0),
    neutSensitiveA(false),
-   neutSensitiveB(false)
+   neutSensitiveB(false),
+   acceptance(false)
 
 {
    G4cout << "*************************************" << G4endl ;
@@ -58,13 +59,16 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    edep -= nonionedep ;
 
    // G4double timeWindow = 1.E8*ns ;
-   // the following number is smaller than any other
+   // the following number is greater than any other
    G4double timeWindow = std::numeric_limits<double>::infinity() ;
    charge = track->GetParticleDefinition()->GetPDGCharge() ;
 
    // Senstivity algorithms
    if(track->GetGlobalTime() < timeWindow) {
-     if(volName == "GasGap1A") {
+
+      if(volName == "fakeA" || volName == "fakeB") acceptance = true ;
+
+      if(volName == "GasGap1A") {
 	 // we're in drift gap
 	 if(edep != 0) driftDepA += edep ;
 
@@ -79,7 +83,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
 	 // special algorithm for neutron sensitivity
 	 if(charge != 0) neutSensitiveA = true ;
       }
-      
+
       if(volName == "GasGap1B") {
 	 // we're in drift gap
 	 if(edep != 0) driftDepB += edep ;
@@ -136,44 +140,57 @@ void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 
 void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-   G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)
-   //G4double ionizationPotential = 0.7*26*eV + 0.3*33*eV ; // Ar:CO2 (70:30)
-   //G4double ionizationPotential = 0.97*14*eV+0.03*10.6*eV ; // RPC GAS 
-   // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli '77, Sharma)  
-   // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
-   // These are values previously used. They represent the minimum ionization potential.
-   G4int factor = 0 ;
-   if(driftDepA > factor*ionizationPotential) {
-      TrGEMAnalysis::GetInstance()->SetDriftSensitivityA(driftDepA) ;
-      //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 
+   G4cout << acceptance << G4endl ;
+   if(acceptance) { // if the particle is in the geometry acceptance 
+
+      G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)
+      //G4double ionizationPotential = 0.7*26*eV + 0.3*33*eV ; // Ar:CO2 (70:30)
+      //G4double ionizationPotential = 0.97*14*eV+0.03*10.6*eV ; // RPC GAS 
+      // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli '77, Sharma)  
+      // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
+      // These are values previously used. They represent the minimum ionization potential.
+      G4int factor = 0 ;
+      if(driftDepA > factor*ionizationPotential) {
+	 TrGEMAnalysis::GetInstance()->SetDriftSensitivityA(driftDepA) ;
+	 //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 
+      }
+      else if(transferDepA > factor*ionizationPotential) { 
+	 TrGEMAnalysis::GetInstance()->SetTransferSensitivityA(transferDepA) ;
+	 //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDep,"Energy") << ")" << G4endl ;
+      }
+
+      if(driftDepB > factor*ionizationPotential) {
+	 TrGEMAnalysis::GetInstance()->SetDriftSensitivityB(driftDepB) ;
+	 //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 
+      }
+      else if(transferDepB > factor*ionizationPotential) { 
+	 TrGEMAnalysis::GetInstance()->SetTransferSensitivityB(transferDepB) ;
+	 //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDep,"Energy") << ")" << G4endl ;
+      }
+
+      driftDepA = 0. ;
+      transferDepA = 0. ;
+      driftDepB = 0. ;
+      transferDepB = 0. ;
+
+      //hitCollection->PrintAllHits() ;
+
+      TrGEMAnalysis::GetInstance()->SetNeutronSensitivityA(neutSensitiveA) ;
+      TrGEMAnalysis::GetInstance()->SetNeutronSensitivityB(neutSensitiveB) ;
+
+      // resetting neutron sensitivity
+      neutSensitiveA = false ;
+      neutSensitiveB = false ;
    }
-   else if(transferDepA > factor*ionizationPotential) { 
-      TrGEMAnalysis::GetInstance()->SetTransferSensitivityA(transferDepA) ;
-      //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDep,"Energy") << ")" << G4endl ;
+   else {
+      G4cout << "Detector missed" << G4endl ;
    }
 
-   if(driftDepB > factor*ionizationPotential) {
-      TrGEMAnalysis::GetInstance()->SetDriftSensitivityB(driftDepB) ;
-      //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 
-   }
-   else if(transferDepB > factor*ionizationPotential) { 
-      TrGEMAnalysis::GetInstance()->SetTransferSensitivityB(transferDepB) ;
-      //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDep,"Energy") << ")" << G4endl ;
-   }
-
-   driftDepA = 0. ;
-   transferDepA = 0. ;
-   driftDepB = 0. ;
-   transferDepB = 0. ;
-
-   //hitCollection->PrintAllHits() ;
-
-   TrGEMAnalysis::GetInstance()->SetNeutronSensitivityA(neutSensitiveA) ;
-   TrGEMAnalysis::GetInstance()->SetNeutronSensitivityB(neutSensitiveB) ;
-   
    // resetting neutron sensitivity
    neutSensitiveA = false ;
    neutSensitiveB = false ;
+   // resetting acceptance
+   acceptance = false ;
 
 }
 

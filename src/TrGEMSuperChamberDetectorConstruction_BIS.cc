@@ -169,6 +169,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    
 
    // Beginning of geometry definition
+   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
+   
+   // Fake A
+   G4Trd* fakeA = Trapezoid("fakeA", 1.*nm) ;
+   G4LogicalVolume* fakeALog = new G4LogicalVolume(fakeA, fEmptyMat, "fakeA") ;
+   trdCollection.push_back(fakeA) ;
+   trdLogCollection.push_back(fakeALog) ;
+   fakeALog->SetSensitiveDetector(sensitive) ;
 
    G4Trd* copper01A = Trapezoid("Copper01A", 35.*um) ;
    G4LogicalVolume* copper01ALog = new G4LogicalVolume(copper01A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper01ALog") ; 
@@ -193,7 +201,6 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    gasGap1ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
    trdCollection.push_back(gasGap1A) ;
    trdLogCollection.push_back(gasGap1ALog) ;
-   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
    sdman->AddNewDetector(sensitive) ;
    gasGap1ALog->SetSensitiveDetector(sensitive) ;
 
@@ -628,6 +635,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    cover1BLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(cover1B) ;
    trdLogCollection.push_back(cover1BLog) ;
+   
+   // Fake B
+   G4Trd* fakeB = Trapezoid("fakeB", 1.*nm) ;
+   G4LogicalVolume* fakeBLog = new G4LogicalVolume(fakeB, fEmptyMat, "fakeB") ;
+   trdCollection.push_back(fakeB) ;
+   trdLogCollection.push_back(fakeBLog) ;
+   fakeBLog->SetSensitiveDetector(sensitive) ;
+
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 

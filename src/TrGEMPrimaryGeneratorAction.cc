@@ -68,7 +68,7 @@ TrGEMPrimaryGeneratorAction::~TrGEMPrimaryGeneratorAction() {
 
 void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
-   bool alfredo = false ;
+   bool alfredo = true ;
    if(alfredo) {
       G4double cosx = fit_cosx->GetRandom(-1.,1.) ;
       //dummy_x->Fill(cosx) ;
@@ -82,7 +82,7 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       double z_source(0) ;
       if(gRandom->Uniform() < prob_neg_z) {
 	 cosz = sqrt(1-cosx*cosx-cosy*cosy) ;
-	 z_source = 4.1*cm ; // good for superchamber
+	 z_source = 7.3*cm ; // good for superchamber
       }
       else {
 	 cosz = -sqrt(1-cosx*cosx-cosy*cosy) ;
@@ -96,10 +96,12 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       gps->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(G4ThreeVector(-cosx,-cosy,-cosz));
 
       G4SPSPosDistribution *posDist = gps->GetCurrentSource()->GetPosDist();
-      posDist->SetPosDisType("Beam");  // or Point,Plane,Volume,Beam
+      posDist->SetPosDisType("Plane");  // or Point,Plane,Volume,Beam
+      posDist->SetPosDisShape("Rectangle");  // or Circle, Annulus, Ellipse, Square  
       posDist->SetCentreCoords(G4ThreeVector(0.0*cm,0.0*cm,z_source));
-      posDist->SetBeamSigmaInX(0.0*mm);
-      posDist->SetBeamSigmaInY(0.0*mm); 
+      posDist->SetHalfY(1283.*mm/2) ;
+      posDist->SetHalfX(279.*mm/2) ;
+
    }
    //fParticleGun->GeneratePrimaryVertex(anEvent) ;
    //
