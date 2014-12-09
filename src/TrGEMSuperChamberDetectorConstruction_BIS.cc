@@ -123,6 +123,8 @@ void TrGEMSuperChamberDetectorConstruction_BIS::DefineMaterials() {
 
 G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
 
+   // HERE FOLLOWS 'EVEN' GEOMETRY
+
    // Cleanup old geometry
    G4GeometryManager::GetInstance()->OpenGeometry();
 

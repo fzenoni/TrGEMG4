@@ -126,6 +126,8 @@ void TrGEMSuperChamberDetectorConstruction::DefineMaterials() {
 
 G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
 
+   // HERE FOLLOWS 'ODD' GEOMETRY
+
    // Cleanup old geometry
    G4GeometryManager::GetInstance()->OpenGeometry();
 
@@ -149,7 +151,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    G4LogicalVolume* worldLog = new G4LogicalVolume(worldBox, fEmptyMat, "WorldLog") ;
    // Set visual attributes
    G4VisAttributes *worldAttributes = new G4VisAttributes ;
-   worldAttributes->SetVisibility(true) ;
+   worldAttributes->SetVisibility(false) ;
    worldLog->SetVisAttributes(worldAttributes) ;
    G4VPhysicalVolume* worldPhys = new G4PVPlacement(0, G4ThreeVector(), worldLog, "WorldSpace", 0, false, 0) ;
 

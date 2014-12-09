@@ -140,7 +140,6 @@ void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 
 void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-   G4cout << acceptance << G4endl ;
    if(acceptance) { // if the particle is in the geometry acceptance 
 
       G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)

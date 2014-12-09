@@ -40,16 +40,16 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TFile* angularFile = new TFile("/Users/fzenoni/TrGEMG4/angular.root") ;
 
-   TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_e") ;
+   TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_n") ;
    h_cosx->Fit("pol4") ;
    fit_cosx = h_cosx->GetFunction("pol4") ;
 
-   TH1F* h_cosy = (TH1F*)angularFile->Get("cosy_e") ;
+   TH1F* h_cosy = (TH1F*)angularFile->Get("cosy_n") ;
    prob_neg_y = h_cosy->Integral(1,h_cosy->GetNbinsX()/2)/h_cosy->Integral() ;
    h_cosy->Fit("pol4") ;
    fit_cosy = h_cosy->GetFunction("pol4") ;
 
-   TH1F* h_cosz = (TH1F*)angularFile->Get("cosz_e") ;
+   TH1F* h_cosz = (TH1F*)angularFile->Get("cosz_n") ;
    prob_neg_z = h_cosz->Integral(1,h_cosz->GetNbinsX()/2)/h_cosz->Integral() ;
    // no fit needed for z
    //

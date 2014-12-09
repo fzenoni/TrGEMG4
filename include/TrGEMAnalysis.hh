@@ -26,7 +26,6 @@ class TrGEMAnalysis {
       void EndOfEvent(const G4Event* anEvent);
       void PrepareNewRun(const G4Run* aRun);
       void EndOfRun(const G4Run* aRun);
-      void EndOfTrack(const G4Track* aTrack);
       void AddSecondary(const G4ParticleDefinition* part);
       void AddGapSecondary(const G4ParticleDefinition* part, G4int gapNum);
       void AddEDep(G4double edep, G4double z);
@@ -41,7 +40,7 @@ class TrGEMAnalysis {
       void SetTransferSensitivityB(G4double someTransferEdep) ;
       void SetNeutronSensitivityA(G4bool someBool) ;
       void SetNeutronSensitivityB(G4bool someBool) ;
-      void SaveStepProcess(int process, std::string volume) ;
+      //void SaveStepProcess(int process, std::string volume) ;
       void SaveProcessQuantities(
 	    G4int    anEventID,
 	    G4int    aParentID,
@@ -58,9 +57,7 @@ class TrGEMAnalysis {
 	    G4double aMomentumDirectionY, 
 	    G4double aMomentumDirectionZ,
 	    std::string aProcess,
-	    std::string aVolume,
-	    G4bool aChargedSensitivityA,
-	    G4bool aChargedSensitivityB) ;
+	    std::string aVolume) ;
 
    private:
 
@@ -114,24 +111,22 @@ class TrGEMAnalysis {
 	 G4bool neutronSensitivityB ;
 
 	 // PROCESS quantities
-	 G4int eventID ;
-	 G4int parentID ;
-	 G4int trackID ;
-	 G4int charge ;
-	 G4double globalTime ;
-	 G4int pdgCode ;
-	 std::string particle ;
-	 G4double kineticEnergy ;
-	 G4double positionX ;
-	 G4double positionY ;
-	 G4double positionZ ;
-	 G4double momentumDirectionX ;
-	 G4double momentumDirectionY ;
-	 G4double momentumDirectionZ ;
-	 std::string process ;
-	 std::string volume ;
-	 G4bool chargedSensitivityA ;
-	 G4bool chargedSensitivityB ;
+	 std::vector<G4int> eventID ;
+	 std::vector<G4int> parentID ;
+	 std::vector<G4int> trackID ;
+	 std::vector<G4int> charge ;
+	 std::vector<G4double> globalTime ;
+	 std::vector<G4int> pdgCode ;
+	 std::vector<std::string> particle ;
+	 std::vector<G4double> kineticEnergy ;
+	 std::vector<G4double> positionX ;
+	 std::vector<G4double> positionY ;
+	 std::vector<G4double> positionZ ;
+	 std::vector<G4double> momentumDirectionX ;
+	 std::vector<G4double> momentumDirectionY ;
+	 std::vector<G4double> momentumDirectionZ ;
+	 std::vector<std::string> process ;
+	 std::vector<std::string> volume ;
 
 	 // ROOT objects
 	 TFile*    m_ROOT_file;
@@ -141,7 +136,6 @@ class TrGEMAnalysis {
 	 TH1D*     m_ROOT_histo3;
 	 //TNtuple*  ntuple;
 	 TTree     *t ;
-	 TTree     *g ;
 
 };
 

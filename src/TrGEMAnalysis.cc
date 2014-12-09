@@ -52,6 +52,25 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
    driftEdepB = 0. ;
    transferEdepA = 0. ;
    transferEdepB = 0. ;
+   
+   // Clearing of the vectors, ready for next event
+   eventID.clear() ;
+   charge.clear() ;
+   parentID.clear() ;
+   trackID.clear() ;
+   globalTime.clear() ;
+   pdgCode.clear() ;
+   particle.clear() ;
+   kineticEnergy.clear() ;
+   positionX.clear() ;
+   positionY.clear() ;
+   positionZ.clear() ;
+   momentumDirectionX.clear() ;
+   momentumDirectionY.clear() ;
+   momentumDirectionZ.clear() ; 
+   process.clear() ;
+   volume.clear() ;
+
 }
 
 void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
@@ -101,29 +120,24 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
    t->Branch("transferEdepB",&transferEdepB, "transferEdepB/D") ;
    t->Branch("neutronSensitivityA",&neutronSensitivityA, "neutronSensitivityA/O") ;
    t->Branch("neutronSensitivityB",&neutronSensitivityB, "neutronSensitivityB/O") ;
-   t->Branch("vecProcess","std::vector<std::string>",&pVecProcess);
-   t->Branch("vecVolume","std::vector<std::string>",&pVecVolume);
-   //t->Branch("vecProcNo",,&pVecVolume) ;
 
-   g = new TTree("Signal","Quantities related to secondaries that provide a signal") ;
-   g->Branch("eventID",&eventID,"eventID/I") ;
-   g->Branch("parentID",&parentID,"parentID/I") ;
-   g->Branch("trackID",&eventID,"trackID/I") ;
-   g->Branch("charge",&charge,"charge/I") ;
-   g->Branch("globalTime",&globalTime,"globalTime/D") ;
-   g->Branch("pdgCode",&pdgCode,"pdgCode/I") ;
-   g->Branch("particle",&particle) ;
-   g->Branch("kineticEnergy",&kineticEnergy,"kineticEnergy/D") ;
-   g->Branch("positionX",&positionX,"positionX/D") ;
-   g->Branch("positionY",&positionY,"positionY/D") ;
-   g->Branch("positionZ",&positionZ,"positionZ/D") ;
-   g->Branch("momentumDirectionX",&momentumDirectionX,"momentumDirectionX/D") ;
-   g->Branch("momentumDirectionY",&momentumDirectionY,"momentumDirectionY/D") ;
-   g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
-   g->Branch("process",&process) ;
-   g->Branch("volume",&volume) ;
-   g->Branch("chargedSensitivityA",&chargedSensitivityA, "chargedSensitivityA/O") ;
-   g->Branch("chargedSensitivityB",&chargedSensitivityB, "chargedSensitivityB/O") ;
+   //g = new TTree("Signal","Quantities related to secondaries that provide a signal") ;
+   t->Branch("eventID",&eventID) ;
+   t->Branch("parentID",&parentID) ;
+   t->Branch("trackID",&eventID) ;
+   t->Branch("charge",&charge) ;
+   t->Branch("globalTime",&globalTime) ;
+   t->Branch("pdgCode",&pdgCode) ;
+   t->Branch("particle",&particle) ;
+   t->Branch("kineticEnergy",&kineticEnergy) ;
+   t->Branch("positionX",&positionX) ;
+   t->Branch("positionY",&positionY) ;
+   t->Branch("positionZ",&positionZ) ;
+   t->Branch("momentumDirectionX",&momentumDirectionX) ;
+   t->Branch("momentumDirectionY",&momentumDirectionY) ;
+   t->Branch("momentumDirectionZ",&momentumDirectionZ) ;
+   t->Branch("process",&process) ;
+   t->Branch("volume",&volume) ;
 
 }
 
@@ -174,7 +188,6 @@ void TrGEMAnalysis::EndOfRun(const G4Run* aRun)
    // Writing and closing the ROOT file
    m_ROOT_file->cd() ;
    t->Write() ;
-   g->Write() ;
    G4cout << "ROOT: files writing..." << G4endl;
    m_ROOT_file->Write();
    G4cout << "ROOT: files closing..." << G4endl;
@@ -182,14 +195,6 @@ void TrGEMAnalysis::EndOfRun(const G4Run* aRun)
    delete m_ROOT_file;
 
 }
-
-
-void TrGEMAnalysis::EndOfTrack(const G4Track* aTrack) {
-
-   g->Fill() ;
-
-} 
-
 
 void TrGEMAnalysis::AddSecondary(const G4ParticleDefinition* part)
 {
@@ -279,28 +284,28 @@ void TrGEMAnalysis::SetNeutronSensitivityB(G4bool someBool) {
 
 }
 
-void TrGEMAnalysis::SaveStepProcess(G4int procNo, std::string volume) {
+/*void TrGEMAnalysis::SaveStepProcess(G4int procNo, std::string volume) {
 
-   if(isNewEvent) {
-      eventCounter++ ;
-      //vecProcess.push_back(process) ;
-      vecVolume.push_back(volume) ;
-      isNewEvent = false ;
-   }
-
-   /*else {
-   //G4String proc_temp = vecProcess[vecProcess.size()-1] ;
-   vecProcess.erase(vecProcess.end()-1) ;
-   //vecProcess.push_back(proc_temp + "+" + process) ;
-   vecProcess.push_back(process) ;
-
-   vecVolume.erase(vecVolume.end()-1) ;
-   vecVolume.push_back(volume) ;
-   }*/
-
-   //G4cout << eventCounter << G4endl ;
-
+  if(isNewEvent) {
+  eventCounter++ ;
+//vecProcess.push_back(process) ;
+vecVolume.push_back(volume) ;
+isNewEvent = false ;
 }
+
+else {
+//G4String proc_temp = vecProcess[vecProcess.size()-1] ;
+vecProcess.erase(vecProcess.end()-1) ;
+//vecProcess.push_back(proc_temp + "+" + process) ;
+vecProcess.push_back(process) ;
+
+vecVolume.erase(vecVolume.end()-1) ;
+vecVolume.push_back(volume) ;
+}
+
+//G4cout << eventCounter << G4endl ;
+
+}*/
 
 void TrGEMAnalysis::SaveProcessQuantities(
       G4int anEventID,
@@ -318,27 +323,23 @@ void TrGEMAnalysis::SaveProcessQuantities(
       G4double aMomentumDirectionY, 
       G4double aMomentumDirectionZ,
       std::string aProcess,
-      std::string aVolume,
-      G4bool aChargedSensitivityA,
-      G4bool aChargedSensitivityB) {
+      std::string aVolume) {
 
-   eventID = anEventID ;
-   charge = aCharge ;
-   parentID = aParentID ;
-   trackID = aTrackID ;
-   globalTime = aGlobalTime ;
-   pdgCode = aPdgCode ;
-   particle = aParticle ;
-   kineticEnergy = aKineticEnergy ;
-   positionX = aPositionX ;
-   positionY = aPositionY ;
-   positionZ = aPositionZ ;
-   momentumDirectionX = aMomentumDirectionX ;
-   momentumDirectionY = aMomentumDirectionY ;
-   momentumDirectionZ = aMomentumDirectionZ ;
-   process = aProcess ;
-   volume = aVolume ;
-   chargedSensitivityA = neutronSensitivityA ;
-   chargedSensitivityB = neutronSensitivityB ;
+   eventID.push_back(anEventID) ;
+   charge.push_back(aCharge) ;
+   parentID.push_back(aParentID) ;
+   trackID.push_back(aTrackID) ;
+   globalTime.push_back(aGlobalTime) ;
+   pdgCode.push_back(aPdgCode) ;
+   particle.push_back(aParticle) ;
+   kineticEnergy.push_back(aKineticEnergy) ;
+   positionX.push_back(aPositionX) ;
+   positionY.push_back(aPositionY) ;
+   positionZ.push_back(aPositionZ) ;
+   momentumDirectionX.push_back(aMomentumDirectionX) ;
+   momentumDirectionY.push_back(aMomentumDirectionY) ;
+   momentumDirectionZ.push_back(aMomentumDirectionZ) ;
+   process.push_back(aProcess) ;
+   volume.push_back(aVolume) ;
 
 } 
