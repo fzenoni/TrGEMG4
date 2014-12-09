@@ -1,0 +1,10 @@
+.svn/
+RPCGeometries/
+c1.C
+c1.root
+include/.GasGapSensitiveDetector.hh.swp
+include/.TrGEMAnalysis.hh.swp
+output/
+src/.GasGapSensitiveDetector.cc.swp
+src/.TrGEMAnalysis.cc.swp
+src/.TrGEMPrimaryGeneratorAction.cc.swp
