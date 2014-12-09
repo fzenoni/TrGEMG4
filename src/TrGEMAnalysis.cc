@@ -155,7 +155,7 @@ void TrGEMAnalysis::EndOfEvent(const G4Event* /*anEvent*/)
    m_ROOT_histo0->Fill(thisEventTotEM/beamEnergy, 1.0);
    //ntuple->Fill(double(n_gapGamma[0]),double(n_gapElectron[0]),double(n_gapPositron[0])) ;
 
-   t->Fill() ;
+   if(acceptance) t->Fill() ;
 
 }
 
@@ -342,4 +342,10 @@ void TrGEMAnalysis::SaveProcessQuantities(
    process.push_back(aProcess) ;
    volume.push_back(aVolume) ;
 
-} 
+}
+
+void TrGEMAnalysis::SetAcceptance(G4bool someAcceptance) {
+
+   acceptance = someAcceptance ;
+
+}

@@ -185,6 +185,7 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
       G4cout << "Detector missed" << G4endl ;
    }
 
+   TrGEMAnalysis::GetInstance()->SetAcceptance(acceptance) ;
    // resetting neutron sensitivity
    neutSensitiveA = false ;
    neutSensitiveB = false ;
