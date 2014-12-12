@@ -1,9 +1,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "QGSP_FTFP_BERT.hh"
-#include "QGSP_BERT_HP.hh"
 #include "FTFP_BERT_HP.hh"
-#include "QGSP_BIC_HP.hh"
+#include "QBBC.hh"
 //#include "TROOT.h"
 
 #include "TrGEMDetectorConstruction.hh"
@@ -49,7 +47,7 @@ int main(int argc, char** argv) {
    // Alternate neutrons PL
    // BUT it looks that this PL is ideal for both photons and neutrons
    G4VUserPhysicsList* physics = new FTFP_BERT_HP();
-   //G4VUserPhysicsList* physics = new QGSP_BIC_HP();
+   //G4VUserPhysicsList* physics = new QBBC();
    runManager->SetUserInitialization(physics) ;
    runManager->SetUserAction(new TrGEMPrimaryGeneratorAction) ;
 
