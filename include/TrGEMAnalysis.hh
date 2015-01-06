@@ -60,6 +60,7 @@ class TrGEMAnalysis {
 	    std::string aVolume) ;
 
       void SetAcceptance(G4bool anAcceptance) ;
+      void SetKickstart(G4bool aKickstart) ;
 
    private:
 
@@ -111,6 +112,7 @@ class TrGEMAnalysis {
       G4int vecProcNo ;
       G4bool neutronSensitivityA ;
       G4bool neutronSensitivityB ;
+      G4bool kickstart ;
 
       // PROCESS quantities
       std::vector<G4int> eventID ;

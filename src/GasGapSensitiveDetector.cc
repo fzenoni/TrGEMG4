@@ -23,7 +23,9 @@
    charge(0),
    neutSensitiveA(false),
    neutSensitiveB(false),
-   acceptance(false)
+   acceptance(false),
+   kickstart(false),
+   trackID_tmp(0) 
 
 {
    G4cout << "*************************************" << G4endl ;
@@ -33,6 +35,7 @@
    // Declaration of the hit collection name
    G4String myCollectionName = "GasGapHitCollection" ;
    collectionName.insert(myCollectionName) ;
+
 
 }
 
@@ -49,6 +52,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    //To identify where the step is we use the touchable navigation,
    //Remember we need to use PreStepPoint!
    G4Track* track = step->GetTrack() ;
+   G4int trackID = track->GetTrackID() ;
    G4TouchableHandle touchable = step->GetPreStepPoint()->GetTouchableHandle();
    G4int copyNo = touchable->GetVolume(0)->GetCopyNo();
    G4int layerIndex = copyNo;
@@ -58,10 +62,17 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    G4double nonionedep = step->GetNonIonizingEnergyDeposit() ;
    edep -= nonionedep ;
 
+   // Get information from particle coming to the gas gap for the first time
+
    // G4double timeWindow = 1.E8*ns ;
-   // the following number is greater than any other
+   // the following number is greater than any other (infinite)
    G4double timeWindow = std::numeric_limits<double>::infinity() ;
+
    charge = track->GetParticleDefinition()->GetPDGCharge() ;
+
+   if(trackID_tmp != trackID) {
+      kickstart = false ;
+   }
 
    // Senstivity algorithms
    if(track->GetGlobalTime() < timeWindow) {
@@ -72,32 +83,44 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
 	 // we're in drift gap
 	 if(edep != 0) driftDepA += edep ;
 
-	 // special algorithm for neutron sensitivity
-	 if(charge != 0) neutSensitiveA = true ;
+	 // special algorithm for "charged" sensitivity
+	 if(charge != 0) {
+	    neutSensitiveA = true ;
+	    kickstart = true ;
+	 }
       }
 
       if(volName == "GasGap2A") {
 	 // we're in transfer1 gap
 	 if(edep != 0) transferDepA += edep ;
 
-	 // special algorithm for neutron sensitivity
-	 if(charge != 0) neutSensitiveA = true ;
+	 // special algorithm for "charged" sensitivity
+	 if(charge != 0) {
+	    neutSensitiveA = true ;
+	    kickstart = true ;
+	 }
       }
 
       if(volName == "GasGap1B") {
 	 // we're in drift gap
 	 if(edep != 0) driftDepB += edep ;
 
-	 // special algorithm for neutron sensitivity
-	 if(charge != 0) neutSensitiveB = true ;
+	 // special algorithm for "charged" sensitivity
+	 if(charge != 0) {
+	    neutSensitiveB = true ;
+	    kickstart = true ;
+	 }
       }
 
       if(volName == "GasGap2B") {
 	 // we're in transfer1 gap
 	 if(edep != 0) transferDepB += edep ;
 
-	 // special algorithm for neutron sensitivity
-	 if(charge != 0) neutSensitiveB = true ;
+	 // special algorithm for "charged" sensitivity
+	 if(charge != 0) {
+	    neutSensitiveB = true ;
+	    kickstart = true ;
+	 }
       } 
    }
 
@@ -124,6 +147,11 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    }
    aHit->AddEdep(edep) ;
 
+   trackID_tmp = trackID ; // updating the variable
+   
+   TrGEMAnalysis::GetInstance()->SetKickstart(kickstart) ;
+   //kickstart = false ;
+
    return true;
 }
 
@@ -136,6 +164,8 @@ void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 
    // Reset map of hits
    hitMap.clear() ;
+
+   trackID_tmp = 0 ;
 }
 
 void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
@@ -146,8 +176,10 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
       //G4double ionizationPotential = 0.7*26*eV + 0.3*33*eV ; // Ar:CO2 (70:30)
       //G4double ionizationPotential = 0.97*14*eV+0.03*10.6*eV ; // RPC GAS 
       // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli '77, Sharma)  
+      
       // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
       // These are values previously used. They represent the minimum ionization potential.
+      
       G4int factor = 0 ;
       if(driftDepA > factor*ionizationPotential) {
 	 TrGEMAnalysis::GetInstance()->SetDriftSensitivityA(driftDepA) ;

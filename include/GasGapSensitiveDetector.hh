@@ -50,6 +50,8 @@ class GasGapSensitiveDetector : public G4VSensitiveDetector
       G4bool   neutSensitiveA ;
       G4bool   neutSensitiveB ;
       G4bool   acceptance ;
+      G4bool   kickstart ;
+      G4int    trackID_tmp ;
 
       typedef std::map<G4int,GasGapHit*> hitMap_t; //< Helper mapping layer number with hit
       hitMap_t hitMap;

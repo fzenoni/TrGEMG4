@@ -52,8 +52,11 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
    driftEdepB = 0. ;
    transferEdepA = 0. ;
    transferEdepB = 0. ;
-   
-   // Clearing of the vectors, ready for next event
+   neutronSensitivityA = false ;
+   neutronSensitivityB = false ;
+   kickstart = false ;
+
+   // Clearing of the vectors, ready for coming event
    eventID.clear() ;
    charge.clear() ;
    parentID.clear() ;
@@ -325,27 +328,35 @@ void TrGEMAnalysis::SaveProcessQuantities(
       std::string aProcess,
       std::string aVolume) {
 
-   eventID.push_back(anEventID) ;
-   charge.push_back(aCharge) ;
-   parentID.push_back(aParentID) ;
-   trackID.push_back(aTrackID) ;
-   globalTime.push_back(aGlobalTime) ;
-   pdgCode.push_back(aPdgCode) ;
-   particle.push_back(aParticle) ;
-   kineticEnergy.push_back(aKineticEnergy) ;
-   positionX.push_back(aPositionX) ;
-   positionY.push_back(aPositionY) ;
-   positionZ.push_back(aPositionZ) ;
-   momentumDirectionX.push_back(aMomentumDirectionX) ;
-   momentumDirectionY.push_back(aMomentumDirectionY) ;
-   momentumDirectionZ.push_back(aMomentumDirectionZ) ;
-   process.push_back(aProcess) ;
-   volume.push_back(aVolume) ;
+   if(kickstart) { // it tells if the particle kickstarted an event (charged part. in drift and/or transfer 1)
+      eventID.push_back(anEventID) ;
+      charge.push_back(aCharge) ;
+      parentID.push_back(aParentID) ;
+      trackID.push_back(aTrackID) ;
+      globalTime.push_back(aGlobalTime) ;
+      pdgCode.push_back(aPdgCode) ;
+      particle.push_back(aParticle) ;
+      kineticEnergy.push_back(aKineticEnergy) ;
+      positionX.push_back(aPositionX) ;
+      positionY.push_back(aPositionY) ;
+      positionZ.push_back(aPositionZ) ;
+      momentumDirectionX.push_back(aMomentumDirectionX) ;
+      momentumDirectionY.push_back(aMomentumDirectionY) ;
+      momentumDirectionZ.push_back(aMomentumDirectionZ) ;
+      process.push_back(aProcess) ;
+      volume.push_back(aVolume) ;
+   }
 
 }
 
 void TrGEMAnalysis::SetAcceptance(G4bool someAcceptance) {
 
    acceptance = someAcceptance ;
+
+}
+
+void TrGEMAnalysis::SetKickstart(G4bool someKickstart) {
+
+   kickstart = someKickstart ;
 
 }
