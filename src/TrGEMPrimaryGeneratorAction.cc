@@ -40,7 +40,7 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TFile* angularFile = new TFile("/Users/fzenoni/TrGEMG4/angular.root") ;
 
-   TString particle = "e" ;
+   TString particle = "n" ;
    TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_" + particle) ;
    h_cosx->Fit("pol4") ;
    fit_cosx = h_cosx->GetFunction("pol4") ;
