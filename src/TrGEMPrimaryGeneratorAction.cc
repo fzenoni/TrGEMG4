@@ -40,7 +40,7 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TFile* angularFile = new TFile("/Users/fzenoni/TrGEMG4/angular.root") ;
 
-   TString particle = "n" ;
+   TString particle = "e" ;
    TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_" + particle) ;
    h_cosx->Fit("pol4") ;
    fit_cosx = h_cosx->GetFunction("pol4") ;
@@ -101,7 +101,7 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       posDist->SetPosDisShape("Rectangle");  // or Circle, Annulus, Ellipse, Square  
       posDist->SetCentreCoords(G4ThreeVector(0.0*cm,0.0*cm,z_source));
       posDist->SetHalfY(1283.*mm/2) ;
-      posDist->SetHalfX(279.*mm/2) ;
+      posDist->SetHalfX(510.*mm/2) ;
 
    }
    //fParticleGun->GeneratePrimaryVertex(anEvent) ;
