@@ -393,7 +393,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(coolCuALog) ;
 
    // Cooling pipe
-   G4Trd* coolPipeA = Trapezoid("coolPipeA", 16.*mm) ;
+   G4Trd* coolPipeA = Trapezoid("coolPipeA", 8.*mm) ;
    G4LogicalVolume* coolPipeALog = new G4LogicalVolume(coolPipeA, fEmptyMat, "coolPipeA") ;
    trdCollection.push_back(coolPipeA) ;
    trdLogCollection.push_back(coolPipeALog) ;
@@ -626,7 +626,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(coolCuBLog) ;
 
    // Cooling pipe
-   G4Trd* coolPipeB = Trapezoid("coolPipeB", 16.*mm) ;
+   G4Trd* coolPipeB = Trapezoid("coolPipeB", 8.*mm) ;
    G4LogicalVolume* coolPipeBLog = new G4LogicalVolume(coolPipeB, fEmptyMat, "coolPipeB") ;
    trdCollection.push_back(coolPipeB) ;
    trdLogCollection.push_back(coolPipeBLog) ;
@@ -704,8 +704,8 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
       G4cout << "Volume (" << i << ") " << layerName << " the position is " << G4BestUnit(XTranslation,"Length") << G4endl ;
 
       if(layerName == "coolPipeA" || layerName == "coolPipeB") {
-	 G4double inRadius = 6.*mm ;
-	 G4double outRadius = 8.*mm ;
+	 G4double inRadius = 6./2.*mm ; // 3. mm
+	 G4double outRadius = 8./2.*mm ; // 4. mm
 	 G4double shift = 120.*mm ;
 	 G4double pipeLength = 0.565*m ;
 	 G4double aperture = 100.*mm ;
