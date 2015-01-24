@@ -200,6 +200,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    // Cooling copper
    G4Trd* coolCuB = Trapezoid("coolCuB", 1.*mm) ;
    G4LogicalVolume* coolCuBLog = new G4LogicalVolume(coolCuB, fEmptyMat, "coolCuBLog") ;
+   coolCuBLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(coolCuB) ;
    trdLogCollection.push_back(coolCuBLog) ;
 

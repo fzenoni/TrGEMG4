@@ -214,7 +214,7 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
       neutSensitiveB = false ;
    }
    else {
-      G4cout << "Detector missed" << G4endl ;
+      //G4cout << "Detector missed" << G4endl ;
    }
 
    TrGEMAnalysis::GetInstance()->SetAcceptance(acceptance) ;
