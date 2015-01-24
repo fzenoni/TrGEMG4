@@ -149,7 +149,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
 
    trackID_tmp = trackID ; // updating the variable
    
-   if(kickstart != true) TrGEMAnalysis::GetInstance()->SetKickstart(kickstart) ;
+   /*if(kickstart != true)*/ TrGEMAnalysis::GetInstance()->SetKickstart(kickstart) ;
    //kickstart = false ;
 
    return true;
