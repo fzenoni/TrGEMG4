@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 TrGEMSuperChamberDetectorConstruction::TrGEMSuperChamberDetectorConstruction() :
    fG10Mat(0), fGasMat(0), fEmptyMat(0), fGasDetectorCuts(0),
@@ -683,8 +684,8 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
 	 coordFile >> coordX ; 
 	 coordFile >> coordY ;
 	 if(coordX == "" || coordY == "") continue ;
-	 x.push_back(std::stod(coordX)) ; 
-	 y.push_back(std::stod(coordY)) ; 
+	 x.push_back(std::strtod(coordX,NULL)) ; 
+	 y.push_back(std::strtod(coordY,NULL)) ; 
       }
       coordFile.close() ;
    }
