@@ -1,6 +1,6 @@
-//NIM A 506 (2003) 101-109
+// Insert Korean paper reference here
 
-#include "CfRPCDetectorConstruction.hh"
+#include "KOREADetectorConstruction.hh"
 #include "GasGapSensitiveDetector.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -20,9 +20,8 @@
 #include "G4PVPlacement.hh"
 #include "G4UnitsTable.hh"
 #include "G4Tubs.hh"
-#include "G4UnitsTable.hh"
 
-CfRPCDetectorConstruction::CfRPCDetectorConstruction() :
+KOREADetectorConstruction::KOREADetectorConstruction() :
    fG10Mat(0), fGraphiteMat(0), fBakeliteMat(0), fGasMat(0), fEmptyMat(0), Al(0), fWoodMat(0), fAirMat(0),
    fGasDetectorCuts(0),
    tripleGemPx(0), tripleGemPy(0),
@@ -38,12 +37,12 @@ CfRPCDetectorConstruction::CfRPCDetectorConstruction() :
    //SETUP=3 - caso C - 5 cm Pb + 4 cm Polietilene + 1 cm Pb
    //SETUP=4 - caso D - 5 cm Pb + 10 cm Polietilene + 1 cm Pb
 
-   SETUP = 4;
+   SETUP =1;
 
    //il rivelatore ha superficie attiva di 35x35 cm^2
    // Squared shape dimensions
-   tripleGemPx = 350.*mm ;  
-   tripleGemPy = 350.*mm ;
+   tripleGemPx = 200.*mm ;  
+   tripleGemPy = 200.*mm ;
 
    //Supporto di alluminio      (dimensioni indicative)
    // Squared shape dimensions
@@ -71,7 +70,7 @@ CfRPCDetectorConstruction::CfRPCDetectorConstruction() :
 
 }
 
-CfRPCDetectorConstruction::~CfRPCDetectorConstruction() {
+KOREADetectorConstruction::~KOREADetectorConstruction() {
 
    delete fGasDetectorCuts ;
 
@@ -80,7 +79,7 @@ CfRPCDetectorConstruction::~CfRPCDetectorConstruction() {
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void CfRPCDetectorConstruction::DefineMaterials() {
+void KOREADetectorConstruction::DefineMaterials() {
 
    G4NistManager* manager = G4NistManager::Instance() ;
    // define Elements
@@ -196,7 +195,7 @@ void CfRPCDetectorConstruction::DefineMaterials() {
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
+G4VPhysicalVolume* KOREADetectorConstruction::Construct() {
 
 
    // Cleanup old geometry
@@ -223,8 +222,8 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
 
    // World definition and placement
    G4Box* worldBox = new G4Box("WorldBox", worldSizeX, worldSizeY, worldSizeZ) ;
-   //   G4LogicalVolume* worldLog = new G4LogicalVolume(worldBox, fEmptyMat, "WorldLog") ;
-   G4LogicalVolume* worldLog = new G4LogicalVolume(worldBox, fAirMat, "WorldLog") ;
+   G4LogicalVolume* worldLog = new G4LogicalVolume(worldBox, fEmptyMat, "WorldLog") ;
+   //  G4LogicalVolume* worldLog = new G4LogicalVolume(worldBox, fAirMat, "WorldLog") ;
    // Set visual attributes
    G4VisAttributes *worldAttributes = new G4VisAttributes ;
    worldAttributes->SetVisibility(true) ;
@@ -254,28 +253,36 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    rpcAttributes->SetForceWireframe(true) ;
 
    //***************************************************
-   //     DOUBLE GAP RPC
+   //     DUOBLE GAP RPC
    //***************************************************
-   G4Box* woodBottom = RPCBox("woodBottom", 1.0*cm) ;
-   G4LogicalVolume* woodBottomLog = new G4LogicalVolume(woodBottom, fWoodMat, "woodBottomLog") ;
-   woodBottomLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
-   trdCollection.push_back(woodBottom) ;
-   trdLogCollection.push_back(woodBottomLog) ;
-   //-------------------------------------------------------------------------------------
 
-   G4Box* copperBottom = RPCBox("copperBottom", 0.0019*cm) ;
+   G4Box* FakeBottom = RPCBox("FakeBottom", 0.1*mm) ;
+   G4LogicalVolume* FakeBottomLog = new G4LogicalVolume(FakeBottom, fAirMat, "FakeBottomLog") ;
+   FakeBottomLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
+   trdCollection.push_back(FakeBottom) ;
+   trdLogCollection.push_back(FakeBottomLog) ;
+   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
+   sdman->AddNewDetector(sensitive) ;
+   FakeBottomLog->SetSensitiveDetector(sensitive) ;
+
+   //***************************************************
+
+   G4Box* copperBottom = RPCBox("copperBottom", 0.005*cm) ;
    G4LogicalVolume* copperBottomLog = new G4LogicalVolume(copperBottom, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copperBottomLog") ;
    copperBottomLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(copperBottom) ;
    trdLogCollection.push_back(copperBottomLog) ;
+   copperBottomLog->SetSensitiveDetector(sensitive);
 
    //-------------------------------------------------------------------------------------
 
-   G4Box* pethylene0 = RPCBox("pethylene0", 0.038*cm) ;
+   G4Box* pethylene0 = RPCBox("pethylene0", 0.06*cm) ;
    G4LogicalVolume* pethylene0Log = new G4LogicalVolume(pethylene0, G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE"), "pethylene0Log") ;
    pethylene0Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene0) ;
    trdLogCollection.push_back(pethylene0Log) ;
+   pethylene0Log->SetSensitiveDetector(sensitive);
+
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite0 = RPCBox("graphite0", 0.002*cm) ;
@@ -283,6 +290,8 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite0Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite0) ;
    trdLogCollection.push_back(graphite0Log) ;
+   graphite0Log->SetSensitiveDetector(sensitive);
+
    //-------------------------------------------------------------------------------------
 
    G4Box* bakelite0 = RPCBox("bakelite0", 0.2*cm) ;
@@ -290,6 +299,8 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite0Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite0) ;
    trdLogCollection.push_back(bakelite0Log) ;
+   bakelite0Log->SetSensitiveDetector(sensitive);
+
    //-------------------------------------------------------------------------------------
 
    G4Box* GasGap1 = RPCBox("GasGap1", 0.2*cm) ;
@@ -297,9 +308,9 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    GasGap1Log->SetVisAttributes(new G4VisAttributes(*rpcAttributes)) ;
    trdCollection.push_back(GasGap1) ;
    trdLogCollection.push_back(GasGap1Log) ;
-   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
-   sdman->AddNewDetector(sensitive) ;
    GasGap1Log->SetSensitiveDetector(sensitive) ;
+
+
    //-------------------------------------------------------------------------------------
 
    G4Box* bakelite1 = RPCBox("bakelite1", 0.2*cm) ;
@@ -307,6 +318,8 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite1Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite1) ;
    trdLogCollection.push_back(bakelite1Log) ;
+   bakelite1Log->SetSensitiveDetector(sensitive);
+
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite1 = RPCBox("graphite1", 0.002*cm) ;
@@ -314,27 +327,35 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite1Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite1) ;
    trdLogCollection.push_back(graphite1Log) ;
+   graphite1Log->SetSensitiveDetector(sensitive) ;
+
    //-------------------------------------------------------------------------------------
 
-   G4Box* pethylene1 = RPCBox("pethylene1", 0.038*cm) ;
+   G4Box* pethylene1 = RPCBox("pethylene1", 0.06*cm) ;
    G4LogicalVolume* pethylene1Log = new G4LogicalVolume(pethylene1,       G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE"), "pethylene1Log") ;
    pethylene1Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene1) ;
    trdLogCollection.push_back(pethylene1Log) ;
+   pethylene1Log->SetSensitiveDetector(sensitive) ;
+
    //-------------------------------------------------------------------------------------
 
-   G4Box* copperStrips = RPCBox("copperStrips", 0.0019*cm) ;
+   G4Box* copperStrips = RPCBox("copperStrips", 0.005*cm) ;
    G4LogicalVolume* copperStripsLog = new G4LogicalVolume(copperStrips, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copperStripsLog") ;
    copperStripsLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(copperStrips) ;
    trdLogCollection.push_back(copperStripsLog) ;
+   copperStripsLog->SetSensitiveDetector(sensitive) ;
+
    //-------------------------------------------------------------------------------------
 
-   G4Box* pethylene2 = RPCBox("pethylene2", 0.038*cm) ;
+   G4Box* pethylene2 = RPCBox("pethylene2", 0.06*cm) ;
    G4LogicalVolume* pethylene2Log = new G4LogicalVolume(pethylene2,       G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE"), "pethylene2Log") ;
    pethylene2Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene2) ;
    trdLogCollection.push_back(pethylene2Log) ;
+   pethylene2Log->SetSensitiveDetector(sensitive) ;
+
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite2 = RPCBox("graphite2", 0.002*cm) ;
@@ -342,6 +363,7 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite2Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite2) ;
    trdLogCollection.push_back(graphite2Log) ;
+   graphite2Log->SetSensitiveDetector(sensitive) ;
 
    //-------------------------------------------------------------------------------------
 
@@ -350,6 +372,8 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite2Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite2) ;
    trdLogCollection.push_back(bakelite2Log) ;
+   bakelite2Log->SetSensitiveDetector(sensitive) ;
+
    //-------------------------------------------------------------------------------------
 
    G4Box* GasGap2 = RPCBox("GasGap2", 0.2*cm) ;
@@ -358,6 +382,8 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    trdCollection.push_back(GasGap2) ;
    trdLogCollection.push_back(GasGap2Log) ;
    GasGap2Log->SetSensitiveDetector(sensitive) ;
+
+
    //-------------------------------------------------------------------------------------
 
    G4Box* bakelite3 = RPCBox("bakelite3", 0.2*cm) ;
@@ -365,6 +391,8 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    bakelite3Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(bakelite3) ;
    trdLogCollection.push_back(bakelite3Log) ;
+   bakelite3Log->SetSensitiveDetector(sensitive) ;
+
    //-------------------------------------------------------------------------------------
 
    G4Box* graphite3 = RPCBox("graphite3", 0.002*cm) ;
@@ -372,38 +400,35 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    graphite3Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(graphite3) ;
    trdLogCollection.push_back(graphite3Log) ;
+   graphite3Log->SetSensitiveDetector(sensitive) ;
 
    //-------------------------------------------------------------------------------------
 
-   G4Box* pethylene3 = RPCBox("pethylene3", 0.038*cm) ;
+   G4Box* pethylene3 = RPCBox("pethylene3", 0.06*cm) ;
    G4LogicalVolume* pethylene3Log = new G4LogicalVolume(pethylene3, G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE"), "pethylene3Log") ;
    pethylene3Log->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(pethylene3) ;
    trdLogCollection.push_back(pethylene3Log) ;
+   pethylene3Log->SetSensitiveDetector(sensitive) ;
+
    //-------------------------------------------------------------------------------------
 
 
-   G4Box* copperTop = RPCBox("copperTop", 0.0019*cm) ;
+   G4Box* copperTop = RPCBox("copperTop", 0.005*cm) ;
    G4LogicalVolume* copperTopLog = new G4LogicalVolume(copperTop, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copperTopLog") ;
    copperTopLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
    trdCollection.push_back(copperTop) ;
    trdLogCollection.push_back(copperTopLog) ;
-   //-------------------------------------------------------------------------------------
+   copperTopLog->SetSensitiveDetector(sensitive) ;
 
-   G4Box* woodTop = RPCBox("woodTop", 1.0*cm) ;
-   G4LogicalVolume* woodTopLog = new G4LogicalVolume(woodTop, fWoodMat, "woodTopLog") ;
-   woodTopLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
-   trdCollection.push_back(woodTop) ;
-   trdLogCollection.push_back(woodTopLog) ;
-   //-------------------------------------------------------------------------------------
 
-   G4Box* aluminiumTop = RPCBox("aluminiumTop", 0.25*cm) ;
-   G4LogicalVolume* aluminiumTopLog = new G4LogicalVolume(aluminiumTop, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "aluminiumTopLog") ;
-   aluminiumTopLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
-   trdCollection.push_back(aluminiumTop) ;
-   trdLogCollection.push_back(aluminiumTopLog) ;
    //-------------------------------------------------------------------------------------
-
+   G4Box* FakeTop = RPCBox("FakeTop", 0.1*mm) ;
+   G4LogicalVolume* FakeTopLog = new G4LogicalVolume(FakeTop, fAirMat, "FakeTopLog") ;
+   FakeTopLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
+   trdCollection.push_back(FakeTop) ;
+   trdLogCollection.push_back(FakeTopLog) ;
+   FakeTopLog->SetSensitiveDetector(sensitive) ;
 
 
 
@@ -552,7 +577,7 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
 //     SHIELDING
 //***************************************************
 
-G4Box* CfRPCDetectorConstruction::SchermoBox(G4String name, G4double width) {
+G4Box* KOREADetectorConstruction::SchermoBox(G4String name, G4double width) {
    G4Box* shape = new G4Box(
 	 name,
 	 SchermoPx/2,
@@ -569,7 +594,7 @@ G4Box* CfRPCDetectorConstruction::SchermoBox(G4String name, G4double width) {
 //***************************************************
 
 //RPC
-G4Box* CfRPCDetectorConstruction::RPCBox(G4String name, G4double width) {
+G4Box* KOREADetectorConstruction::RPCBox(G4String name, G4double width) {
    G4Box* shape = new G4Box(
 	 name,
 	 tripleGemPx/2,
@@ -579,7 +604,7 @@ G4Box* CfRPCDetectorConstruction::RPCBox(G4String name, G4double width) {
 }
 
 
-void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
+void KOREADetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
 
    G4cout<<"SETUP "<<SETUP<<G4endl;
    //G4bool checkOverlaps = true;
@@ -590,7 +615,7 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
 
    for(size_t i=0 ; i<trdCollection.size() ; i++) {
       // i counts as the copyNo
-      if(i<20){
+      if(i<19){
 	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
 	 position = tlate +        G4ThreeVector(0,0,ZTranslation).transform(G4RotationMatrix(*pRot).inverse()) ;
 	 G4cout << "RPC     Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " << G4BestUnit(ZTranslation,"Length") << G4endl ;
@@ -602,91 +627,11 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
 	       false,
 	       i) ;
 	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
-      }
-      //_________________________________________________________________________________________________________________
 
-
-      if(i==20){ //Al support
-	 ZTranslation=0;
-	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
-	 position = G4ThreeVector(0,0,-50)+G4ThreeVector(0,0,ZTranslation ) ;
-	 new G4PVPlacement(0, 		    //no rotation
-	       position,         
-	       trdLogCollection.at(i),	    //its logical volume
-	       trdCollection.at(i)->GetName(),  	    //its name
-	       pMotherLogical,	   //its mother  volume
-	       false,		   //no boolean operation
-	       i			   //copy number
-	       );	    
-	 G4cout << "        Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " <<G4BestUnit(position.getZ(),"Length") << G4endl ;
-
-      }
-      //_____________________________________________________________________________________________________________________
-
-      if(i==22){ //Scint1
-	 XTranslation = trdCollection.at(i)->GetXHalfLength() ;
-	 position = G4ThreeVector(30,0,-300)+G4ThreeVector(XTranslation,0,0 ) ;
-	 new G4PVPlacement(0, 		    //no rotation
-	       position,         
-	       trdLogCollection.at(i),	    //its logical volume
-	       trdCollection.at(i)->GetName(),  	    //its name
-	       pMotherLogical,	   //its mother  volume
-	       false,		   //no boolean operation
-	       i			   //copy number
-	       );	    
-	 G4cout << "        Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " <<G4BestUnit(position.getZ(),"Length") << G4endl ;
 
 
       }
 
-      if(i==23){ //Scint1
-	 XTranslation = trdCollection.at(i)->GetXHalfLength() ;
-	 position = G4ThreeVector(-30,0,-300)-G4ThreeVector(XTranslation,0,0 ) ;
-	 new G4PVPlacement(0, 		    //no rotation
-	       position,         
-	       trdLogCollection.at(i),	    //its logical volume
-	       trdCollection.at(i)->GetName(),  	    //its name
-	       pMotherLogical,	   //its mother  volume
-	       false,		   //no boolean operation
-	       i			   //copy number
-	       );	    
-	 G4cout << "        Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " <<G4BestUnit(position.getZ(),"Length") << G4endl ;
-
-	 ZTranslation=0;
-      }
-
-      //_________________________________________________________________________________________________________________
-
-
-      if(i>23){
-	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
-	 position = G4ThreeVector(0,0,-240) +G4ThreeVector(0,0,ZTranslation).transform(G4RotationMatrix(*pRot).inverse()) ;
-	 G4cout << "SCHERMO Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " << G4BestUnit(position.getZ(),"Length") << G4endl ;
-	 new G4PVPlacement(pRot,
-	       position,
-	       trdLogCollection.at(i),
-	       trdCollection.at(i)->GetName(),
-	       pMotherLogical,
-	       false,
-	       i) ;
-	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
-      }
-
-      if(i==21){ //Al support
-	 ZTranslation=0;
-	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
-	 position = G4ThreeVector(0,0,-340)-G4ThreeVector(0,0,ZTranslation ) ;
-	 new G4PVPlacement(0, 		    //no rotation
-	       position,         
-	       trdLogCollection.at(i),	    //its logical volume
-	       trdCollection.at(i)->GetName(),  	    //its name
-	       pMotherLogical,	   //its mother  volume
-	       false,		   //no boolean operation
-	       i			   //copy number
-	       );	    
-	 G4cout << "        Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " <<G4BestUnit(position.getZ(),"Length") << G4endl ;
-
-      }
 
    }
 

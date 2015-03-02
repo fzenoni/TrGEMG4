@@ -10,6 +10,8 @@
 #include "RPCDetectorConstruction.hh"
 #include "CfRPCDetectorConstruction.hh"
 #include "UniPVRPCDetectorConstruction.hh"
+#include "KOREADetectorConstruction.hh"
+#include "RE12DetectorConstruction.hh"
 //#include "TrGEMPhysicsList.hh"
 #include "TrGEMPrimaryGeneratorAction.hh"
 #include "TrGEMRunAction.hh"
@@ -36,8 +38,10 @@ int main(int argc, char** argv) {
    // set mandatory initialization classes
    //runManager->SetUserInitialization(new TrGEMDetectorConstruction) ;
    //runManager->SetUserInitialization(new TrGEMSuperChamberDetectorConstruction_BIS) ;
-   runManager->SetUserInitialization(new TrGEMSuperChamberDetectorConstruction) ;
+   //runManager->SetUserInitialization(new TrGEMSuperChamberDetectorConstruction) ;
    //runManager->SetUserInitialization(new CfRPCDetectorConstruction) ;
+   //runManager->SetUserInitialization(new KOREADetectorConstruction) ;
+   runManager->SetUserInitialization(new RE12DetectorConstruction) ;
    //runManager->SetUserInitialization(new UniPVRPCDetectorConstruction) ;
    // For EM physics
    //G4VUserPhysicsList* physics = new QGSP_FTFP_BERT();

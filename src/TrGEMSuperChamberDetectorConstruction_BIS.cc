@@ -20,6 +20,8 @@
 #include "G4PVPlacement.hh"
 #include "G4UnitsTable.hh"
 
+#include <string>
+
 TrGEMSuperChamberDetectorConstruction_BIS::TrGEMSuperChamberDetectorConstruction_BIS() :
    fG10Mat(0), fGasMat(0), fEmptyMat(0), fGasDetectorCuts(0),
    tripleGemThinBase(0), tripleGemLargeBase(0), tripleGemHeight(0)
@@ -679,8 +681,8 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
 	 coordFile >> coordX ; 
 	 coordFile >> coordY ;
 	 if(coordX == "" || coordY == "") continue ;
-	 x.push_back(std::stod(coordX)) ; 
-	 y.push_back(std::stod(coordY)) ; 
+	 x.push_back(std::strtod(coordX, NULL)) ; 
+	 y.push_back(std::strtod(coordY, NULL)) ; 
       }
       coordFile.close() ;
    }
