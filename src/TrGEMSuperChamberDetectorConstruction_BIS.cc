@@ -141,9 +141,9 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    // SD Manager 
    G4SDManager* sdman = G4SDManager::GetSDMpointer() ;
 
-   G4double worldSizeX = 10*m;
-   G4double worldSizeY = 10*m;
-   G4double worldSizeZ = 10*m;
+   G4double worldSizeX = 10.*m;
+   G4double worldSizeY = 10.*m;
+   G4double worldSizeZ = 10.*m;
 
    // World definition and placement
    G4Box* worldBox = new G4Box("WorldBox", worldSizeX, worldSizeY, worldSizeZ) ;
@@ -379,6 +379,12 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    gebA_copper1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebA_copper1) ;
    trdLogCollection.push_back(gebA_copper1Log) ;
+   
+   // Hybrid Pedestal
+   G4Trd* pedestalA = Trapezoid("pedestalA", 5.5*mm) ;
+   G4LogicalVolume* pedestalALog = new G4LogicalVolume(pedestalA, fEmptyMat, "pedestalALog") ;
+   trdCollection.push_back(pedestalA) ;
+   trdLogCollection.push_back(pedestalALog) ;
 
    // VFAT2
    G4Trd* vfatA = Trapezoid("vfatA", 1.6*mm) ;
@@ -612,6 +618,12 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    gebB_copper1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebB_copper1) ;
    trdLogCollection.push_back(gebB_copper1Log) ;
+   
+   // Hybrid Pedestal
+   G4Trd* pedestalB = Trapezoid("pedestalB", 5.5*mm) ;
+   G4LogicalVolume* pedestalBLog = new G4LogicalVolume(pedestalB, fEmptyMat, "pedestalBLog") ;
+   trdCollection.push_back(pedestalB) ;
+   trdLogCollection.push_back(pedestalBLog) ;
 
    // VFAT2
    G4Trd* vfatB = Trapezoid ("vfatB", 1.6*mm) ;

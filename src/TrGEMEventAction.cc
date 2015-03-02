@@ -17,7 +17,7 @@ void TrGEMEventAction::BeginOfEventAction(const G4Event* anEvent)
 {
 
    G4int event_id = anEvent->GetEventID();
-   if (event_id % 10000 == 0) 
+   if (event_id % 1000 == 0) 
       G4cout << "Starting Event: " << anEvent->GetEventID() << G4endl ;
 
    TrGEMAnalysis::GetInstance()->PrepareNewEvent(anEvent) ;

@@ -132,7 +132,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    // Cleanup old geometry
    G4GeometryManager::GetInstance()->OpenGeometry();
 
-   G4GeometryManager::GetInstance()->OpenGeometry();
+   //G4GeometryManager::GetInstance()->OpenGeometry();
    //G4PhysicalVolumeStore::GetInstance()->Clean();
    //G4LogicalVolumeStore::GetInstance()->Clean();
    //G4SolidStore::GetInstance()->Clean();
@@ -143,9 +143,9 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    // SD Manager 
    G4SDManager* sdman = G4SDManager::GetSDMpointer() ;
 
-   G4double worldSizeX = 10*m;
-   G4double worldSizeY = 10*m;
-   G4double worldSizeZ = 10*m;
+   G4double worldSizeX = 10.*m;
+   G4double worldSizeY = 10.*m;
+   G4double worldSizeZ = 10.*m;
 
    // World definition and placement
    G4Box* worldBox = new G4Box("WorldBox", worldSizeX, worldSizeY, worldSizeZ) ;
@@ -206,11 +206,17 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(coolCuBLog) ;
 
    // VFAT2
-   G4Trd* vfatB = Trapezoid ("vfatB", 1.6*mm) ;
+   G4Trd* vfatB = Trapezoid("vfatB", 1.6*mm) ;
    G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
    vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatB) ;
    trdLogCollection.push_back(vfatBLog) ;
+
+   // Hybrid Pedestal
+   G4Trd* pedestalB = Trapezoid("pedestalB", 5.5*mm) ;
+   G4LogicalVolume* pedestalBLog = new G4LogicalVolume(pedestalB, fEmptyMat, "pedestalBLog") ;
+   trdCollection.push_back(pedestalB) ;
+   trdLogCollection.push_back(pedestalBLog) ;
 
    // GEB board B composition
    // Copper plane 1
@@ -446,6 +452,12 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatA) ;
    trdLogCollection.push_back(vfatALog) ;
+
+   // Hybrid Pedestal
+   G4Trd* pedestalA = Trapezoid("pedestalA", 5.5*mm) ;
+   G4LogicalVolume* pedestalALog = new G4LogicalVolume(pedestalA, fEmptyMat, "pedestalALog") ;
+   trdCollection.push_back(pedestalA) ;
+   trdLogCollection.push_back(pedestalALog) ;
 
    // GEB board A composition
    // Copper plane 1

@@ -40,7 +40,7 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TFile* angularFile = new TFile("/Users/fzenoni/TrGEMG4/angular.root") ;
 
-   TString particle = "ph" ;
+   TString particle = "n" ;
    TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_" + particle) ;
    h_cosx->Fit("pol4") ;
    fit_cosx = h_cosx->GetFunction("pol4") ;
@@ -52,11 +52,7 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TH1F* h_cosz = (TH1F*)angularFile->Get("cosz_" + particle) ;
    prob_neg_z = h_cosz->Integral(1,h_cosz->GetNbinsX()/2)/h_cosz->Integral() ;
-   // no fit needed for z
-   //
-   //dummy_x = new TH1F("dummy_x", "dummy_x",100,-1.,1.) ;
-   //dummy_y = new TH1F("dummy_y", "dummy_y",100,-1.,1.) ;
-   //dummy_z = new TH1F("dummy_z", "dummy_z",100,-1.,1.) ;
+
 }
 
 
@@ -89,11 +85,7 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 	 cosz = -sqrt(1-cosx*cosx-cosy*cosy) ;
 	 z_source = -1*mm ;
       }
-      //dummy_z->Fill(cosz) ;
 
-      /*G4cout << "cosx is " << cosx << G4endl ;
-	G4cout << "cosy is " << cosy << G4endl ;
-	G4cout << "cosz is " << cosz << G4endl ;*/
       gps->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(G4ThreeVector(-cosx,-cosy,-cosz));
 
       G4SPSPosDistribution *posDist = gps->GetCurrentSource()->GetPosDist();
@@ -101,15 +93,11 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       posDist->SetPosDisShape("Rectangle");  // or Circle, Annulus, Ellipse, Square  
       posDist->SetCentreCoords(G4ThreeVector(0.0*cm,0.0*cm,z_source));
       posDist->SetHalfY(1283.*mm/2.) ;
-      posDist->SetHalfX(279.*mm/2.) ;
+      posDist->SetHalfX(510.*mm/2.) ; // I want to span over the full surface
 
    }
+   
    //fParticleGun->GeneratePrimaryVertex(anEvent) ;
-   //
    gun->GeneratePrimaryVertex(anEvent) ;
-
-   //dummy_x->SaveAs("dummy_x.C") ;
-   //dummy_y->SaveAs("dummy_y.C") ;
-   //dummy_z->SaveAs("dummy_z.C") ;
 
 }
