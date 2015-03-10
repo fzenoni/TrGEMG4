@@ -40,6 +40,7 @@ class TrGEMSuperChamberDetectorConstruction : public G4VUserDetectorConstruction
       G4Material*        fFR4Mat;
       G4Material*        fGasMat;
       G4Material*        fEmptyMat;
+      G4Material*        fSiMat;
       G4ProductionCuts*  fGasDetectorCuts;
       G4double           tripleGemThinBase; 
       G4double           tripleGemLargeBase;

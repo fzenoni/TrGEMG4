@@ -64,6 +64,7 @@ void TrGEMSuperChamberDetectorConstruction_BIS::DefineMaterials() {
    G4Material *C  = G4NistManager::Instance()->FindOrBuildMaterial("G4_C") ;
    G4Material *O  = G4NistManager::Instance()->FindOrBuildMaterial("G4_O") ;
    G4Material *Si = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si") ;
+   fSiMat = Si ;
 
    G4Material *g10Material = new G4Material("G10", 1.9*g/cm3, 4) ;
    g10Material->AddMaterial(C,0.1323) ;
@@ -74,19 +75,20 @@ void TrGEMSuperChamberDetectorConstruction_BIS::DefineMaterials() {
 
    // define FR-4
    G4double density(0.), temperature(0.), pressure(0.) ;
-   density = 1.2*g/cm3;
 
-   G4Material* SiO2 = new G4Material("quartz",density= 2.200*g/cm3, ncomponents=2);
+   density = 2.65*g/cm3 ;
+   G4Material* SiO2 = new G4Material("quartz", density, ncomponents=2);
    SiO2->AddElement(elSi, natoms=1);
    SiO2->AddElement(elO , natoms=2);
 
-   G4Material* Epoxy = new G4Material("Epoxy" , density, ncomponents=2);
+   density = 1.2*g/cm3;
+   G4Material* Epoxy = new G4Material("Epoxy", density, ncomponents=2);
    Epoxy->AddElement(elH, natoms=2);
    Epoxy->AddElement(elC, natoms=2);
 
    //FR4 (Glass + Epoxy)
-   density = 1.86*g/cm3;
-   G4Material* FR4 = new G4Material("FR4"  , density, ncomponents=2);
+   density = 1.85*g/cm3;
+   G4Material* FR4 = new G4Material("FR4", density, ncomponents=2);
    FR4->AddMaterial(SiO2, fractionmass=0.528);
    FR4->AddMaterial(Epoxy, fractionmass=0.472);
    fFR4Mat = FR4 ;
@@ -182,24 +184,28 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(fakeALog) ;
    fakeALog->SetSensitiveDetector(sensitive) ;
 
+   // Drift Copper 1
    G4Trd* copper01A = Trapezoid("Copper01A", 35.*um) ;
    G4LogicalVolume* copper01ALog = new G4LogicalVolume(copper01A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper01ALog") ; 
    copper01ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(copper01A) ;
    trdLogCollection.push_back(copper01ALog) ;
 
+   // Drift Board
    G4Trd* g10_1A = Trapezoid("g10_1A", 3.2*mm) ;
    G4LogicalVolume* g10_1ALog = new G4LogicalVolume(g10_1A, fFR4Mat, "G10_1ALog") ;
    g10_1ALog->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(g10_1A) ;
    trdLogCollection.push_back(g10_1ALog) ;
 
+   // Drift Copper 2
    G4Trd* copper02A = Trapezoid("Copper01B", 35.*um) ;
    G4LogicalVolume* copper02ALog = new G4LogicalVolume(copper02A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper02ALog") ; 
    copper02ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(copper02A) ;
    trdLogCollection.push_back(copper02ALog) ;
 
+   // GasGap1
    G4Trd* gasGap1A = Trapezoid("GasGap1A", 3.*mm) ;
    G4LogicalVolume* gasGap1ALog = new G4LogicalVolume(gasGap1A, fGasMat, "gasGap1ALog") ; 
    gasGap1ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
@@ -228,6 +234,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(copper12ALog) ;
    // First GEM Foil - end
 
+   // Gas Gap 2
    G4Trd* gasGap2A = Trapezoid("GasGap2A", 1.*mm) ;
    G4LogicalVolume* gasGap2ALog = new G4LogicalVolume(gasGap2A, fGasMat, "gasGap2ALog") ;
    gasGap2ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
@@ -235,6 +242,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(gasGap2ALog) ;
    gasGap2ALog->SetSensitiveDetector(sensitive) ;
 
+   // Second GEM Foil - beginning
    G4Trd* copper21A = Trapezoid("Copper21A", 5.*um) ;
    G4LogicalVolume* copper21ALog = new G4LogicalVolume(copper21A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper21ALog") ;
    copper21ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
@@ -252,13 +260,16 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    copper22ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(copper22A) ;
    trdLogCollection.push_back(copper22ALog) ;
+   // Second GEM Foil - end
 
+   // Gas Gap 3
    G4Trd* gasGap3A = Trapezoid("GasGap3A", 2.*mm) ;
    G4LogicalVolume* gasGap3ALog = new G4LogicalVolume(gasGap3A, fGasMat, "GasGap3ALog") ;
    gasGap3ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
    trdCollection.push_back(gasGap3A) ;
    trdLogCollection.push_back(gasGap3ALog) ;
 
+   // Third GEM Foil - beginning
    G4Trd* copper31A = Trapezoid("Copper31A", 5.*um) ;
    G4LogicalVolume* copper31ALog = new G4LogicalVolume(copper31A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper31ALog") ;
    copper31ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
@@ -276,7 +287,9 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    copper32ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
    trdCollection.push_back(copper32A) ;
    trdLogCollection.push_back(copper32ALog) ;
-
+   // Third GEM Foil - end
+  
+  // Gas Gap 4 
    G4Trd* gasGap4A = Trapezoid("GasGap4A", 1.*mm) ;
    G4LogicalVolume* gasGap4ALog = new G4LogicalVolume(gasGap4A, fGasMat, "gasGap4ALog") ;
    gasGap4ALog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
@@ -297,6 +310,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdCollection.push_back(g10_2A) ;
    trdLogCollection.push_back(g10_2ALog) ;
 
+   // Readout copper
    G4Trd* copper5A = Trapezoid("Copper5A", 35.*um) ;
    G4LogicalVolume* copper5ALog = new G4LogicalVolume(copper5A, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "copper5ALog") ;
    copper5ALog->SetVisAttributes(new G4VisAttributes(*gemAttributes)) ;
@@ -387,7 +401,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(pedestalALog) ;
 
    // VFAT2
-   G4Trd* vfatA = Trapezoid("vfatA", 1.6*mm) ;
+   G4Trd* vfatA = Trapezoid("vfatA", 1.66*mm) ;
    G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, fEmptyMat, "vfatALog") ;
    vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatA) ;
@@ -626,7 +640,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(pedestalBLog) ;
 
    // VFAT2
-   G4Trd* vfatB = Trapezoid ("vfatB", 1.6*mm) ;
+   G4Trd* vfatB = Trapezoid("vfatB", 1.66*mm) ;
    G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
    vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
    trdCollection.push_back(vfatB) ;
@@ -771,6 +785,9 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
 	 double vfatThick = 1.*mm ;
 	 double copperThick = 17.5*um ;
 	 double insulatorThick = 310*um ;
+	 G4double chipX = 7.*mm ;
+	 G4double chipY = 9.*mm ;
+	 G4double chipThick = 350*um ;
 	 G4Box* vfatModule = new G4Box("vfatModule", vfatThick/2., vfatX/2., vfatY/2.) ; // G4Box wants half sizes
 	 G4LogicalVolume* vfatModuleLog = new G4LogicalVolume(vfatModule, fEmptyMat, "vfatModuleLog") ;
 	 for(G4int k = 0; k < 24; k++) {
@@ -781,6 +798,9 @@ void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *
 	    G4LogicalVolume* CuLog = new G4LogicalVolume(Cu, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "CuLog") ;
 	    G4Box* insulator = new G4Box("insulator", insulatorThick/2., vfatX/2., vfatY/2.) ;
 	    G4LogicalVolume* insulatorLog = new G4LogicalVolume(insulator, fFR4Mat, "insulatorLog") ;
+	    G4Box* chip = new G4Box("chip", chipThick/2., chipX/2., chipY/2.) ;
+	    G4LogicalVolume* chipLog = new G4LogicalVolume(chip, fSiMat, "chipLog") ;
+	    new G4PVPlacement(0, G4ThreeVector(vfatThick/2.+chipThick/2., 0., 0.), chipLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	    new G4PVPlacement(0, G4ThreeVector(vfatThick/2.-copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	    new G4PVPlacement(0, G4ThreeVector(vfatThick/2.-copperThick-insulatorThick/2., 0., 0.), insulatorLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	    new G4PVPlacement(0, G4ThreeVector(insulatorThick/2.+copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 

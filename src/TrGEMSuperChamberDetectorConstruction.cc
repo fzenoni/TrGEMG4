@@ -66,6 +66,7 @@ void TrGEMSuperChamberDetectorConstruction::DefineMaterials() {
    G4Material *C  = G4NistManager::Instance()->FindOrBuildMaterial("G4_C") ;
    G4Material *O  = G4NistManager::Instance()->FindOrBuildMaterial("G4_O") ;
    G4Material *Si = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si") ;
+   fSiMat = Si ;
 
    G4Material *g10Material = new G4Material("G10", 1.9*g/cm3, 4) ;
    g10Material->AddMaterial(C,0.1323) ;
@@ -76,18 +77,19 @@ void TrGEMSuperChamberDetectorConstruction::DefineMaterials() {
 
    // define FR-4
    G4double density(0.), temperature(0.), pressure(0.) ;
-   density = 1.2*g/cm3;
 
-   G4Material* SiO2 = new G4Material("quartz",density= 2.200*g/cm3, ncomponents=2);
+   density = 2.65*g/cm3 ;
+   G4Material* SiO2 = new G4Material("quartz",density, ncomponents=2);
    SiO2->AddElement(elSi, natoms=1);
    SiO2->AddElement(elO , natoms=2);
 
+   density = 1.2*g/cm3;
    G4Material* Epoxy = new G4Material("Epoxy" , density, ncomponents=2);
    Epoxy->AddElement(elH, natoms=2);
    Epoxy->AddElement(elC, natoms=2);
 
    //FR4 (Glass + Epoxy)
-   density = 1.86*g/cm3;
+   density = 1.85*g/cm3;
    G4Material* FR4 = new G4Material("FR4"  , density, ncomponents=2);
    FR4->AddMaterial(SiO2, fractionmass=0.528);
    FR4->AddMaterial(Epoxy, fractionmass=0.472);
@@ -206,17 +208,17 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(coolCuBLog) ;
 
    // VFAT2
-   G4Trd* vfatB = Trapezoid("vfatB", 1.6*mm) ;
+   G4Trd* vfatB = Trapezoid("vfatB", 1.66*mm) ;
    G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
    vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   trdCollection.push_back(vfatB) ;
-   trdLogCollection.push_back(vfatBLog) ;
+   //trdCollection.push_back(vfatB) ;
+   //trdLogCollection.push_back(vfatBLog) ;
 
    // Hybrid Pedestal
    G4Trd* pedestalB = Trapezoid("pedestalB", 5.5*mm) ;
    G4LogicalVolume* pedestalBLog = new G4LogicalVolume(pedestalB, fEmptyMat, "pedestalBLog") ;
-   trdCollection.push_back(pedestalB) ;
-   trdLogCollection.push_back(pedestalBLog) ;
+   //trdCollection.push_back(pedestalB) ;
+   //trdLogCollection.push_back(pedestalBLog) ;
 
    // GEB board B composition
    // Copper plane 1
@@ -447,17 +449,17 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(coolCuALog) ;
 
    // VFAT2
-   G4Trd* vfatA = Trapezoid("vfatA", 1.6*mm) ;
+   G4Trd* vfatA = Trapezoid("vfatA", 1.66*mm) ;
    G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, fEmptyMat, "vfatALog") ;
    vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   trdCollection.push_back(vfatA) ;
-   trdLogCollection.push_back(vfatALog) ;
+   //trdCollection.push_back(vfatA) ;
+   //trdLogCollection.push_back(vfatALog) ;
 
    // Hybrid Pedestal
    G4Trd* pedestalA = Trapezoid("pedestalA", 5.5*mm) ;
    G4LogicalVolume* pedestalALog = new G4LogicalVolume(pedestalA, fEmptyMat, "pedestalALog") ;
-   trdCollection.push_back(pedestalA) ;
-   trdLogCollection.push_back(pedestalALog) ;
+   //trdCollection.push_back(pedestalA) ;
+   //trdLogCollection.push_back(pedestalALog) ;
 
    // GEB board A composition
    // Copper plane 1
@@ -775,6 +777,9 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
 	 G4double vfatThick = 1.*mm ;
 	 G4double copperThick = 17.5*um ;
 	 G4double insulatorThick = 310*um ;
+	 G4double chipX = 7.*mm ;
+	 G4double chipY = 9.*mm ;
+	 G4double chipThick = 350*um ;
 	 G4Box* vfatModule = new G4Box("vfatModule", vfatThick/2., vfatX/2., vfatY/2.) ; // G4Box wants half sizes
 	 G4LogicalVolume* vfatModuleLog = new G4LogicalVolume(vfatModule, fEmptyMat, "vfatModuleLog") ;
 	 for(G4int k = 0; k < 24; k++) {
@@ -785,6 +790,8 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
 	    G4LogicalVolume* CuLog = new G4LogicalVolume(Cu, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "CuLog") ;
 	    G4Box* insulator = new G4Box("insulator", insulatorThick/2., vfatX/2., vfatY/2.) ;
 	    G4LogicalVolume* insulatorLog = new G4LogicalVolume(insulator, fFR4Mat, "insulatorLog") ;
+	    G4Box* chip = new G4Box("chip", chipThick/2., chipX/2., chipY/2.) ;
+	    G4LogicalVolume* chipLog = new G4LogicalVolume(chip, fSiMat, "chipLog") ;
 	    new G4PVPlacement(0, G4ThreeVector(vfatThick/2.-copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	    new G4PVPlacement(0, G4ThreeVector(vfatThick/2.-copperThick-insulatorThick/2., 0., 0.), insulatorLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	    new G4PVPlacement(0, G4ThreeVector(insulatorThick/2.+copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
@@ -792,6 +799,7 @@ void TrGEMSuperChamberDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot
 	    new G4PVPlacement(0, G4ThreeVector(-insulatorThick/2.-copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	    new G4PVPlacement(0, G4ThreeVector(-vfatThick/2.+copperThick+insulatorThick/2., 0., 0.), insulatorLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	    new G4PVPlacement(0, G4ThreeVector(-vfatThick/2.+copperThick/2., 0., 0.), CuLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
+	    new G4PVPlacement(0, G4ThreeVector(-vfatThick/2.-chipThick/2., 0., 0.), chipLog, "vfatModule", vfatModuleLog, false, copyNo++) ; 
 	 }
 	 // And now for the optohybrid
 	 G4Box* optoHybrid = new G4Box("optoHybrid", 1.6*mm/2., 220.13/2*mm, 140.60/2.*mm) ;
