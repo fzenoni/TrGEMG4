@@ -40,7 +40,7 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TFile* angularFile = new TFile("/Users/fzenoni/TrGEMG4/angular.root") ;
 
-   TString particle = "n" ;
+   TString particle = "ph" ;
    TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_" + particle) ;
    h_cosx->Fit("pol4") ;
    fit_cosx = h_cosx->GetFunction("pol4") ;
@@ -79,7 +79,9 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       double z_source(0) ;
       if(gRandom->Uniform() < prob_neg_z) {
 	 cosz = sqrt(1-cosx*cosx-cosy*cosy) ;
-	 z_source = 7.3*cm ; // good for superchamber
+	 //z_source = 7.3*cm ; // good for superchamber
+	 z_source = 5.7*cm ; // good for superchamber without the VFAT
+	 //z_source = 3.5*cm ; // good for single chamber
       }
       else {
 	 cosz = -sqrt(1-cosx*cosx-cosy*cosy) ;

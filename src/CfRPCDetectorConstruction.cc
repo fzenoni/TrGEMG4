@@ -256,6 +256,17 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    //***************************************************
    //     DOUBLE GAP RPC
    //***************************************************
+   //
+   //
+   // Fake A
+   G4Box* fakeA = RPCBox("fakeA", 1.*nm) ;
+   G4LogicalVolume* fakeALog = new G4LogicalVolume(fakeA, fEmptyMat, "fakeA") ;
+   trdCollection.push_back(fakeA) ;
+   trdLogCollection.push_back(fakeALog) ;
+   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
+   fakeALog->SetSensitiveDetector(sensitive) ;
+   //-------------------------------------------------------------------------------------
+
    G4Box* woodBottom = RPCBox("woodBottom", 1.0*cm) ;
    G4LogicalVolume* woodBottomLog = new G4LogicalVolume(woodBottom, fWoodMat, "woodBottomLog") ;
    woodBottomLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
@@ -292,12 +303,11 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    trdLogCollection.push_back(bakelite0Log) ;
    //-------------------------------------------------------------------------------------
 
-   G4Box* GasGap1 = RPCBox("GasGap1", 0.2*cm) ;
+   G4Box* GasGap1 = RPCBox("GasGap1A", 0.2*cm) ;
    G4LogicalVolume* GasGap1Log = new G4LogicalVolume(GasGap1, fGasMat, "GasGap1Log") ; 
    GasGap1Log->SetVisAttributes(new G4VisAttributes(*rpcAttributes)) ;
    trdCollection.push_back(GasGap1) ;
    trdLogCollection.push_back(GasGap1Log) ;
-   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
    sdman->AddNewDetector(sensitive) ;
    GasGap1Log->SetSensitiveDetector(sensitive) ;
    //-------------------------------------------------------------------------------------
@@ -352,7 +362,7 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    trdLogCollection.push_back(bakelite2Log) ;
    //-------------------------------------------------------------------------------------
 
-   G4Box* GasGap2 = RPCBox("GasGap2", 0.2*cm) ;
+   G4Box* GasGap2 = RPCBox("GasGap1B", 0.2*cm) ;
    G4LogicalVolume* GasGap2Log = new G4LogicalVolume(GasGap2, fGasMat, "GasGap2Log") ; 
    GasGap2Log->SetVisAttributes(new G4VisAttributes(*rpcAttributes)) ;
    trdCollection.push_back(GasGap2) ;
@@ -404,8 +414,12 @@ G4VPhysicalVolume* CfRPCDetectorConstruction::Construct() {
    trdLogCollection.push_back(aluminiumTopLog) ;
    //-------------------------------------------------------------------------------------
 
-
-
+   // Fake B
+   G4Box* fakeB = RPCBox("fakeB", 1.*nm) ;
+   G4LogicalVolume* fakeBLog = new G4LogicalVolume(fakeB, fEmptyMat, "fakeB") ;
+   trdCollection.push_back(fakeB) ;
+   trdLogCollection.push_back(fakeBLog) ;
+   fakeBLog->SetSensitiveDetector(sensitive) ;
 
    //***************************************************
    //     ALUMINUM SUPPORT
@@ -590,7 +604,7 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
 
    for(size_t i=0 ; i<trdCollection.size() ; i++) {
       // i counts as the copyNo
-      if(i<20){
+      if(i<22){
 	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
 	 position = tlate +        G4ThreeVector(0,0,ZTranslation).transform(G4RotationMatrix(*pRot).inverse()) ;
 	 G4cout << "RPC     Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " << G4BestUnit(ZTranslation,"Length") << G4endl ;
@@ -606,7 +620,7 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
       //_________________________________________________________________________________________________________________
 
 
-      if(i==20){ //Al support
+      if(i==22){ //Al support
 	 ZTranslation=0;
 	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
 	 position = G4ThreeVector(0,0,-50)+G4ThreeVector(0,0,ZTranslation ) ;
@@ -623,7 +637,7 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
       }
       //_____________________________________________________________________________________________________________________
 
-      if(i==22){ //Scint1
+      if(i==24){ //Scint1
 	 XTranslation = trdCollection.at(i)->GetXHalfLength() ;
 	 position = G4ThreeVector(30,0,-300)+G4ThreeVector(XTranslation,0,0 ) ;
 	 new G4PVPlacement(0, 		    //no rotation
@@ -639,7 +653,7 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
 
       }
 
-      if(i==23){ //Scint1
+      if(i==25){ //Scint1
 	 XTranslation = trdCollection.at(i)->GetXHalfLength() ;
 	 position = G4ThreeVector(-30,0,-300)-G4ThreeVector(XTranslation,0,0 ) ;
 	 new G4PVPlacement(0, 		    //no rotation
@@ -658,7 +672,7 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
       //_________________________________________________________________________________________________________________
 
 
-      if(i>23){
+      if(i>25){
 	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
 	 position = G4ThreeVector(0,0,-240) +G4ThreeVector(0,0,ZTranslation).transform(G4RotationMatrix(*pRot).inverse()) ;
 	 G4cout << "SCHERMO Volume (" << i << ") " << trdCollection.at(i)->GetName() << " the position is " << G4BestUnit(position.getZ(),"Length") << G4endl ;
@@ -672,7 +686,7 @@ void CfRPCDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVec
 	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
       }
 
-      if(i==21){ //Al support
+      if(i==23){ //Al support
 	 ZTranslation=0;
 	 ZTranslation += trdCollection.at(i)->GetZHalfLength() ;
 	 position = G4ThreeVector(0,0,-340)-G4ThreeVector(0,0,ZTranslation ) ;

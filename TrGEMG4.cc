@@ -14,6 +14,7 @@
 #include "RE12DetectorConstruction.hh"
 //#include "TrGEMPhysicsList.hh"
 #include "TrGEMPrimaryGeneratorAction.hh"
+#include "CfRPCPrimaryGeneratorAction.hh"
 #include "TrGEMRunAction.hh"
 #include "TrGEMEventAction.hh"
 #include "TrGEMSteppingAction.hh"
@@ -54,6 +55,7 @@ int main(int argc, char** argv) {
    //G4VUserPhysicsList* physics = new QBBC();
    runManager->SetUserInitialization(physics) ;
    runManager->SetUserAction(new TrGEMPrimaryGeneratorAction) ;
+   //runManager->SetUserAction(new CfRPCPrimaryGeneratorAction) ;
 
    // User Action classes
    runManager->SetUserAction(new TrGEMRunAction) ;

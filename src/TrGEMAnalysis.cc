@@ -158,7 +158,7 @@ void TrGEMAnalysis::EndOfEvent(const G4Event* /*anEvent*/)
    m_ROOT_histo0->Fill(thisEventTotEM/beamEnergy, 1.0);
    //ntuple->Fill(double(n_gapGamma[0]),double(n_gapElectron[0]),double(n_gapPositron[0])) ;
 
-   if(acceptance) t->Fill() ;
+   if(/*acceptance*/1) t->Fill() ;
 
 }
 

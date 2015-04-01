@@ -185,6 +185,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    G4LogicalVolume* fakeBLog = new G4LogicalVolume(fakeB, fEmptyMat, "fakeB") ;
    trdCollection.push_back(fakeB) ;
    trdLogCollection.push_back(fakeBLog) ;
+   sdman->AddNewDetector(sensitive) ;
    fakeBLog->SetSensitiveDetector(sensitive) ;
 
    // GEM cover (1 mm)
@@ -235,7 +236,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(gebB_insulator1Log) ;
    // Routing Plane 1
    G4Trd* gebB_routing1 = Trapezoid("gebB_routing1", 17.5*um) ;
-   G4LogicalVolume* gebB_routing1Log = new G4LogicalVolume(gebB_routing1, fFR4Mat, "gebB_routing1Log") ;
+   G4LogicalVolume* gebB_routing1Log = new G4LogicalVolume(gebB_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing1Log") ;
    gebB_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebB_routing1) ;
    trdLogCollection.push_back(gebB_routing1Log) ;
@@ -271,7 +272,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(gebB_insulator4Log) ;
    // Routing Plane 2
    G4Trd* gebB_routing2 = Trapezoid("gebB_routing2", 17.5*um) ;
-   G4LogicalVolume* gebB_routing2Log = new G4LogicalVolume(gebB_routing2, fFR4Mat, "gebB_routing2Log") ;
+   G4LogicalVolume* gebB_routing2Log = new G4LogicalVolume(gebB_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing2Log") ;
    gebB_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebB_routing2) ;
    trdLogCollection.push_back(gebB_routing2Log) ;
@@ -370,7 +371,6 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    gasGap2BLog->SetVisAttributes(new G4VisAttributes(*gasAttributes)) ;
    trdCollection.push_back(gasGap2B) ;
    trdLogCollection.push_back(gasGap2BLog) ;
-   sdman->AddNewDetector(sensitive) ;
    gasGap2BLog->SetSensitiveDetector(sensitive) ;
 
    G4Trd* copper12B = Trapezoid("Copper12B",5.*um) ;
@@ -476,7 +476,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(gebA_insulator1Log) ;
    // Routing Plane 1
    G4Trd* gebA_routing1 = Trapezoid("gebA_routing1", 17.5*um) ;
-   G4LogicalVolume* gebA_routing1Log = new G4LogicalVolume(gebA_routing1, fFR4Mat, "gebA_routing1Log") ;
+   G4LogicalVolume* gebA_routing1Log = new G4LogicalVolume(gebA_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing1Log") ;
    gebA_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebA_routing1) ;
    trdLogCollection.push_back(gebA_routing1Log) ;
@@ -512,7 +512,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    trdLogCollection.push_back(gebA_insulator4Log) ;
    // Routing Plane 2
    G4Trd* gebA_routing2 = Trapezoid("gebA_routing2", 17.5*um) ;
-   G4LogicalVolume* gebA_routing2Log = new G4LogicalVolume(gebA_routing2, fFR4Mat, "gebA_routing2Log") ;
+   G4LogicalVolume* gebA_routing2Log = new G4LogicalVolume(gebA_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing2Log") ;
    gebA_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebA_routing2) ;
    trdLogCollection.push_back(gebA_routing2Log) ;

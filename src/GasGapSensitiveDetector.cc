@@ -64,7 +64,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
 
    // Get information from particle coming to the gas gap for the first time
 
-   // G4double timeWindow = 1.E8*ns ;
+   //G4double timeWindow = 50*ns ;
    // the following number is greater than any other (infinite)
    G4double timeWindow = std::numeric_limits<double>::infinity() ;
 
@@ -77,7 +77,10 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    // Senstivity algorithms
    if(track->GetGlobalTime() < timeWindow) {
 
-      if(volName == "fakeA" || volName == "fakeB") acceptance = true ;
+      if(volName == "fakeA" || volName == "fakeB") {
+	 acceptance = true ;
+	 //G4cout << "Hit?" << G4endl;
+      }
 
       if(volName == "GasGap1A") {
 	 // we're in drift gap
@@ -102,22 +105,26 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
       }
 
       if(volName == "GasGap1B") {
+	 //G4cout << "Hit?" << G4endl;
 	 // we're in drift gap
 	 if(edep != 0) driftDepB += edep ;
 
 	 // special algorithm for "charged" sensitivity
 	 if(charge != 0) {
+	    //G4cout << "Hit!" << G4endl;
 	    neutSensitiveB = true ;
 	    kickstart = true ;
 	 }
       }
 
       if(volName == "GasGap2B") {
+	 //G4cout << "Hit?" << G4endl;
 	 // we're in transfer1 gap
 	 if(edep != 0) transferDepB += edep ;
 
 	 // special algorithm for "charged" sensitivity
 	 if(charge != 0) {
+	    //G4cout << "Hit!" << G4endl;
 	    neutSensitiveB = true ;
 	    kickstart = true ;
 	 }
@@ -170,7 +177,7 @@ void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 
 void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-   if(acceptance) { // if the particle is in the geometry acceptance 
+   if(1/*acceptance*/) { // if the particle is in the geometry acceptance 
 
       G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)
       //G4double ionizationPotential = 0.7*26*eV + 0.3*33*eV ; // Ar:CO2 (70:30)

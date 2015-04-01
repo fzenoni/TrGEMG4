@@ -19,6 +19,7 @@ class G4PhysicalVolume ;
 #include "G4ProductionCuts.hh"
 #include "G4Region.hh"
 #include "G4Trd.hh"
+#include "G4CSGSolid.hh"
 
 
 class TrGEMDetectorConstruction : public G4VUserDetectorConstruction
@@ -36,8 +37,10 @@ class TrGEMDetectorConstruction : public G4VUserDetectorConstruction
 
    private :
       G4Material*        fG10Mat;
+      G4Material*        fFR4Mat;
       G4Material*        fGasMat;
       G4Material*        fEmptyMat;
+      G4Material*        fSiMat;
       G4ProductionCuts*  fGasDetectorCuts;
       G4double           tripleGemThinBase; 
       G4double           tripleGemLargeBase;
@@ -49,4 +52,3 @@ class TrGEMDetectorConstruction : public G4VUserDetectorConstruction
 };
 
 #endif
-

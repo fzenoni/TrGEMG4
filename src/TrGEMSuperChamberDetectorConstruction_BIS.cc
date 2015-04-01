@@ -341,7 +341,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(gebA_insulator5Log) ;
    // Routing Plane 2
    G4Trd* gebA_routing2 = Trapezoid("gebA_routing2", 17.5*um) ;
-   G4LogicalVolume* gebA_routing2Log = new G4LogicalVolume(gebA_routing2, fFR4Mat, "gebA_routing2Log") ;
+   G4LogicalVolume* gebA_routing2Log = new G4LogicalVolume(gebA_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing2Log") ;
    gebA_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebA_routing2) ;
    trdLogCollection.push_back(gebA_routing2Log) ;
@@ -377,7 +377,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(gebA_insulator2Log) ;
    // Routing Plane 1
    G4Trd* gebA_routing1 = Trapezoid("gebA_routing1", 17.5*um) ;
-   G4LogicalVolume* gebA_routing1Log = new G4LogicalVolume(gebA_routing1, fFR4Mat, "gebA_routing1Log") ;
+   G4LogicalVolume* gebA_routing1Log = new G4LogicalVolume(gebA_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing1Log") ;
    gebA_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebA_routing1) ;
    trdLogCollection.push_back(gebA_routing1Log) ;
@@ -397,15 +397,15 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    // Hybrid Pedestal
    G4Trd* pedestalA = Trapezoid("pedestalA", 5.5*mm) ;
    G4LogicalVolume* pedestalALog = new G4LogicalVolume(pedestalA, fEmptyMat, "pedestalALog") ;
-   trdCollection.push_back(pedestalA) ;
-   trdLogCollection.push_back(pedestalALog) ;
+   //trdCollection.push_back(pedestalA) ;
+   //trdLogCollection.push_back(pedestalALog) ;
 
    // VFAT2
    G4Trd* vfatA = Trapezoid("vfatA", 1.66*mm) ;
    G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, fEmptyMat, "vfatALog") ;
    vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   trdCollection.push_back(vfatA) ;
-   trdLogCollection.push_back(vfatALog) ;
+   //trdCollection.push_back(vfatA) ;
+   //trdLogCollection.push_back(vfatALog) ;
 
    // Cooling copper
    G4Trd* coolCuA = Trapezoid("coolCuA", 1.*mm) ;
@@ -580,7 +580,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(gebB_insulator5Log) ;
    // Routing Plane 2
    G4Trd* gebB_routing2 = Trapezoid("gebB_routing2", 17.5*um) ;
-   G4LogicalVolume* gebB_routing2Log = new G4LogicalVolume(gebB_routing2, fFR4Mat, "gebB_routing2Log") ;
+   G4LogicalVolume* gebB_routing2Log = new G4LogicalVolume(gebB_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing2Log") ;
    gebB_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebB_routing2) ;
    trdLogCollection.push_back(gebB_routing2Log) ;
@@ -616,7 +616,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(gebB_insulator2Log) ;
    // Routing Plane 1
    G4Trd* gebB_routing1 = Trapezoid("gebB_routing1", 17.5*um) ;
-   G4LogicalVolume* gebB_routing1Log = new G4LogicalVolume(gebB_routing1, fFR4Mat, "gebB_routing1Log") ;
+   G4LogicalVolume* gebB_routing1Log = new G4LogicalVolume(gebB_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing1Log") ;
    gebB_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
    trdCollection.push_back(gebB_routing1) ;
    trdLogCollection.push_back(gebB_routing1Log) ;
@@ -636,15 +636,15 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    // Hybrid Pedestal
    G4Trd* pedestalB = Trapezoid("pedestalB", 5.5*mm) ;
    G4LogicalVolume* pedestalBLog = new G4LogicalVolume(pedestalB, fEmptyMat, "pedestalBLog") ;
-   trdCollection.push_back(pedestalB) ;
-   trdLogCollection.push_back(pedestalBLog) ;
+   //trdCollection.push_back(pedestalB) ;
+   //trdLogCollection.push_back(pedestalBLog) ;
 
    // VFAT2
    G4Trd* vfatB = Trapezoid("vfatB", 1.66*mm) ;
    G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
    vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   trdCollection.push_back(vfatB) ;
-   trdLogCollection.push_back(vfatBLog) ;
+   //trdCollection.push_back(vfatB) ;
+   //trdLogCollection.push_back(vfatBLog) ;
 
    // Cooling copper
    G4Trd* coolCuB = Trapezoid("coolCuB", 1.*mm) ;
