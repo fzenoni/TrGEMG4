@@ -1,4 +1,4 @@
-#include "TrGEMSuperChamberDetectorConstruction_BIS.hh"
+#include "TrGEMSuperSimpleDetectorConstruction_BIS.hh"
 #include "GasGapSensitiveDetector.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -22,7 +22,7 @@
 
 #include <string>
 
-TrGEMSuperChamberDetectorConstruction_BIS::TrGEMSuperChamberDetectorConstruction_BIS() :
+TrGEMSuperSimpleDetectorConstruction_BIS::TrGEMSuperSimpleDetectorConstruction_BIS() :
    fG10Mat(0), fGasMat(0), fEmptyMat(0), fGasDetectorCuts(0),
    tripleGemThinBase(0), tripleGemLargeBase(0), tripleGemHeight(0)
 {
@@ -40,13 +40,13 @@ TrGEMSuperChamberDetectorConstruction_BIS::TrGEMSuperChamberDetectorConstruction
 
 }
 
-TrGEMSuperChamberDetectorConstruction_BIS::~TrGEMSuperChamberDetectorConstruction_BIS() {
+TrGEMSuperSimpleDetectorConstruction_BIS::~TrGEMSuperSimpleDetectorConstruction_BIS() {
 
    delete fGasDetectorCuts ;
 
 }
 
-void TrGEMSuperChamberDetectorConstruction_BIS::DefineMaterials() {
+void TrGEMSuperSimpleDetectorConstruction_BIS::DefineMaterials() {
 
    G4int ncomponents, natoms;
    G4double abundance, fractionmass;
@@ -125,7 +125,7 @@ void TrGEMSuperChamberDetectorConstruction_BIS::DefineMaterials() {
 
 }
 
-G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
+G4VPhysicalVolume* TrGEMSuperSimpleDetectorConstruction_BIS::Construct() {
 
    // HERE FOLLOWS 'EVEN' GEOMETRY
 
@@ -326,99 +326,99 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(spacerALog) ;
    */
 
-   // GEB board A composition
-   // Copper plane 4
-   G4Trd* gebA_copper4 = Trapezoid("gebA_copper4", 35*um) ;
-   G4LogicalVolume* gebA_copper4Log = new G4LogicalVolume(gebA_copper4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper4Log") ;
-   gebA_copper4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_copper4) ;
-   trdLogCollection.push_back(gebA_copper4Log) ;
-   // Insulator FR4 5
-   G4Trd* gebA_insulator5 = Trapezoid("gebA_insulator5", 218*um) ;
-   G4LogicalVolume* gebA_insulator5Log = new G4LogicalVolume(gebA_insulator5, fFR4Mat, "gebA_insulator5Log") ;
-   gebA_insulator5Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_insulator5) ;
-   trdLogCollection.push_back(gebA_insulator5Log) ;
-   // Routing Plane 2
-   G4Trd* gebA_routing2 = Trapezoid("gebA_routing2", 17.5*um) ;
-   G4LogicalVolume* gebA_routing2Log = new G4LogicalVolume(gebA_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing2Log") ;
-   gebA_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_routing2) ;
-   trdLogCollection.push_back(gebA_routing2Log) ;
-   // Insulator FR4 4
-   G4Trd* gebA_insulator4 = Trapezoid("gebA_insulator4", 150*um) ;
-   G4LogicalVolume* gebA_insulator4Log = new G4LogicalVolume(gebA_insulator4, fFR4Mat, "gebA_insulator4Log") ;
-   gebA_insulator4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_insulator4) ;
-   trdLogCollection.push_back(gebA_insulator4Log) ;
-   // Copper plane 3
-   G4Trd* gebA_copper3 = Trapezoid("gebA_copper3", 17.5*um) ;
-   G4LogicalVolume* gebA_copper3Log = new G4LogicalVolume(gebA_copper3, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper3Log") ;
-   gebA_copper3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_copper3) ;
-   trdLogCollection.push_back(gebA_copper3Log) ;
-   // Insulator FR4 3
-   G4Trd* gebA_insulator3 = Trapezoid("gebA_insulator3", 120*um) ;
-   G4LogicalVolume* gebA_insulator3Log = new G4LogicalVolume(gebA_insulator3, fFR4Mat, "gebA_insulator3Log") ;
-   gebA_insulator3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_insulator3) ;
-   trdLogCollection.push_back(gebA_insulator3Log) ;
-   // Copper plane 2
-   G4Trd* gebA_copper2 = Trapezoid("gebA_copper2", 17.5*um) ;
-   G4LogicalVolume* gebA_copper2Log = new G4LogicalVolume(gebA_copper2, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper2Log") ;
-   gebA_copper2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_copper2) ;
-   trdLogCollection.push_back(gebA_copper2Log) ;
-   // Insulator FR4 2
-   G4Trd* gebA_insulator2 = Trapezoid("gebA_insulator2", 150*um) ;
-   G4LogicalVolume* gebA_insulator2Log = new G4LogicalVolume(gebA_insulator2, fFR4Mat, "gebA_insulator2Log") ;
-   gebA_insulator2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_insulator2) ;
-   trdLogCollection.push_back(gebA_insulator2Log) ;
-   // Routing Plane 1
-   G4Trd* gebA_routing1 = Trapezoid("gebA_routing1", 17.5*um) ;
-   G4LogicalVolume* gebA_routing1Log = new G4LogicalVolume(gebA_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing1Log") ;
-   gebA_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_routing1) ;
-   trdLogCollection.push_back(gebA_routing1Log) ;
-   // Insulator FR4 1
-   G4Trd* gebA_insulator1 = Trapezoid("gebA_insulator1", 218*um) ;
-   G4LogicalVolume* gebA_insulator1Log = new G4LogicalVolume(gebA_insulator1, fFR4Mat, "gebA_insulator1Log") ;
-   gebA_insulator1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_insulator1) ;
-   trdLogCollection.push_back(gebA_insulator1Log) ;
-   // Copper plane 1
-   G4Trd* gebA_copper1 = Trapezoid("gebA_copper1", 35*um) ;
-   G4LogicalVolume* gebA_copper1Log = new G4LogicalVolume(gebA_copper1, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper1Log") ;
-   gebA_copper1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebA_copper1) ;
-   trdLogCollection.push_back(gebA_copper1Log) ;
-   
-   // Hybrid Pedestal
-   G4Trd* pedestalA = Trapezoid("pedestalA", 5.5*mm) ;
-   G4LogicalVolume* pedestalALog = new G4LogicalVolume(pedestalA, fEmptyMat, "pedestalALog") ;
-   //trdCollection.push_back(pedestalA) ;
-   //trdLogCollection.push_back(pedestalALog) ;
+   //// GEB board A composition
+   //// Copper plane 4
+   //G4Trd* gebA_copper4 = Trapezoid("gebA_copper4", 35*um) ;
+   //G4LogicalVolume* gebA_copper4Log = new G4LogicalVolume(gebA_copper4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper4Log") ;
+   //gebA_copper4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_copper4) ;
+   //trdLogCollection.push_back(gebA_copper4Log) ;
+   //// Insulator FR4 5
+   //G4Trd* gebA_insulator5 = Trapezoid("gebA_insulator5", 218*um) ;
+   //G4LogicalVolume* gebA_insulator5Log = new G4LogicalVolume(gebA_insulator5, fFR4Mat, "gebA_insulator5Log") ;
+   //gebA_insulator5Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_insulator5) ;
+   //trdLogCollection.push_back(gebA_insulator5Log) ;
+   //// Routing Plane 2
+   //G4Trd* gebA_routing2 = Trapezoid("gebA_routing2", 17.5*um) ;
+   //G4LogicalVolume* gebA_routing2Log = new G4LogicalVolume(gebA_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing2Log") ;
+   //gebA_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_routing2) ;
+   //trdLogCollection.push_back(gebA_routing2Log) ;
+   //// Insulator FR4 4
+   //G4Trd* gebA_insulator4 = Trapezoid("gebA_insulator4", 150*um) ;
+   //G4LogicalVolume* gebA_insulator4Log = new G4LogicalVolume(gebA_insulator4, fFR4Mat, "gebA_insulator4Log") ;
+   //gebA_insulator4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_insulator4) ;
+   //trdLogCollection.push_back(gebA_insulator4Log) ;
+   //// Copper plane 3
+   //G4Trd* gebA_copper3 = Trapezoid("gebA_copper3", 17.5*um) ;
+   //G4LogicalVolume* gebA_copper3Log = new G4LogicalVolume(gebA_copper3, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper3Log") ;
+   //gebA_copper3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_copper3) ;
+   //trdLogCollection.push_back(gebA_copper3Log) ;
+   //// Insulator FR4 3
+   //G4Trd* gebA_insulator3 = Trapezoid("gebA_insulator3", 120*um) ;
+   //G4LogicalVolume* gebA_insulator3Log = new G4LogicalVolume(gebA_insulator3, fFR4Mat, "gebA_insulator3Log") ;
+   //gebA_insulator3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_insulator3) ;
+   //trdLogCollection.push_back(gebA_insulator3Log) ;
+   //// Copper plane 2
+   //G4Trd* gebA_copper2 = Trapezoid("gebA_copper2", 17.5*um) ;
+   //G4LogicalVolume* gebA_copper2Log = new G4LogicalVolume(gebA_copper2, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper2Log") ;
+   //gebA_copper2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_copper2) ;
+   //trdLogCollection.push_back(gebA_copper2Log) ;
+   //// Insulator FR4 2
+   //G4Trd* gebA_insulator2 = Trapezoid("gebA_insulator2", 150*um) ;
+   //G4LogicalVolume* gebA_insulator2Log = new G4LogicalVolume(gebA_insulator2, fFR4Mat, "gebA_insulator2Log") ;
+   //gebA_insulator2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_insulator2) ;
+   //trdLogCollection.push_back(gebA_insulator2Log) ;
+   //// Routing Plane 1
+   //G4Trd* gebA_routing1 = Trapezoid("gebA_routing1", 17.5*um) ;
+   //G4LogicalVolume* gebA_routing1Log = new G4LogicalVolume(gebA_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebA_routing1Log") ;
+   //gebA_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_routing1) ;
+   //trdLogCollection.push_back(gebA_routing1Log) ;
+   //// Insulator FR4 1
+   //G4Trd* gebA_insulator1 = Trapezoid("gebA_insulator1", 218*um) ;
+   //G4LogicalVolume* gebA_insulator1Log = new G4LogicalVolume(gebA_insulator1, fFR4Mat, "gebA_insulator1Log") ;
+   //gebA_insulator1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_insulator1) ;
+   //trdLogCollection.push_back(gebA_insulator1Log) ;
+   //// Copper plane 1
+   //G4Trd* gebA_copper1 = Trapezoid("gebA_copper1", 35*um) ;
+   //G4LogicalVolume* gebA_copper1Log = new G4LogicalVolume(gebA_copper1, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebA_copper1Log") ;
+   //gebA_copper1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebA_copper1) ;
+   //trdLogCollection.push_back(gebA_copper1Log) ;
+   //
+   //// Hybrid Pedestal
+   //G4Trd* pedestalA = Trapezoid("pedestalA", 5.5*mm) ;
+   //G4LogicalVolume* pedestalALog = new G4LogicalVolume(pedestalA, fEmptyMat, "pedestalALog") ;
+   ////trdCollection.push_back(pedestalA) ;
+   ////trdLogCollection.push_back(pedestalALog) ;
 
-   // VFAT2
-   G4Trd* vfatA = Trapezoid("vfatA", 1.66*mm) ;
-   G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, fEmptyMat, "vfatALog") ;
-   vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   //trdCollection.push_back(vfatA) ;
-   //trdLogCollection.push_back(vfatALog) ;
+   //// VFAT2
+   //G4Trd* vfatA = Trapezoid("vfatA", 1.66*mm) ;
+   //G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, fEmptyMat, "vfatALog") ;
+   //vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
+   ////trdCollection.push_back(vfatA) ;
+   ////trdLogCollection.push_back(vfatALog) ;
 
-   // Cooling copper
-   G4Trd* coolCuA = Trapezoid("coolCuA", 1.*mm) ;
-   G4LogicalVolume* coolCuALog = new G4LogicalVolume(coolCuA, fEmptyMat, "coolCuALog") ;
-   coolCuALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
-   trdCollection.push_back(coolCuA) ;
-   trdLogCollection.push_back(coolCuALog) ;
+   //// Cooling copper
+   //G4Trd* coolCuA = Trapezoid("coolCuA", 1.*mm) ;
+   //G4LogicalVolume* coolCuALog = new G4LogicalVolume(coolCuA, fEmptyMat, "coolCuALog") ;
+   //coolCuALog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
+   //trdCollection.push_back(coolCuA) ;
+   //trdLogCollection.push_back(coolCuALog) ;
 
-   // Cooling pipe
-   G4Trd* coolPipeA = Trapezoid("coolPipeA", 8.*mm) ;
-   G4LogicalVolume* coolPipeALog = new G4LogicalVolume(coolPipeA, fEmptyMat, "coolPipeA") ;
-   trdCollection.push_back(coolPipeA) ;
-   trdLogCollection.push_back(coolPipeALog) ;
+   //// Cooling pipe
+   //G4Trd* coolPipeA = Trapezoid("coolPipeA", 8.*mm) ;
+   //G4LogicalVolume* coolPipeALog = new G4LogicalVolume(coolPipeA, fEmptyMat, "coolPipeA") ;
+   //trdCollection.push_back(coolPipeA) ;
+   //trdLogCollection.push_back(coolPipeALog) ;
 
    // GEM cover (1 mm)
    G4Trd* cover2A = Trapezoid("Cover2A", 1.*mm) ;
@@ -565,99 +565,99 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
    trdLogCollection.push_back(spacerBLog) ;
    */
 
-   // GEB board B composition
-   // Copper plane 4
-   G4Trd* gebB_copper4 = Trapezoid("gebB_copper4", 35*um) ;
-   G4LogicalVolume* gebB_copper4Log = new G4LogicalVolume(gebB_copper4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper4Log") ;
-   gebB_copper4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_copper4) ;
-   trdLogCollection.push_back(gebB_copper4Log) ;
-   // Insulator FR4 5
-   G4Trd* gebB_insulator5 = Trapezoid("gebB_insulator5", 218*um) ;
-   G4LogicalVolume* gebB_insulator5Log = new G4LogicalVolume(gebB_insulator5, fFR4Mat, "gebB_insulator5Log") ;
-   gebB_insulator5Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_insulator5) ;
-   trdLogCollection.push_back(gebB_insulator5Log) ;
-   // Routing Plane 2
-   G4Trd* gebB_routing2 = Trapezoid("gebB_routing2", 17.5*um) ;
-   G4LogicalVolume* gebB_routing2Log = new G4LogicalVolume(gebB_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing2Log") ;
-   gebB_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_routing2) ;
-   trdLogCollection.push_back(gebB_routing2Log) ;
-   // Insulator FR4 4
-   G4Trd* gebB_insulator4 = Trapezoid("gebB_insulator4", 150*um) ;
-   G4LogicalVolume* gebB_insulator4Log = new G4LogicalVolume(gebB_insulator4, fFR4Mat, "gebB_insulator4Log") ;
-   gebB_insulator4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_insulator4) ;
-   trdLogCollection.push_back(gebB_insulator4Log) ;
-   // Copper plane 3
-   G4Trd* gebB_copper3 = Trapezoid("gebB_copper3", 17.5*um) ;
-   G4LogicalVolume* gebB_copper3Log = new G4LogicalVolume(gebB_copper3, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper3Log") ;
-   gebB_copper3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_copper3) ;
-   trdLogCollection.push_back(gebB_copper3Log) ;
-   // Insulator FR4 3
-   G4Trd* gebB_insulator3 = Trapezoid("gebB_insulator3", 120*um) ;
-   G4LogicalVolume* gebB_insulator3Log = new G4LogicalVolume(gebB_insulator3, fFR4Mat, "gebB_insulator3Log") ;
-   gebB_insulator3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_insulator3) ;
-   trdLogCollection.push_back(gebB_insulator3Log) ;
-   // Copper plane 2
-   G4Trd* gebB_copper2 = Trapezoid("gebB_copper2", 17.5*um) ;
-   G4LogicalVolume* gebB_copper2Log = new G4LogicalVolume(gebB_copper2, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper2Log") ;
-   gebB_copper2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_copper2) ;
-   trdLogCollection.push_back(gebB_copper2Log) ;
-   // Insulator FR4 2
-   G4Trd* gebB_insulator2 = Trapezoid("gebB_insulator2", 150*um) ;
-   G4LogicalVolume* gebB_insulator2Log = new G4LogicalVolume(gebB_insulator2, fFR4Mat, "gebB_insulator2Log") ;
-   gebB_insulator2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_insulator2) ;
-   trdLogCollection.push_back(gebB_insulator2Log) ;
-   // Routing Plane 1
-   G4Trd* gebB_routing1 = Trapezoid("gebB_routing1", 17.5*um) ;
-   G4LogicalVolume* gebB_routing1Log = new G4LogicalVolume(gebB_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing1Log") ;
-   gebB_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_routing1) ;
-   trdLogCollection.push_back(gebB_routing1Log) ;
-   // Insulator FR4 1
-   G4Trd* gebB_insulator1 = Trapezoid("gebB_insulator1", 218*um) ;
-   G4LogicalVolume* gebB_insulator1Log = new G4LogicalVolume(gebB_insulator1, fFR4Mat, "gebB_insulator1Log") ;
-   gebB_insulator1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_insulator1) ;
-   trdLogCollection.push_back(gebB_insulator1Log) ;
-   // Copper plane 1
-   G4Trd* gebB_copper1 = Trapezoid("gebB_copper1", 35*um) ;
-   G4LogicalVolume* gebB_copper1Log = new G4LogicalVolume(gebB_copper1, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper1Log") ;
-   gebB_copper1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
-   trdCollection.push_back(gebB_copper1) ;
-   trdLogCollection.push_back(gebB_copper1Log) ;
-   
-   // Hybrid Pedestal
-   G4Trd* pedestalB = Trapezoid("pedestalB", 5.5*mm) ;
-   G4LogicalVolume* pedestalBLog = new G4LogicalVolume(pedestalB, fEmptyMat, "pedestalBLog") ;
-   //trdCollection.push_back(pedestalB) ;
-   //trdLogCollection.push_back(pedestalBLog) ;
+   //// GEB board B composition
+   //// Copper plane 4
+   //G4Trd* gebB_copper4 = Trapezoid("gebB_copper4", 35*um) ;
+   //G4LogicalVolume* gebB_copper4Log = new G4LogicalVolume(gebB_copper4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper4Log") ;
+   //gebB_copper4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_copper4) ;
+   //trdLogCollection.push_back(gebB_copper4Log) ;
+   //// Insulator FR4 5
+   //G4Trd* gebB_insulator5 = Trapezoid("gebB_insulator5", 218*um) ;
+   //G4LogicalVolume* gebB_insulator5Log = new G4LogicalVolume(gebB_insulator5, fFR4Mat, "gebB_insulator5Log") ;
+   //gebB_insulator5Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_insulator5) ;
+   //trdLogCollection.push_back(gebB_insulator5Log) ;
+   //// Routing Plane 2
+   //G4Trd* gebB_routing2 = Trapezoid("gebB_routing2", 17.5*um) ;
+   //G4LogicalVolume* gebB_routing2Log = new G4LogicalVolume(gebB_routing2, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing2Log") ;
+   //gebB_routing2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_routing2) ;
+   //trdLogCollection.push_back(gebB_routing2Log) ;
+   //// Insulator FR4 4
+   //G4Trd* gebB_insulator4 = Trapezoid("gebB_insulator4", 150*um) ;
+   //G4LogicalVolume* gebB_insulator4Log = new G4LogicalVolume(gebB_insulator4, fFR4Mat, "gebB_insulator4Log") ;
+   //gebB_insulator4Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_insulator4) ;
+   //trdLogCollection.push_back(gebB_insulator4Log) ;
+   //// Copper plane 3
+   //G4Trd* gebB_copper3 = Trapezoid("gebB_copper3", 17.5*um) ;
+   //G4LogicalVolume* gebB_copper3Log = new G4LogicalVolume(gebB_copper3, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper3Log") ;
+   //gebB_copper3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_copper3) ;
+   //trdLogCollection.push_back(gebB_copper3Log) ;
+   //// Insulator FR4 3
+   //G4Trd* gebB_insulator3 = Trapezoid("gebB_insulator3", 120*um) ;
+   //G4LogicalVolume* gebB_insulator3Log = new G4LogicalVolume(gebB_insulator3, fFR4Mat, "gebB_insulator3Log") ;
+   //gebB_insulator3Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_insulator3) ;
+   //trdLogCollection.push_back(gebB_insulator3Log) ;
+   //// Copper plane 2
+   //G4Trd* gebB_copper2 = Trapezoid("gebB_copper2", 17.5*um) ;
+   //G4LogicalVolume* gebB_copper2Log = new G4LogicalVolume(gebB_copper2, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper2Log") ;
+   //gebB_copper2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_copper2) ;
+   //trdLogCollection.push_back(gebB_copper2Log) ;
+   //// Insulator FR4 2
+   //G4Trd* gebB_insulator2 = Trapezoid("gebB_insulator2", 150*um) ;
+   //G4LogicalVolume* gebB_insulator2Log = new G4LogicalVolume(gebB_insulator2, fFR4Mat, "gebB_insulator2Log") ;
+   //gebB_insulator2Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_insulator2) ;
+   //trdLogCollection.push_back(gebB_insulator2Log) ;
+   //// Routing Plane 1
+   //G4Trd* gebB_routing1 = Trapezoid("gebB_routing1", 17.5*um) ;
+   //G4LogicalVolume* gebB_routing1Log = new G4LogicalVolume(gebB_routing1, /*G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")*/fFR4Mat, "gebB_routing1Log") ;
+   //gebB_routing1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_routing1) ;
+   //trdLogCollection.push_back(gebB_routing1Log) ;
+   //// Insulator FR4 1
+   //G4Trd* gebB_insulator1 = Trapezoid("gebB_insulator1", 218*um) ;
+   //G4LogicalVolume* gebB_insulator1Log = new G4LogicalVolume(gebB_insulator1, fFR4Mat, "gebB_insulator1Log") ;
+   //gebB_insulator1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_insulator1) ;
+   //trdLogCollection.push_back(gebB_insulator1Log) ;
+   //// Copper plane 1
+   //G4Trd* gebB_copper1 = Trapezoid("gebB_copper1", 35*um) ;
+   //G4LogicalVolume* gebB_copper1Log = new G4LogicalVolume(gebB_copper1, G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu"), "gebB_copper1Log") ;
+   //gebB_copper1Log->SetVisAttributes(new G4VisAttributes(*g10Attributes)) ;
+   //trdCollection.push_back(gebB_copper1) ;
+   //trdLogCollection.push_back(gebB_copper1Log) ;
+   //
+   //// Hybrid Pedestal
+   //G4Trd* pedestalB = Trapezoid("pedestalB", 5.5*mm) ;
+   //G4LogicalVolume* pedestalBLog = new G4LogicalVolume(pedestalB, fEmptyMat, "pedestalBLog") ;
+   ////trdCollection.push_back(pedestalB) ;
+   ////trdLogCollection.push_back(pedestalBLog) ;
 
-   // VFAT2
-   G4Trd* vfatB = Trapezoid("vfatB", 1.66*mm) ;
-   G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
-   vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   //trdCollection.push_back(vfatB) ;
-   //trdLogCollection.push_back(vfatBLog) ;
+   //// VFAT2
+   //G4Trd* vfatB = Trapezoid("vfatB", 1.66*mm) ;
+   //G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
+   //vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
+   ////trdCollection.push_back(vfatB) ;
+   ////trdLogCollection.push_back(vfatBLog) ;
 
-   // Cooling copper
-   G4Trd* coolCuB = Trapezoid("coolCuB", 1.*mm) ;
-   G4LogicalVolume* coolCuBLog = new G4LogicalVolume(coolCuB, fEmptyMat, "coolCuBLog") ;
-   coolCuBLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
-   trdCollection.push_back(coolCuB) ;
-   trdLogCollection.push_back(coolCuBLog) ;
+   //// Cooling copper
+   //G4Trd* coolCuB = Trapezoid("coolCuB", 1.*mm) ;
+   //G4LogicalVolume* coolCuBLog = new G4LogicalVolume(coolCuB, fEmptyMat, "coolCuBLog") ;
+   //coolCuBLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
+   //trdCollection.push_back(coolCuB) ;
+   //trdLogCollection.push_back(coolCuBLog) ;
 
-   // Cooling pipe
-   G4Trd* coolPipeB = Trapezoid("coolPipeB", 8.*mm) ;
-   G4LogicalVolume* coolPipeBLog = new G4LogicalVolume(coolPipeB, fEmptyMat, "coolPipeB") ;
-   trdCollection.push_back(coolPipeB) ;
-   trdLogCollection.push_back(coolPipeBLog) ;
+   //// Cooling pipe
+   //G4Trd* coolPipeB = Trapezoid("coolPipeB", 8.*mm) ;
+   //G4LogicalVolume* coolPipeBLog = new G4LogicalVolume(coolPipeB, fEmptyMat, "coolPipeB") ;
+   //trdCollection.push_back(coolPipeB) ;
+   //trdLogCollection.push_back(coolPipeBLog) ;
 
    // GEM cover (1 mm)
    G4Trd* cover1B = Trapezoid("Cover1B", 1.*mm) ;
@@ -680,7 +680,7 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction_BIS::Construct() {
 
 }
 
-G4Trd* TrGEMSuperChamberDetectorConstruction_BIS::Trapezoid(G4String name, G4double width) {
+G4Trd* TrGEMSuperSimpleDetectorConstruction_BIS::Trapezoid(G4String name, G4double width) {
    G4Trd* shape = new G4Trd(name,
 	 width/2, width/2,
 	 tripleGemThinBase/2,
@@ -689,7 +689,7 @@ G4Trd* TrGEMSuperChamberDetectorConstruction_BIS::Trapezoid(G4String name, G4dou
    return shape ;
 }
 
-void TrGEMSuperChamberDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
+void TrGEMSuperSimpleDetectorConstruction_BIS::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
    
    G4VisAttributes *coolingAttributes = new G4VisAttributes(G4Color::Blue()) ;
    coolingAttributes->SetForceWireframe(true) ;

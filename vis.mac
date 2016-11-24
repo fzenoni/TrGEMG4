@@ -29,7 +29,8 @@
 /vis/viewer/zoom 0.8
 
 # Geant Particle Source parameters
-/gps/particle gamma
+#/gps/particle mu-
+#/gps/energy 150 GeV
 #/gps/pos/type Surface
 #/gps/pos/shape Sphere
 #/gps/pos/centre 0. 0. 0. cm
@@ -39,13 +40,13 @@
 #/gps/pos/type Beam
 #/gps/position 0. 0. 2.743 cm
 #/gps/position 0. 0. -1 cm
-#/gps/pos/sigma_x 1. mm
-#/gps/pos/sigma_y 1. mm
+#/gps/pos/sigma_x 0. mm
+#/gps/pos/sigma_y 0. mm
 
 #/gps/ang/type beam2d
-#/gps/ang/sigma_x 2. mrad
-#/gps/ang/sigma_y 2. mrad
-#/gps/ang/rot1 -1. 0. 1.
+#/gps/ang/sigma_x 0. mrad
+#/gps/ang/sigma_y 0. mrad
+#/gps/ang/rot1 -1. 0. 0.
 
 #
 # for drawing the tracks

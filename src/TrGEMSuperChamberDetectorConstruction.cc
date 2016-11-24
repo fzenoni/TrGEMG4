@@ -90,7 +90,7 @@ void TrGEMSuperChamberDetectorConstruction::DefineMaterials() {
 
    //FR4 (Glass + Epoxy)
    density = 1.85*g/cm3;
-   G4Material* FR4 = new G4Material("FR4"  , density, ncomponents=2);
+   G4Material* FR4 = new G4Material("FR4", density, ncomponents=2);
    FR4->AddMaterial(SiO2, fractionmass=0.528);
    FR4->AddMaterial(Epoxy, fractionmass=0.472);
    fFR4Mat = FR4 ;
@@ -212,14 +212,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    G4Trd* vfatB = Trapezoid("vfatB", 1.66*mm) ;
    G4LogicalVolume* vfatBLog = new G4LogicalVolume(vfatB, fEmptyMat, "vfatBLog") ;
    vfatBLog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   //trdCollection.push_back(vfatB) ;
-   //trdLogCollection.push_back(vfatBLog) ;
+   trdCollection.push_back(vfatB) ;
+   trdLogCollection.push_back(vfatBLog) ;
 
    // Hybrid Pedestal
    G4Trd* pedestalB = Trapezoid("pedestalB", 5.5*mm) ;
    G4LogicalVolume* pedestalBLog = new G4LogicalVolume(pedestalB, fEmptyMat, "pedestalBLog") ;
-   //trdCollection.push_back(pedestalB) ;
-   //trdLogCollection.push_back(pedestalBLog) ;
+   trdCollection.push_back(pedestalB) ;
+   trdLogCollection.push_back(pedestalBLog) ;
 
    // GEB board B composition
    // Copper plane 1
@@ -452,14 +452,14 @@ G4VPhysicalVolume* TrGEMSuperChamberDetectorConstruction::Construct() {
    G4Trd* vfatA = Trapezoid("vfatA", 1.66*mm) ;
    G4LogicalVolume* vfatALog = new G4LogicalVolume(vfatA, fEmptyMat, "vfatALog") ;
    vfatALog->SetVisAttributes(new G4VisAttributes(*vfatAttributes)) ;
-   //trdCollection.push_back(vfatA) ;
-   //trdLogCollection.push_back(vfatALog) ;
+   trdCollection.push_back(vfatA) ;
+   trdLogCollection.push_back(vfatALog) ;
 
    // Hybrid Pedestal
    G4Trd* pedestalA = Trapezoid("pedestalA", 5.5*mm) ;
    G4LogicalVolume* pedestalALog = new G4LogicalVolume(pedestalA, fEmptyMat, "pedestalALog") ;
-   //trdCollection.push_back(pedestalA) ;
-   //trdLogCollection.push_back(pedestalALog) ;
+   trdCollection.push_back(pedestalA) ;
+   trdLogCollection.push_back(pedestalALog) ;
 
    // GEB board A composition
    // Copper plane 1

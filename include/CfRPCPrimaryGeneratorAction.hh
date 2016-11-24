@@ -45,18 +45,23 @@ class G4Event;
 
 class CfRPCPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    CfRPCPrimaryGeneratorAction();    
-   ~CfRPCPrimaryGeneratorAction();
+   public:
+      CfRPCPrimaryGeneratorAction();    
+      ~CfRPCPrimaryGeneratorAction();
 
-  public:
-    virtual void GeneratePrimaries(G4Event*);
-    G4ParticleGun* GetParticleGun() { return fParticleGuns;} ;
-            
-  private:
-    G4ParticleGun*  fParticleGuns;
-    G4ParticleGun*  fParticleGun[4];
-    G4ParticleGun*  fParticleGung[10];
+   public:
+      virtual void GeneratePrimaries(G4Event*);
+      G4ParticleGun* GetParticleGun() { return fParticleGuns;} ;
+
+   private:
+      G4ParticleGun*  fParticleGuns;
+      G4ParticleGun*  fParticleGung[10];
+      G4ParticleGun*  fParticleGun[3];
+      G4double xx[100],yy[100],maxx,maxy;
+      G4double xxg[24],yyg[24],maxxg,maxyg;
+      G4int ngamma = 10;
+      G4int nneutron = 3;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

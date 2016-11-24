@@ -6,6 +6,7 @@
 #include "G4HCtable.hh"
 #include "G4UnitsTable.hh"
 #include "G4VProcess.hh"
+#include <TRandom.h>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -75,61 +76,63 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    }
 
    // Senstivity algorithms
-   if(track->GetGlobalTime() < timeWindow) {
 
-      if(volName == "fakeA" || volName == "fakeB") {
-	 acceptance = true ;
-	 //G4cout << "Hit?" << G4endl;
-      }
-
-      if(volName == "GasGap1A") {
-	 // we're in drift gap
-	 if(edep != 0) driftDepA += edep ;
-
-	 // special algorithm for "charged" sensitivity
-	 if(charge != 0) {
-	    neutSensitiveA = true ;
-	    kickstart = true ;
-	 }
-      }
-
-      if(volName == "GasGap2A") {
-	 // we're in transfer1 gap
-	 if(edep != 0) transferDepA += edep ;
-
-	 // special algorithm for "charged" sensitivity
-	 if(charge != 0) {
-	    neutSensitiveA = true ;
-	    kickstart = true ;
-	 }
-      }
-
-      if(volName == "GasGap1B") {
-	 //G4cout << "Hit?" << G4endl;
-	 // we're in drift gap
-	 if(edep != 0) driftDepB += edep ;
-
-	 // special algorithm for "charged" sensitivity
-	 if(charge != 0) {
-	    //G4cout << "Hit!" << G4endl;
-	    neutSensitiveB = true ;
-	    kickstart = true ;
-	 }
-      }
-
-      if(volName == "GasGap2B") {
-	 //G4cout << "Hit?" << G4endl;
-	 // we're in transfer1 gap
-	 if(edep != 0) transferDepB += edep ;
-
-	 // special algorithm for "charged" sensitivity
-	 if(charge != 0) {
-	    //G4cout << "Hit!" << G4endl;
-	    neutSensitiveB = true ;
-	    kickstart = true ;
-	 }
-      } 
+   if(volName == "fakeA" || volName == "fakeB") {
+      acceptance = true ;
+      //G4cout << "Hit?" << G4endl;
    }
+   if(volName == "GasGap1A" && track->GetGlobalTime() < timeWindow) {
+      // we're in drift gap
+      if(edep != 0) driftDepA += edep ;
+
+      // special algorithm for "charged" sensitivity
+      if(charge != 0) {
+	 //G4cout << "sens A" << G4endl;
+	 neutSensitiveA = true ;
+	 kickstart = true ;
+      }
+   }
+
+   if(volName == "GasGap2A" && track->GetGlobalTime() < timeWindow) {
+      // we're in transfer1 gap
+      if(edep != 0) transferDepA += edep ;
+
+      // special algorithm for "charged" sensitivity
+      if(charge != 0) {
+	 //G4cout << "sens A" << G4endl;
+	 neutSensitiveA = true ;
+	 kickstart = true ;
+      }
+   }
+
+   if(volName == "GasGap1B" && track->GetGlobalTime() < timeWindow) {
+      //G4cout << "Hit?" << G4endl;
+      // we're in drift gap
+      if(edep != 0) driftDepB += edep ;
+
+      // special algorithm for "charged" sensitivity
+      if(charge != 0) {
+	 //G4cout << "sens B" << G4endl;
+	 neutSensitiveB = true ;
+	 kickstart = true ;
+      }
+   }
+
+   if(volName == "GasGap2B" && track->GetGlobalTime() < timeWindow) {
+      //G4cout << "Hit?" << G4endl;
+      // we're in transfer1 gap
+      if(edep != 0) {
+	 transferDepB += edep ;
+	 //G4cout << "Hit!" << G4endl;
+      }
+      // special algorithm for "charged" sensitivity
+      if(charge != 0) {
+	 //G4cout << "sens B" << G4endl;
+	 neutSensitiveB = true ;
+	 kickstart = true ;
+      }
+   } 
+
 
    //This line is used to store in Analysis class the energy deposited in this layer
    //The Analysis class will sum up this edep to the current event total energy in this layer
@@ -155,7 +158,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
    aHit->AddEdep(edep) ;
 
    trackID_tmp = trackID ; // updating the variable
-   
+
    /*if(kickstart != true)*/ TrGEMAnalysis::GetInstance()->SetKickstart(kickstart) ;
    //kickstart = false ;
 
@@ -177,16 +180,16 @@ void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 
 void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-   if(1/*acceptance*/) { // if the particle is in the geometry acceptance 
+   if(acceptance) { // if the particle is in the geometry acceptance 
 
       G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)
       //G4double ionizationPotential = 0.7*26*eV + 0.3*33*eV ; // Ar:CO2 (70:30)
       //G4double ionizationPotential = 0.97*14*eV+0.03*10.6*eV ; // RPC GAS 
       // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli '77, Sharma)  
-      
+
       // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
       // These are values previously used. They represent the minimum ionization potential.
-      
+
       G4int factor = 0 ;
       if(driftDepA > factor*ionizationPotential) {
 	 TrGEMAnalysis::GetInstance()->SetDriftSensitivityA(driftDepA) ;
@@ -199,11 +202,11 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 
       if(driftDepB > factor*ionizationPotential) {
 	 TrGEMAnalysis::GetInstance()->SetDriftSensitivityB(driftDepB) ;
-	 //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDep,"Energy") << ")" << G4endl ; 
+	 //G4cout << "The Drift Gap is sensitive (" << G4BestUnit(driftDepB,"Energy") << ")" << G4endl ; 
       }
       else if(transferDepB > factor*ionizationPotential) { 
 	 TrGEMAnalysis::GetInstance()->SetTransferSensitivityB(transferDepB) ;
-	 //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDep,"Energy") << ")" << G4endl ;
+	 //G4cout << "The Transfer Gap 1 is sensitive (" << G4BestUnit(transferDepB,"Energy") << ")" << G4endl ;
       }
 
       driftDepA = 0. ;

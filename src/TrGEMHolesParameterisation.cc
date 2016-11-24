@@ -1,5 +1,7 @@
 #include "TrGEMHolesParameterisation.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4NistManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"

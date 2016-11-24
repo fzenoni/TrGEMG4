@@ -1,7 +1,9 @@
-#include "TrGEMDetectorConstruction.hh"
+#include "TrGEMSquareDetectorConstruction.hh"
 #include "GasGapSensitiveDetector.hh"
 #include "TrGEMHolesParameterisation.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4NistManager.hh"
 #include "G4SDManager.hh"
 #include "G4Element.hh"
@@ -18,7 +20,7 @@
 #include "G4UnitsTable.hh"
 #include "G4Tubs.hh"
 
-TrGEMDetectorConstruction::TrGEMDetectorConstruction() :
+TrGEMSquareDetectorConstruction::TrGEMSquareDetectorConstruction() :
    fG10Mat(0), fGasMat(0), fEmptyMat(0), fGasDetectorCuts(0),
    tripleGemThinBase(0), tripleGemLargeBase(0), tripleGemHeight(0)
 {
@@ -41,13 +43,13 @@ TrGEMDetectorConstruction::TrGEMDetectorConstruction() :
 
 }
 
-TrGEMDetectorConstruction::~TrGEMDetectorConstruction() {
+TrGEMSquareDetectorConstruction::~TrGEMSquareDetectorConstruction() {
 
    delete fGasDetectorCuts ;
 
 }
 
-void TrGEMDetectorConstruction::DefineMaterials() {
+void TrGEMSquareDetectorConstruction::DefineMaterials() {
 
    G4NistManager* manager = G4NistManager::Instance() ;
    // define Elements
@@ -71,7 +73,8 @@ void TrGEMDetectorConstruction::DefineMaterials() {
    G4Material* Argon = manager->FindOrBuildMaterial("G4_Ar");
    G4Material* CarbonDioxide = manager->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
    G4Material* empty  = manager->FindOrBuildMaterial("G4_Galactic");
-   fEmptyMat = empty ;
+   G4Material* air  = manager->FindOrBuildMaterial("G4_AIR");
+   fEmptyMat = air;
 
    // CF4 must be defined by hand
    G4int numel(0) ;
@@ -100,7 +103,7 @@ void TrGEMDetectorConstruction::DefineMaterials() {
 
 }
 
-G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
+G4VPhysicalVolume* TrGEMSquareDetectorConstruction::Construct() {
 
 
    // Cleanup old geometry
@@ -273,7 +276,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    trdLogCollection.push_back(readoutLog) ;
    */
 
-   /*
+   
       G4double holePitch = 140.*um ;
       G4double spacingX = holePitch ;
       G4double spacingY = holePitch*sqrt(3.)/2 ;
@@ -300,7 +303,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
    new G4PVPlacement(0,position,holeLog,"holePlacement3", kapton3Log, false, 2E6+holeCopyNo);
    }
    }
-   */
+   
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 
@@ -308,7 +311,7 @@ G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
 
 }
 
-G4Trd* TrGEMDetectorConstruction::Trapezoid(G4String name, G4double width) {
+G4Trd* TrGEMSquareDetectorConstruction::Trapezoid(G4String name, G4double width) {
    G4Trd* shape = new G4Trd(name,
 	 width/2, width/2,
 	 tripleGemThinBase/2,
@@ -317,7 +320,7 @@ G4Trd* TrGEMDetectorConstruction::Trapezoid(G4String name, G4double width) {
    return shape ;
 }
 
-G4Box* TrGEMDetectorConstruction::GemBox(G4String name, G4double width) {
+G4Box* TrGEMSquareDetectorConstruction::GemBox(G4String name, G4double width) {
    G4Box* shape = new G4Box(
 	 name,
 	 tripleGemPx/2,
@@ -327,7 +330,7 @@ G4Box* TrGEMDetectorConstruction::GemBox(G4String name, G4double width) {
 
 }
 
-void TrGEMDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
+void TrGEMSquareDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
 
    G4double ZTranslation = 0 ;
 

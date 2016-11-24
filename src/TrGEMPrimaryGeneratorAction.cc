@@ -40,7 +40,7 @@ TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction(
 
    TFile* angularFile = new TFile("/Users/fzenoni/TrGEMG4/angular.root") ;
 
-   TString particle = "ph" ;
+   TString particle = "e" ;
    TH1F* h_cosx = (TH1F*)angularFile->Get("cosx_" + particle) ;
    h_cosx->Fit("pol4") ;
    fit_cosx = h_cosx->GetFunction("pol4") ;
@@ -79,8 +79,8 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       double z_source(0) ;
       if(gRandom->Uniform() < prob_neg_z) {
 	 cosz = sqrt(1-cosx*cosx-cosy*cosy) ;
-	 //z_source = 7.3*cm ; // good for superchamber
-	 z_source = 5.7*cm ; // good for superchamber without the VFAT
+	 z_source = 7.3*cm ; // good for superchamber
+	 //z_source = 5.7*cm ; // good for superchamber without the VFAT
 	 //z_source = 3.5*cm ; // good for single chamber
       }
       else {
@@ -94,8 +94,11 @@ void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
       posDist->SetPosDisType("Plane");  // or Point,Plane,Volume,Beam
       posDist->SetPosDisShape("Rectangle");  // or Circle, Annulus, Ellipse, Square  
       posDist->SetCentreCoords(G4ThreeVector(0.0*cm,0.0*cm,z_source));
-      posDist->SetHalfY(1283.*mm/2.) ;
-      posDist->SetHalfX(510.*mm/2.) ; // I want to span over the full surface
+      //posDist->SetHalfY(1283.*mm/2.) ;
+      //posDist->SetHalfX(510.*mm/2.) ; // I want to span over the full surface
+      posDist->SetHalfY(100.*mm/2.) ;
+      posDist->SetHalfX(100.*mm/2.) ; // I want to span over the full surface
+
 
    }
    

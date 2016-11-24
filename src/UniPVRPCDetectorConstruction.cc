@@ -65,33 +65,33 @@ void UniPVRPCDetectorConstruction::DefineMaterials() {
    g10Material->AddMaterial(Si,0.35194) ;
    fG10Mat = g10Material ;
 
-      // gases at STP conditions 
+   // gases at STP conditions 
    G4Material* Argon = manager->FindOrBuildMaterial("G4_Ar");
    G4Material* CarbonDioxide = manager->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
    G4Material* empty  = manager->FindOrBuildMaterial("G4_Galactic");
-   fEmptyMat = empty ;
+   G4Material* air = manager->FindOrBuildMaterial("G4_AIR");
+   fEmptyMat = air ;
 
    // CF4 must be defined by hand
    G4int numel(0), natoms(0) ;
    G4double density(0.), temperature(0.), pressure(0.) ;
    G4String name, symbol ;
-   G4Material* CF4 = new G4Material(name="CF4", density=0.003884*g/cm3, numel=2, kStateGas, temperature = 273.15*kelvin, pressure=1.0*atmosphere);
-   CF4->AddElement(elC, 1) ;
-   CF4->AddElement(elF, 4) ; 
+   //G4Material* CF4 = new G4Material(name="CF4", density=0.003884*g/cm3, numel=2, kStateGas, temperature = 273.15*kelvin, pressure=1.0*atmosphere);
+   //CF4->AddElement(elC, 1) ;
+   //CF4->AddElement(elF, 4) ; 
 
    // Ar:CO2 (70:30) @ STP conditions
-   G4double mixtureDensity = (Argon->GetDensity() * 70/100.0 + CarbonDioxide->GetDensity() * 30/100.0) ;
-   G4Material *ArCO2 = new G4Material("Ar/CO2",mixtureDensity,2) ;
-   ArCO2->AddMaterial(Argon, 0.7) ;
-   ArCO2->AddMaterial(CarbonDioxide, 0.3) ;
+   //G4double mixtureDensity = (Argon->GetDensity() * 70/100.0 + CarbonDioxide->GetDensity() * 30/100.0) ;
+   //G4Material *ArCO2 = new G4Material("Ar/CO2",mixtureDensity,2) ;
+   //ArCO2->AddMaterial(Argon, 0.7) ;
+   //ArCO2->AddMaterial(CarbonDioxide, 0.3) ;
 
    // Ar:CO2:CF4 (45:15:40) @ STP conditions
-   mixtureDensity = (Argon->GetDensity() * 45/100.0 + CarbonDioxide->GetDensity() * 15/100.0 + CF4->GetDensity() * 40/100.0) ;
-   G4Material *ArCO2CF4 = new G4Material("Ar/CO2/CF4",mixtureDensity,3) ;
-   ArCO2CF4->AddMaterial(Argon, 0.45) ;
-   ArCO2CF4->AddMaterial(CarbonDioxide,0.15) ;
-   ArCO2CF4->AddMaterial(CF4,0.40) ;
-
+   //mixtureDensity = (Argon->GetDensity() * 45/100.0 + CarbonDioxide->GetDensity() * 15/100.0 + CF4->GetDensity() * 40/100.0) ;
+   //G4Material *ArCO2CF4 = new G4Material("Ar/CO2/CF4",mixtureDensity,3) ;
+   //ArCO2CF4->AddMaterial(Argon, 0.45) ;
+   //ArCO2CF4->AddMaterial(CarbonDioxide,0.15) ;
+   //ArCO2CF4->AddMaterial(CF4,0.40) ;
 
    // RPC mixture gas components
    // iso-Butane (methylpropane), STP
@@ -100,7 +100,7 @@ void UniPVRPCDetectorConstruction::DefineMaterials() {
    isobutane->AddElement(elC,4);
    isobutane->AddElement(elH,10);
 
-   // Freon
+   // Tetrafluoroethane
    density = 4.55*mg/cm3;
    G4Material* C2H2F4 = new G4Material(name = "Freon", density, numel=3) ;
    C2H2F4->AddElement(elC, natoms=2);
@@ -120,15 +120,24 @@ void UniPVRPCDetectorConstruction::DefineMaterials() {
    // Graphite
    G4int z(0) ;
    G4double a(0.) ;
-   G4Material* graphite = new G4Material("graphite", z=6, a= 12.0107*g/mole, density= 2.2*g/cm3);
+   //G4Material* graphite = new G4Material("graphite", z=6, a= 12.0107*g/mole, density= 2.2*g/cm3);
+   G4Material* graphite = manager->FindOrBuildMaterial("G4_GRAPHITE");
    fGraphiteMat = graphite ;
 
    // Bakelite
-   G4Material* bakelite = new G4Material("bakelite", density = 1.4*g/cm3, numel=3) ;
-   bakelite->AddElement(elC, natoms=1) ;
-   bakelite->AddElement(elH, natoms=4) ;
-   bakelite->AddElement(elO, natoms=2) ;
+   //G4Material* bakelite = new G4Material("bakelite", density = 1.4*g/cm3, numel=3) ;
+   //bakelite->AddElement(elC, natoms=1) ;
+   //bakelite->AddElement(elH, natoms=4) ;
+   //bakelite->AddElement(elO, natoms=2) ;
+   G4Material* bakelite = manager->FindOrBuildMaterial("G4_BAKELITE");
    fBakeliteMat = bakelite ;
+
+   // barium fluoride
+   //G4Material* scint_crystal = new G4Material("scint_crystal", density = 4.88*g/cm3, numel=2) ;
+   //scint_crystal->AddElement(elBa,natoms=1) ;
+   //scint_crystal->AddElement(elF, natoms=2) ;
+   G4Material* scint_crystal = manager->FindOrBuildMaterial("G4_BARIUM_FLUORIDE");
+   //fScintMat = scint_crystal ;
 
 }
 
@@ -149,9 +158,9 @@ G4VPhysicalVolume* UniPVRPCDetectorConstruction::Construct() {
    // SD Manager 
    G4SDManager* sdman = G4SDManager::GetSDMpointer() ;
 
-   G4double worldSizeX = 10*m ;
-   G4double worldSizeY = 10*m ;
-   G4double worldSizeZ = 10*m ;
+   G4double worldSizeX = 2*m ;
+   G4double worldSizeY = 2*m ;
+   G4double worldSizeZ = 2*m ;
 
    // World definition and placement
    G4Box* worldBox = new G4Box("WorldBox", worldSizeX, worldSizeY, worldSizeZ) ;
@@ -178,6 +187,15 @@ G4VPhysicalVolume* UniPVRPCDetectorConstruction::Construct() {
    gasAttributes->SetForceWireframe(true) ;
    G4VisAttributes *rpcAttributes = new G4VisAttributes(G4Color::Green()) ;
    rpcAttributes->SetForceWireframe(true) ;
+   
+   G4Box* FakeBottom = RPCBox("FakeB", 1.*nm) ;
+   G4LogicalVolume* FakeBottomLog = new G4LogicalVolume(FakeBottom, fEmptyMat, "FakeBLog") ;
+   FakeBottomLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
+   trdCollection.push_back(FakeBottom) ;
+   trdLogCollection.push_back(FakeBottomLog) ;
+   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
+   sdman->AddNewDetector(sensitive) ;
+   FakeBottomLog->SetSensitiveDetector(sensitive) ;
 
    G4Box* aluminiumTop = RPCBox("aluminiumTop", 0.06*cm) ;
    G4LogicalVolume* aluminiumTopLog = new G4LogicalVolume(aluminiumTop, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"), "aluminiumTopLog") ;
@@ -197,13 +215,11 @@ G4VPhysicalVolume* UniPVRPCDetectorConstruction::Construct() {
    trdCollection.push_back(bakelite0) ;
    trdLogCollection.push_back(bakelite0Log) ;
    
-   G4Box* gasGap1 = RPCBox("GasGap1", 0.2*cm) ;
-   G4LogicalVolume* gasGap1Log = new G4LogicalVolume(gasGap1, fGasMat, "gasGap1Log") ; 
+   G4Box* gasGap1 = RPCBox("GasGap1B", 0.2*cm) ;
+   G4LogicalVolume* gasGap1Log = new G4LogicalVolume(gasGap1, fGasMat, "gasGap1BLog") ; 
    gasGap1Log->SetVisAttributes(new G4VisAttributes(*rpcAttributes)) ;
    trdCollection.push_back(gasGap1) ;
    trdLogCollection.push_back(gasGap1Log) ;
-   GasGapSensitiveDetector* sensitive = new GasGapSensitiveDetector("/GasGap") ;
-   sdman->AddNewDetector(sensitive) ;
    gasGap1Log->SetSensitiveDetector(sensitive) ;
 
    G4Box* bakelite1 = RPCBox("bakelite1", 0.2*cm) ;
@@ -224,8 +240,8 @@ G4VPhysicalVolume* UniPVRPCDetectorConstruction::Construct() {
    trdCollection.push_back(bakelite2) ;
    trdLogCollection.push_back(bakelite2Log) ;
 
-   G4Box* gasGap2 = RPCBox("GasGap2", 0.2*cm) ;
-   G4LogicalVolume* gasGap2Log = new G4LogicalVolume(gasGap2, fGasMat, "gasGap2Log") ; 
+   G4Box* gasGap2 = RPCBox("GasGap2B", 0.2*cm) ;
+   G4LogicalVolume* gasGap2Log = new G4LogicalVolume(gasGap2, fGasMat, "gasGap2BLog") ; 
    gasGap2Log->SetVisAttributes(new G4VisAttributes(*rpcAttributes)) ;
    trdCollection.push_back(gasGap2) ;
    trdLogCollection.push_back(gasGap2Log) ;
@@ -248,6 +264,13 @@ G4VPhysicalVolume* UniPVRPCDetectorConstruction::Construct() {
    aluminiumBottomLog->SetVisAttributes(new G4VisAttributes(*cathodeAttributes)) ;
    trdCollection.push_back(aluminiumBottom) ;
    trdLogCollection.push_back(aluminiumBottomLog) ;
+   
+   G4Box* FakeTop = RPCBox("FakeA", 1*nm) ;
+   G4LogicalVolume* FakeTopLog = new G4LogicalVolume(FakeTop, fEmptyMat, "FakeALog") ;
+   FakeTopLog->SetVisAttributes(new G4VisAttributes(*insAttributes)) ;
+   trdCollection.push_back(FakeTop) ;
+   trdLogCollection.push_back(FakeTopLog) ;
+   FakeTopLog->SetSensitiveDetector(sensitive) ;
 
    PlaceGeometry(rotationPlacement,G4ThreeVector(0.,0.,0.),worldLog) ;
 

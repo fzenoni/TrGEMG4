@@ -23,80 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/PhysicsList.hh
-/// \brief Definition of the PhysicsList class
+/// \file radioactivedecay/rdecay01/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
 //
 // $Id$
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsList
-//
-// Description: EM physics with a possibility to add PAI model
-//
-// Author:      V.Ivanchenko 01.09.2010
-//
-//----------------------------------------------------------------------------
-//
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#ifndef TrGEMPhysicsList_h
-#define TrGEMPhysicsList_h 1
+#ifndef CfRPCPrimaryGeneratorAction_h
+#define CfRPCPrimaryGeneratorAction_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ParticleGun.hh"
 #include "globals.hh"
-#include "G4EmConfigurator.hh"
 
-class G4VPhysicsConstructor;
-class StepMax;
-class PhysicsListMessenger;
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrGEMPhysicsList: public G4VModularPhysicsList
+class CfRPCPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
+    CfRPCPrimaryGeneratorAction();    
+   ~CfRPCPrimaryGeneratorAction();
 
-  TrGEMPhysicsList();
-  virtual ~TrGEMPhysicsList();
-
-  void ConstructParticle();
-    
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-  void SetCutForProton(G4double);
-        
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-    
-  void AddStepMax(); 
-
-private:
-
-  void  AddPAIModel(const G4String&);
-  void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
-                    const G4String& procname);
-
-  G4EmConfigurator* fConfig;
-
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
-  G4double fCutForProton;
-
-  G4VPhysicsConstructor*  fEmPhysicsList;
-  G4VPhysicsConstructor*  fDecayPhysicsList;
-  std::vector<G4VPhysicsConstructor*> fHadronPhys;
-  G4String fEmName;
-    
-  StepMax* fStepMaxProcess;
-    
-  PhysicsListMessenger* fMessenger;
-
+  public:
+    virtual void GeneratePrimaries(G4Event*);
+    G4ParticleGun* GetParticleGun() { return fParticleGuns;} ;
+            
+  private:
+    G4ParticleGun*  fParticleGuns;
+    G4ParticleGun*  fParticleGun[4];
+    G4ParticleGun*  fParticleGung[10];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

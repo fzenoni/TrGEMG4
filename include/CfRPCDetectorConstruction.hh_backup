@@ -44,6 +44,7 @@ class CfRPCDetectorConstruction : public G4VUserDetectorConstruction
       G4Material*        fEmptyMat;
       G4Material*        fWoodMat;
       G4Material*        fScintMat;
+      G4Material*        Al;
       G4Material*        fAirMat;
       G4ProductionCuts*  fGasDetectorCuts;
       G4double           tripleGemPx;
